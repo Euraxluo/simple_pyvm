@@ -1,3 +1,4 @@
+
 //
 // Created by euraxluo on 2020/11/22.
 //
@@ -15,70 +16,69 @@ public:
     int var_type() {
         /**
         type:           ************size**************
-        bool:           ËùÕ¼×Ö½ÚÊı£º1   ×î´óÖµ£º1               ×îĞ¡Öµ£º0
-        char:           ËùÕ¼×Ö½ÚÊı£º1   ×î´óÖµ£º               ×îĞ¡Öµ£º¢ã
-        signed char:    ËùÕ¼×Ö½ÚÊı£º1   ×î´óÖµ£º               ×îĞ¡Öµ£º¢ã
-        unsigned char:  ËùÕ¼×Ö½ÚÊı£º1   ×î´óÖµ£º?              ×îĞ¡Öµ£º
-        wchar_t:        ËùÕ¼×Ö½ÚÊı£º2   ×î´óÖµ£º65535           ×îĞ¡Öµ£º0
-        short:          ËùÕ¼×Ö½ÚÊı£º2   ×î´óÖµ£º32767           ×îĞ¡Öµ£º-32768
-        int:            ËùÕ¼×Ö½ÚÊı£º4   ×î´óÖµ£º2147483647      ×îĞ¡Öµ£º-2147483648
-        unsigned:       ËùÕ¼×Ö½ÚÊı£º4   ×î´óÖµ£º4294967295      ×îĞ¡Öµ£º0
-        long:           ËùÕ¼×Ö½ÚÊı£º4   ×î´óÖµ£º2147483647      ×îĞ¡Öµ£º-2147483648
-        unsigned long:  ËùÕ¼×Ö½ÚÊı£º4   ×î´óÖµ£º4294967295      ×îĞ¡Öµ£º0
-        double:         ËùÕ¼×Ö½ÚÊı£º8   ×î´óÖµ£º1.79769e+308    ×îĞ¡Öµ£º2.22507e-308
-        long double:    ËùÕ¼×Ö½ÚÊı£º12  ×î´óÖµ£º1.18973e+4932   ×îĞ¡Öµ£º3.3621e-4932
-        float:          ËùÕ¼×Ö½ÚÊı£º4   ×î´óÖµ£º3.40282e+038    ×îĞ¡Öµ£º1.17549e-038
+        bool:           æ‰€å å­—èŠ‚æ•°ï¼š1   æœ€å¤§å€¼ï¼š1               æœ€å°å€¼ï¼š0
+        char:           æ‰€å å­—èŠ‚æ•°ï¼š1   æœ€å¤§å€¼ï¼š               æœ€å°å€¼ï¼šâ‚¬
+        signed char:    æ‰€å å­—èŠ‚æ•°ï¼š1   æœ€å¤§å€¼ï¼š               æœ€å°å€¼ï¼šâ‚¬
+        unsigned char:  æ‰€å å­—èŠ‚æ•°ï¼š1   æœ€å¤§å€¼ï¼š?              æœ€å°å€¼ï¼š
+        wchar_t:        æ‰€å å­—èŠ‚æ•°ï¼š2   æœ€å¤§å€¼ï¼š65535           æœ€å°å€¼ï¼š0
+        short:          æ‰€å å­—èŠ‚æ•°ï¼š2   æœ€å¤§å€¼ï¼š32767           æœ€å°å€¼ï¼š-32768
+        int:            æ‰€å å­—èŠ‚æ•°ï¼š4   æœ€å¤§å€¼ï¼š2147483647      æœ€å°å€¼ï¼š-2147483648
+        unsigned:       æ‰€å å­—èŠ‚æ•°ï¼š4   æœ€å¤§å€¼ï¼š4294967295      æœ€å°å€¼ï¼š0
+        long:           æ‰€å å­—èŠ‚æ•°ï¼š4   æœ€å¤§å€¼ï¼š2147483647      æœ€å°å€¼ï¼š-2147483648
+        unsigned long:  æ‰€å å­—èŠ‚æ•°ï¼š4   æœ€å¤§å€¼ï¼š4294967295      æœ€å°å€¼ï¼š0
+        double:         æ‰€å å­—èŠ‚æ•°ï¼š8   æœ€å¤§å€¼ï¼š1.79769e+308    æœ€å°å€¼ï¼š2.22507e-308
+        long double:    æ‰€å å­—èŠ‚æ•°ï¼š12  æœ€å¤§å€¼ï¼š1.18973e+4932   æœ€å°å€¼ï¼š3.3621e-4932
+        float:          æ‰€å å­—èŠ‚æ•°ï¼š4   æœ€å¤§å€¼ï¼š3.40282e+038    æœ€å°å€¼ï¼š1.17549e-038
         size_t:
-
-        size_t:         ËùÕ¼×Ö½ÚÊı£º4   ×î´óÖµ£º4294967295      ×îĞ¡Öµ£º0
-        string:         ËùÕ¼×Ö½ÚÊı£º24
+        size_t:         æ‰€å å­—èŠ‚æ•°ï¼š4   æœ€å¤§å€¼ï¼š4294967295      æœ€å°å€¼ï¼š0
+        string:         æ‰€å å­—èŠ‚æ•°ï¼š24
         type:           ************size**************
          */
         cout << "type: \t\t" << "************size**************" << endl;
-        cout << "bool: \t\t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(bool);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<bool>::max)();
-        cout << "\t\t×îĞ¡Öµ£º" << (numeric_limits<bool>::min)() << endl;
-        cout << "char: \t\t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(char);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<char>::max)();
-        cout << "\t\t×îĞ¡Öµ£º" << (numeric_limits<char>::min)() << endl;
-        cout << "signed char: \t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(signed char);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<signed char>::max)();
-        cout << "\t\t×îĞ¡Öµ£º" << (numeric_limits<signed char>::min)() << endl;
-        cout << "unsigned char: \t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(unsigned char);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<unsigned char>::max)();
-        cout << "\t\t×îĞ¡Öµ£º" << (numeric_limits<unsigned char>::min)() << endl;
-        cout << "wchar_t: \t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(wchar_t);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<wchar_t>::max)();
-        cout << "\t\t×îĞ¡Öµ£º" << (numeric_limits<wchar_t>::min)() << endl;
-        cout << "short: \t\t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(short);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<short>::max)();
-        cout << "\t\t×îĞ¡Öµ£º" << (numeric_limits<short>::min)() << endl;
-        cout << "int: \t\t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(int);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<int>::max)();
-        cout << "\t×îĞ¡Öµ£º" << (numeric_limits<int>::min)() << endl;
-        cout << "unsigned: \t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(unsigned);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<unsigned>::max)();
-        cout << "\t×îĞ¡Öµ£º" << (numeric_limits<unsigned>::min)() << endl;
-        cout << "long: \t\t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(long);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<long>::max)();
-        cout << "\t×îĞ¡Öµ£º" << (numeric_limits<long>::min)() << endl;
-        cout << "unsigned long: \t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(unsigned long);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<unsigned long>::max)();
-        cout << "\t×îĞ¡Öµ£º" << (numeric_limits<unsigned long>::min)() << endl;
-        cout << "double: \t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(double);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<double>::max)();
-        cout << "\t×îĞ¡Öµ£º" << (numeric_limits<double>::min)() << endl;
-        cout << "long double: \t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(long double);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<long double>::max)();
-        cout << "\t×îĞ¡Öµ£º" << (numeric_limits<long double>::min)() << endl;
-        cout << "float: \t\t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(float);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<float>::max)();
-        cout << "\t×îĞ¡Öµ£º" << (numeric_limits<float>::min)() << endl;
-        cout << "size_t: \t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(size_t);
-        cout << "\t×î´óÖµ£º" << (numeric_limits<size_t>::max)();
-        cout << "\t×îĞ¡Öµ£º" << (numeric_limits<size_t>::min)() << endl;
-        cout << "string: \t" << "ËùÕ¼×Ö½ÚÊı£º" << sizeof(string) << endl;
-        // << "\t×î´óÖµ£º" << (numeric_limits<string>::max)() << "\t×îĞ¡Öµ£º" << (numeric_limits<string>::min)() << endl;
+        cout << "bool: \t\t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(bool);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<bool>::max)();
+        cout << "\t\tæœ€å°å€¼ï¼š" << (numeric_limits<bool>::min)() << endl;
+        cout << "char: \t\t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(char);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<char>::max)();
+        cout << "\t\tæœ€å°å€¼ï¼š" << (numeric_limits<char>::min)() << endl;
+        cout << "signed char: \t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(signed char);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<signed char>::max)();
+        cout << "\t\tæœ€å°å€¼ï¼š" << (numeric_limits<signed char>::min)() << endl;
+        cout << "unsigned char: \t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(unsigned char);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<unsigned char>::max)();
+        cout << "\t\tæœ€å°å€¼ï¼š" << (numeric_limits<unsigned char>::min)() << endl;
+        cout << "wchar_t: \t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(wchar_t);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<wchar_t>::max)();
+        cout << "\t\tæœ€å°å€¼ï¼š" << (numeric_limits<wchar_t>::min)() << endl;
+        cout << "short: \t\t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(short);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<short>::max)();
+        cout << "\t\tæœ€å°å€¼ï¼š" << (numeric_limits<short>::min)() << endl;
+        cout << "int: \t\t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(int);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<int>::max)();
+        cout << "\tæœ€å°å€¼ï¼š" << (numeric_limits<int>::min)() << endl;
+        cout << "unsigned: \t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(unsigned);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<unsigned>::max)();
+        cout << "\tæœ€å°å€¼ï¼š" << (numeric_limits<unsigned>::min)() << endl;
+        cout << "long: \t\t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(long);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<long>::max)();
+        cout << "\tæœ€å°å€¼ï¼š" << (numeric_limits<long>::min)() << endl;
+        cout << "unsigned long: \t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(unsigned long);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<unsigned long>::max)();
+        cout << "\tæœ€å°å€¼ï¼š" << (numeric_limits<unsigned long>::min)() << endl;
+        cout << "double: \t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(double);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<double>::max)();
+        cout << "\tæœ€å°å€¼ï¼š" << (numeric_limits<double>::min)() << endl;
+        cout << "long double: \t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(long double);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<long double>::max)();
+        cout << "\tæœ€å°å€¼ï¼š" << (numeric_limits<long double>::min)() << endl;
+        cout << "float: \t\t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(float);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<float>::max)();
+        cout << "\tæœ€å°å€¼ï¼š" << (numeric_limits<float>::min)() << endl;
+        cout << "size_t: \t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(size_t);
+        cout << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<size_t>::max)();
+        cout << "\tæœ€å°å€¼ï¼š" << (numeric_limits<size_t>::min)() << endl;
+        cout << "string: \t" << "æ‰€å å­—èŠ‚æ•°ï¼š" << sizeof(string) << endl;
+        // << "\tæœ€å¤§å€¼ï¼š" << (numeric_limits<string>::max)() << "\tæœ€å°å€¼ï¼š" << (numeric_limits<string>::min)() << endl;
         cout << "type: \t\t" << "************size**************" << endl;
         return 0;
     }
@@ -87,11 +87,11 @@ public:
         char str[] = "hello world";
         char str2[] = "world";
         const char *pstr1 = str;
-        char const *pstr2 = str;//Ö¸Õë£¬Ö¸Ïòchar const
-        char *const pstr3 = str;//const Ö¸Õë£¬Ö¸Ïòchar
+        char const *pstr2 = str;//æŒ‡é’ˆï¼ŒæŒ‡å‘char const
+        char *const pstr3 = str;//const æŒ‡é’ˆï¼ŒæŒ‡å‘char
 
-//        pstr1[0] = 's';//±¨´í£¬ÎŞ·¨Ö±½Ó¸Ä±äÖ¸ÕëÖ¸ÏòµÄÖµ
-//        pstr2[0] = 's';//±¨´í£¬ÎŞ·¨Ö±½Ó¸Ä±äÖ¸ÕëÖ¸ÏòµÄÖµ
+//        pstr1[0] = 's';//æŠ¥é”™ï¼Œæ— æ³•ç›´æ¥æ”¹å˜æŒ‡é’ˆæŒ‡å‘çš„å€¼
+//        pstr2[0] = 's';//æŠ¥é”™ï¼Œæ— æ³•ç›´æ¥æ”¹å˜æŒ‡é’ˆæŒ‡å‘çš„å€¼
         pstr3[0] = 's';
         pstr1 = str2;
         pstr2 = str2;
@@ -99,19 +99,25 @@ public:
         cout<<"pstr1:"<<pstr1<<endl;
         cout<<"pstr2:"<<pstr2<<endl;
         cout<<"pstr3:"<<pstr3<<endl;
-//        pstr3 = str2;//±¨´í£¬ÎŞ·¨¸Ä±äÖ¸ÕëµÄÖ¸Ïò
+//        pstr3 = str2;//æŠ¥é”™ï¼Œæ— æ³•æ”¹å˜æŒ‡é’ˆçš„æŒ‡å‘
 
     }
 
     void file_stu_1(char const *filename) {
-        FILE *fp;//ÎÄ¼şÖ¸Õë
-        char str_buf[256];//×Ö·û´®£¨charÊı×é£©
+        FILE *fp;//æ–‡ä»¶æŒ‡é’ˆ
+        char str_buf[256];//å­—ç¬¦ä¸²ï¼ˆcharæ•°ç»„ï¼‰
         fp = fopen(filename, "r");
         if (fp) {
             fgets(str_buf, 10, fp);
         } else {
             printf("cannot find file named %s\n", filename);
         }
+    }
+    void test_0_x_ff(){
+        signed int t = 257;
+        t = t & 0xff;
+        printf("%d",t);
+//        signed
     }
 };
 

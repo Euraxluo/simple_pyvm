@@ -3,19 +3,20 @@
 using namespace std;
 
 #include "src/study/Study.hpp"
-
+#include "src/util/BufferedInputStream.hpp"
 #define INIT 0
 #define NUM 1
 
 
-int main() {
+int main(int argc,char** argv) {
 
     /***
      * Study space
      */
 //    Study().var_type();
-    Study().file_stu_1("test/hello.py");
-    Study().const_char_stu();
+//    Study().test_0_x_ff();
+//    Study().file_stu_1("test/hello.py");
+//    Study().const_char_stu();
 
 
 
@@ -29,19 +30,16 @@ int main() {
     /***
      * Main space
      */
-//    FILE *fp = fopen("test/hello.py","r");
-//    char ch;
-//    int state,num = 0;
-//    while ((ch=getc(fp)) != EOF){
-//        if (ch == ' ' || ch == '\n'){
-//            if (state == NUM){
-//                cout<<"token NUM:%d\n"<<endl;
-//            }
-//        }
-//    }
-//
-//
-//    std::cout << "Hello, World!" << std::endl;
+    std::cout << "Hello, VM!" << std::endl;
+
+    if (argc <= 1) {
+        printf("vm need a parameter : filename\n");
+        return 0;
+    }
+
+    BufferedInputStream stream(argv[1]);
+    printf("\nmagic number is 0x%x\n", stream.read_int());
+
     return 0;
 }
 

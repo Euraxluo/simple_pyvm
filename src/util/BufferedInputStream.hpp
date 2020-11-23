@@ -24,6 +24,44 @@ public:
         close();
     }
 
+    char read(){
+        if (index<BUFFER_LEN){
+            return szBuffer[index++];
+        } else{
+            index = 0;
+            fread(szBuffer,BUFFER_LEN*sizeof(char),1,fp);//读取BUFFER_LEN长的字节,并存到szBUffer中,index为0
+            return szBuffer[index++];
+        }
+    }
+    int read_int(){
+        /**
+         * 先转为无符号int型,再移位,避免溢出
+         */
+        char m = read();
+//        printf("%d\n",m);
+//        printf("%d\n",m&0xff);
+//        printf("%d\n",int(m)&0xff);
+        int b1 = toUnsignedInt(read());//oxff = 11111111,简单来说会把高24位全部变成0，低8位保持不变!
+        int b2 = toUnsignedInt(read());
+        int b3 = toUnsignedInt(read());
+        int b4 = toUnsignedInt(read());
+        return b4 << 24 | b3 << 16 | b2 << 8 | b1;
+    }
+    double read_double(){
+        char t[8];
+        for (int i = 0;i<8;i++){
+            t[i] = read();
+        }
+        return *(double *)t;
+    }
+    void unread(){
+        index --;
+    }
+
+    int toUnsignedInt(char x) {
+        return  ((int) x) & 0xff;//将高24位全部变成0，低8位保持不变
+    }
+
     void close(){
         if (fp!=NULL){
             fclose(fp);
