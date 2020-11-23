@@ -12,7 +12,6 @@
 using namespace std;
 
 class Study {
-//https://www.runoob.com/cplusplus/cpp-files-streams.html
 public:
     int var_type() {
         /**
@@ -83,6 +82,7 @@ public:
         cout << "type: \t\t" << "************size**************" << endl;
         return 0;
     }
+
     void const_char_stu() {
         char str[] = "hello world";
         char str2[] = "world";
@@ -102,6 +102,7 @@ public:
 //        pstr3 = str2;//报错，无法改变指针的指向
 
     }
+
     void file_stu_1(char const *filename) {
         FILE *fp;//文件指针
         char str_buf[256];//字符串（char数组）
