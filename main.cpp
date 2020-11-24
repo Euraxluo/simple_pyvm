@@ -4,6 +4,9 @@ using namespace std;
 
 #include "src/study/Study.hpp"
 #include "src/util/BufferedInputStream.hpp"
+#include "src/object/HiObject.hpp"
+#include "src/object/HiString.hpp"
+#include "src/util/ArrayList.hpp"
 #define INIT 0
 #define NUM 1
 
@@ -25,6 +28,10 @@ int main(int argc,char** argv) {
     /***
      * Test space
      */
+     ArrayList<int > xx(1);
+     xx.add(3);
+     xx.add(4);
+     printf("%d\n",xx.pop());
 
 
     /***
