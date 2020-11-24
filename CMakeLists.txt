@@ -1,6 +1,17 @@
 cmake_minimum_required(VERSION 3.13)
-project(pythonvm)
+project(simple_pyvm)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(pythonvm main.cpp src/util/BufferedInputStream.hpp src/study/Study.hpp src/util/ArrayList.hpp src/object/HiObject.hpp src/object/HiString.hpp)
+include_directories(src)
+include_directories(src/object)
+include_directories(src/study)
+include_directories(src/util)
+
+add_executable(simple_pyvm
+        src/object/HiObject.hpp
+        src/object/HiString.hpp
+        src/study/Study.hpp
+        src/util/ArrayList.hpp
+        src/util/BufferedInputStream.hpp
+        main.cpp src/util/Vector.hpp src/util/heap.hpp)
