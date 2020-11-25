@@ -14,4 +14,4 @@ add_executable(simple_pyvm
         src/study/Study.hpp
         src/util/ArrayList.hpp
         src/util/BufferedInputStream.hpp
-        main.cpp src/util/Vector.hpp src/util/heap.hpp)
+        main.cpp src/util/heap.hpp)
