@@ -6,7 +6,7 @@
 #define PYTHONVM_HIOBJECT_HPP
 
 
-class HiObject {
+class Object {
 
 };
 
