@@ -29,6 +29,7 @@ public:
             return szBuffer[index++];
         } else{
             index = 0;
+            //char,-127~128,8bit
             fread(szBuffer,BUFFER_LEN*sizeof(char),1,fp);//读取BUFFER_LEN长的字节,并存到szBUffer中,index为0
             return szBuffer[index++];
         }
@@ -37,10 +38,7 @@ public:
         /**
          * 先转为无符号int型,再移位,避免溢出
          */
-        char m = read();
-//        printf("%d\n",m);
-//        printf("%d\n",m&0xff);
-//        printf("%d\n",int(m)&0xff);
+        char m = read();//空读第一个字节
         int b1 = toUnsignedInt(read());//oxff = 11111111,简单来说会把高24位全部变成0，低8位保持不变!
         int b2 = toUnsignedInt(read());
         int b3 = toUnsignedInt(read());

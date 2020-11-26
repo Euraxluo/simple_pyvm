@@ -9,9 +9,9 @@ include_directories(src/study)
 include_directories(src/util)
 
 add_executable(simple_pyvm
-        src/object/Object.hpp
-        src/object/String.hpp
-        src/study/Study.hpp
-        src/util/ArrayList.hpp
-        src/util/BufferedInputStream.hpp
-        main.cpp src/util/heap.hpp)
+        src/object/object.hpp
+        src/object/string.hpp
+        src/study/study.hpp
+        src/util/arrayList.hpp
+        src/util/bufferedInputStream.hpp
+        main.cpp src/util/heap.hpp src/object/integer.hpp src/code/codeObject.hpp)

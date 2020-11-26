@@ -1,5 +1,6 @@
 //
 // Created by euraxluo on 2020/11/24.
+// test pass
 //
 
 #ifndef PYTHONVM_HISTRING_HPP
@@ -114,6 +115,7 @@ public:
     ~String() {
         delete[] _string;
     }
+        printf("~String");
 
     inline const char *c_str() {
         return _string;

@@ -11,9 +11,9 @@ template<typename T>
 class ArrayList {
 private:
 private:
-    int _capacity;//元素数组大小
+    size_t _capacity;//元素数组大小
     T *_array;//泛型指针,指向元素数组
-    int _size;//用于显示当前列表中的有效元素个数
+    size_t _size;//用于显示当前列表中的有效元素个数
     /**
      * 在hpp中可以将模板类的实现和定义放在一起
      * 分开实现：
@@ -32,10 +32,27 @@ private:
     }
 
 public:
-    ArrayList(int capacity = 8) {
-        _capacity = capacity;
-        _size = 0;
+    //int 构造器
+    ArrayList(size_t capacity = 1) {
+        if (capacity>0){
+            _capacity = capacity;
+            _size = 0;
+            _array = new T[_capacity];
+        } else{
+            _capacity = 1;
+            _size = 0;
+            _array = new T[_capacity];
+        }
+    }
+    ArrayList(){
+        _capacity=1;
+        _size=0;
         _array = new T[_capacity];
+    }
+    ArrayList(const T *array){
+        _size = 0;
+        if (array){
+        }
     }
 
     ~ArrayList() {
@@ -44,7 +61,7 @@ public:
 
     void push(T t) {
         /**
-         * 将元素放到arrayList的末尾
+         * 将元素放到ArrayList的末尾
          */
         assert(_size <= _capacity);
         if (_size == _capacity) {
@@ -55,7 +72,7 @@ public:
 
     T pop() {
         /**
-         * 移除arrayList的最后一个元素
+         * 移除ArrayList的最后一个元素
          */
         assert(_size > 0);
         T back = _array[_size--];
