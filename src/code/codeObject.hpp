@@ -2,18 +2,13 @@
 // Created by yons on 2020/12/10.
 //
 
-#ifndef SIMPLE_PYVM_CODEOBJECT_HPP
-#define SIMPLE_PYVM_CODEOBJECT_HPP
 #ifndef CODE_OBJECT_HPP
 #define CODE_OBJECT_HPP
-
-#include "object.hpp"
-#include "string.hpp"
-#include "arrayList.hpp"
 
 //前置声明,暂不使用
 //template <typename T>
 //class ArrayList;
+#include "helper.hpp"
 
 class CodeObject : public Object {
 public:
@@ -57,9 +52,71 @@ public:
             _notable(notable){
 
     }
+
+    inline const char* toString(){
+        if (this == nullptr){
+            return "null";
+        }
+        String to_string;
+        char* intv = new char[16];
+        String * bytecodesHex = Helper::string2hex(_bytecodes);
+        String * notableHex = Helper::string2hex(_notable);
+        to_string="_argcount(";
+        to_string+=String::int2String(_argcount,intv);
+        to_string+="),";
+        to_string+="_nlocals(";
+        to_string+=String::int2String(_nlocals,intv);
+        to_string+="),";
+        to_string+="_stack_size(";
+        to_string+=String::int2String(_stack_size,intv);
+        to_string+="),";
+        to_string+="_flag(";
+        to_string+=String::int2String(_flag,intv);
+        to_string+="),";
+        to_string=to_string+"_bytecodes("+bytecodesHex->c_str()+"),";
+        to_string+="_names[";
+        for (int i = 0; i < _names->size(); ++i) {
+            auto o=  _names->get(i);
+            to_string+=o->toString();
+        }
+        to_string+="],";
+        to_string+="_consts[";
+        for (int i = 0; i < _consts->size(); ++i) {
+            auto o=  _consts->get(i);
+            to_string+=o->toString();
+        }
+        to_string+="],";
+        to_string+="_var_names[";
+        for (int i = 0; i < _var_names->size(); ++i) {
+            auto o=  _var_names->get(i);
+            to_string+=o->toString();
+        }
+        to_string+="],";
+        to_string+="_free_vars[";
+        for (int i = 0; i < _free_vars->size(); ++i) {
+            auto o=  _free_vars->get(i);
+            to_string+=o->toString();
+        }
+        to_string+="],";
+        to_string+="_cell_vars[";
+        for (int i = 0; i < _cell_vars->size(); ++i) {
+            auto o=  _cell_vars->get(i);
+            to_string+=o->toString();
+        }
+        to_string+="],";
+        to_string=to_string+"_co_name("+*_co_name+"),";
+        to_string=to_string+"_file_name("+*_file_name+"),";
+        to_string+="_lineno(";
+        to_string+=String::int2String(_lineno,intv);
+        to_string+="),";
+        to_string=to_string+"_notable("+notableHex->c_str()+")";
+
+        //避免幽灵变量
+        String * string = new String(to_string);
+        delete bytecodesHex;
+        delete intv;
+        return string->toString();
+    }
 };
 
 #endif
-
-
-#endif //SIMPLE_PYVM_CODEOBJECT_HPP

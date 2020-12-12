@@ -16,8 +16,15 @@ private:
 public:
     BufferedInputStream(char const* filename){//构造函数
         //file 是一个指向char const 的指针，可以改变指针的指向，但是不能改变它的值
+        //todo 文件不存在时会出现段错误
         fp = fopen(filename,"rb");
-        fread(szBuffer,BUFFER_LEN* sizeof(char),1,fp);
+        try {
+            fread(szBuffer,BUFFER_LEN* sizeof(char),1,fp);
+        } catch (...) {
+            printf("file %s not found\n",filename);
+            throw "fread Exception\n";
+        }
+
         index=0;
     }
     ~BufferedInputStream() {//析构函数
@@ -38,7 +45,6 @@ public:
         /**
          * 先转为无符号int型,再移位,避免溢出
          */
-        char m = read();//空读第一个字节
         int b1 = toUnsignedInt(read());//oxff = 11111111,简单来说会把高24位全部变成0，低8位保持不变!
         int b2 = toUnsignedInt(read());
         int b3 = toUnsignedInt(read());
@@ -61,9 +67,9 @@ public:
     }
 
     void close(){
-        if (fp!=NULL){
+        if (fp!= nullptr){
             fclose(fp);
-            fp = NULL;
+            fp = nullptr;
         }
     }
 

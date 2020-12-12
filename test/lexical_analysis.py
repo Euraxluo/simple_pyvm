@@ -1,8 +1,8 @@
 import tokenize
-f = open("test_token.py",encoding='utf8')
-tk = tokenize.generate_tokens(f.readline)
-for tok_num,tok_value,_,_,_ in tk:
-    print(tok_num,tok_value)
+with open("test_token.py",encoding='utf8') as f:
+    tk = tokenize.generate_tokens(f.readline)
+    for tok_num,tok_value,_,_,_ in tk:
+        print(tok_num,tok_value)
 
 
 
@@ -64,7 +64,7 @@ ELLIPSIS = 52
 OP = 53
 ERRORTOKEN = 54
 # These aren't used by the C tokenizer but are needed for tokenize.py
-COMMENT = 55 注释
+COMMENT = 55 
 NL = 56
 ENCODING = 57
 N_TOKENS = 58

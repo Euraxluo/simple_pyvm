@@ -7,7 +7,8 @@
 
 
 class Object {
-
+public:
+    virtual const char* toString(){}
 };
 
 
