@@ -11,7 +11,7 @@
 
 using namespace std;
 
-class Study {
+class study {
 public:
     int var_type() {
         /**
@@ -118,6 +118,13 @@ public:
         t = t & 0xff;
         printf("%d",t);
 //        signed
+    }
+    auto adder(){
+        auto sum = 0;
+        return [=] (int value) mutable{
+            sum+=value;
+            return sum;
+        };
     }
 };
 
