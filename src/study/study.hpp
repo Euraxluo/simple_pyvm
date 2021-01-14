@@ -11,7 +11,7 @@
 
 using namespace std;
 
-class study {
+class Study {
 public:
     int var_type() {
         /**

@@ -18,19 +18,22 @@ public:
         return time;
     }
 
-    static String* string2hex(String *str) {
+    static String* string2hex(String *str,int radix=16) {
         if (str->length() == 0) {
             String *res = new String("\000");
             return res;
         }
         size_t size = str->length() * 2;
-        String *hex_res = new String(size);
+        auto *hex_res = new String(size);
         static const char *hex = "0123456789ABCDEF";
         for (int i = 0; i < str->length(); ++i) {
             hex_res->insert(i * 2, hex[(str->c_str()[i] >> 4) & 0xf]);
             hex_res->insert(((i * 2) + 1), hex[str->c_str()[i] & 0xf]);
         }
         return hex_res;
+    }
+    static int byte2int(char byte) {
+        return (byte&0xFF);
     }
 };
 

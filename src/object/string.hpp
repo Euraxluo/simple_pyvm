@@ -7,14 +7,12 @@
 #define _STRING_HPP
 
 #include <assert.h>
-
-
-#define max 100
+#include <stdio.h>
 
 class String : public Object {
 private:
-    char *_string;
-    size_t _length;
+    char *_string= nullptr;
+    size_t _length=0;
 
     inline char *strcpy(char *dst, const char *src) {
         char *ret = dst;
@@ -72,7 +70,9 @@ private:
     }
 
     inline int strcmp(const char *str1, const char *str2) {
-        while (*str1 && (*str1 == *str2)) {
+        if (!str1 or !str2)
+            return 1;
+        while (*str1 && *str2 && (*str1 == *str2)) {
             ++str1;
             ++str2;
         }
@@ -319,6 +319,16 @@ public:
 
     inline const char *toString() {
         return _string;
+    }
+    unsigned int hashCode(){
+        unsigned int hash = 5381;
+        char * key = _string;
+
+        while (*key){
+            hash = ((hash << 5) + hash) + (*key++); /* times 33 */
+        }
+        hash &= ~(1 << 31); /* strip the highest bit */
+        return hash;
     }
 };
 

@@ -56,4 +56,4 @@ def show_hex(label, h, indent):
         print("%s</%s>" % (indent, label))
 
 
-show_file("hello.pyc" if len(sys.argv)<=1 else sys.argv[1])
+show_file("test_if.pyc" if len(sys.argv)<=1 else sys.argv[1])

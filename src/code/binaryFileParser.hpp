@@ -34,8 +34,8 @@ public:
 
         //接下来是字节码，以字符s开头，然后是整型，表示字节码长度，剩余字节就是字节
         String* byte_codes = get_byte_codes();
-        String * hex = Helper::string2hex(byte_codes);
-//        printf("\nbyte_codes is $%s$",hex->c_str());
+        auto * hex = Helper::string2hex(byte_codes);
+        printf("\nbyte_codes is $%s$",hex->c_str());
         delete hex;
 
         //接下来是常量表，以字符'('开始,接下来是整型，表示这个list的长度，接下来就是第一个元素的类型,根据类型，可以知道我们应该取多少个字节
@@ -138,7 +138,7 @@ public:
                     list->push(new Integer(file_stream->read_int()));
                     break;
                 case 'N':
-                    list->push(new Integer(NULL));
+                    list->push(new Integer(0));
                     break;
                 case 't'://t,也表示字符串，但是要加入到string_table中
                     str = get_string();

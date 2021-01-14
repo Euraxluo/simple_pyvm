@@ -76,8 +76,10 @@ public:
          * 移除ArrayList的最后一个元素
          */
         assert(_size > 0);
-        T back = _array[_size--];
+        T back = _array[--_size];
         if (_size == _capacity >> 2) {
+            if (_capacity == 1)
+                return back;
             resize(_capacity >> 1);
         }
         return back;

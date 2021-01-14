@@ -58,6 +58,7 @@ public:
         }
         return *(double *)t;
     }
+
     void unread(){
         index --;
     }
