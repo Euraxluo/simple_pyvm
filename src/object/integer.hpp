@@ -1,76 +1,61 @@
 //
-// Created by yons on 2020/12/9.
+// Created by euraxluo on 2021/1/21.
 //
 
-#ifndef _INTEGER_HPP
-#define _INTEGER_HPP
+#ifndef SIMPLE_PYVM_INTEGER_HPP
+#define SIMPLE_PYVM_INTEGER_HPP
+
+#include "klass.hpp"
 #include "object.hpp"
-#include "string.hpp"
-#include "runtime/universe.hpp"
-class Universe;
+class IntegerKlass : public Klass {
+private:
+    static IntegerKlass *_instance;
+
+    IntegerKlass();
+    ~IntegerKlass();
+
+public:
+    static IntegerKlass *getInstance();
+
+
+    virtual void print(Object *obj);
+
+
+    virtual Object *greater(Object *x, Object *y);
+
+    virtual Object *less(Object *x, Object *y);
+
+    virtual Object *equal(Object *x, Object *y);
+
+    virtual Object *not_equal(Object *x, Object *y);
+
+    virtual Object *ge(Object *x, Object *y);
+
+    virtual Object *le(Object *x, Object *y);
+
+    virtual Object *add(Object *x, Object *y);
+
+    virtual Object *sub(Object *x, Object *y);
+
+    virtual Object *mul(Object *x, Object *y);
+
+    virtual Object *div(Object *x, Object *y);
+
+    virtual Object *mod(Object *x, Object *y);
+};
+
 
 class Integer : public Object {
 private:
     int _value;
 
 public:
-    Integer(int x){
-        _value=x;
-    }
-    inline int value() { return _value; }
+    Integer(int x);
 
-    inline const char* toString(){
-        char * str = new char[64];
-        String::int2String(_value,str,10);
-        return str;
-    }
+    int value() { return _value; }
 
-    inline void print(){
-        printf("%d",_value);
-    }
-    inline Object* add(Object* x){
-        return new Integer(_value+((Integer*) x)->_value );
-    }
-    inline Object* i_add(Object* x){
-        return new Integer(_value+((Integer*) x)->_value );
-    }
-
-    inline Object* greater  (Object* x) {
-        if(_value>((Integer*)x)->_value)
-            return Universe::Real;
-        else
-            return Universe::Inveracious;
-    }
-    inline Object* less     (Object* x) {
-        if(_value<((Integer*)x)->_value)
-            return Universe::Real;
-        else
-            return Universe::Inveracious;
-    }
-    inline Object* equal    (Object* x) {
-        if(_value==((Integer*)x)->_value)
-            return Universe::Real;
-        else
-            return Universe::Inveracious;
-
-    }
-    inline Object* not_equal(Object* x) {
-        if(_value!=((Integer*)x)->_value)
-            return Universe::Real;
-        else
-            return Universe::Inveracious;
-    }
-    inline Object* ge       (Object* x) {
-        if(_value>=((Integer*)x)->_value)
-            return Universe::Real;
-        else
-            return Universe::Inveracious;
-    }
-    inline Object* le       (Object* x) {
-        if(_value<=((Integer*)x)->_value)
-            return Universe::Real;
-        else
-            return Universe::Inveracious;
-    }
+    const char *toString();
 };
-#endif //_INTEGER_HPP
+
+
+#endif //SIMPLE_PYVM_INTEGER_HPP

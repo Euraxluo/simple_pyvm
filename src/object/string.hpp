@@ -8,7 +8,7 @@
 
 #include <assert.h>
 #include <stdio.h>
-
+#include "object.hpp"
 class String : public Object {
 private:
     char *_string= nullptr;

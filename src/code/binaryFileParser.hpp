@@ -34,7 +34,7 @@ public:
 
         //接下来是字节码，以字符s开头，然后是整型，表示字节码长度，剩余字节就是字节
         String* byte_codes = get_byte_codes();
-        auto * hex = Helper::string2hex(byte_codes);
+        String * hex = Helper::string2hex(byte_codes);
         printf("\nbyte_codes is $%s$",hex->c_str());
         delete hex;
 

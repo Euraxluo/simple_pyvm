@@ -24,7 +24,7 @@ public:
             return res;
         }
         size_t size = str->length() * 2;
-        auto *hex_res = new String(size);
+        String *hex_res = new String(size);
         static const char *hex = "0123456789ABCDEF";
         for (int i = 0; i < str->length(); ++i) {
             hex_res->insert(i * 2, hex[(str->c_str()[i] >> 4) & 0xf]);

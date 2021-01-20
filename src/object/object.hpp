@@ -1,27 +1,53 @@
 //
-// Created by euraxluo on 2020/11/24.
+// Created by euraxluo on 2021/1/16.
 //
 
-#ifndef _OBJECT_HPP
-#define _OBJECT_HPP
+#ifndef SIMPLE_PYVM_OBJECT_HPP
+#define SIMPLE_PYVM_OBJECT_HPP
 
-
+#include "assert.h"
+class Klass;
 class Object {
+private:
+    Klass *_klass = nullptr;
 public:
-    virtual const char* toString(){}
-    virtual unsigned int hashCode(){};
-    
-    virtual void print(){}
-    virtual Object* add(Object* x){}
-    virtual Object* i_add(Object* x){}
+    Klass *klass() {
+        assert(_klass != nullptr);
+        return _klass;
+    }
 
-    virtual Object* greater  (Object* x) {};
-    virtual Object* less     (Object* x) {};
-    virtual Object* equal    (Object* x) {};
-    virtual Object* not_equal(Object* x) {};
-    virtual Object* ge       (Object* x) {};
-    virtual Object* le       (Object* x) {};
+    void setKlass(Klass *k) { _klass = k; }
+
+
+    virtual const char *toString() {}
+
+    virtual unsigned int hashCode() {};
+
+    void print();
+
+    Object *add(Object *rhs);
+
+    Object *sub(Object *rhs);
+
+    Object *mul(Object *rhs);
+
+    Object *div(Object *rhs);
+
+    Object *mod(Object *rhs);
+
+    Object *i_add(Object *x) {}
+
+    Object *greater(Object *rhs);
+
+    Object *less(Object *rhs);
+
+    Object *equal(Object *rhs);
+
+    Object *not_equal(Object *rhs);
+
+    Object *ge(Object *rhs);
+
+    Object *le(Object *rhs);
 };
 
-
-#endif //_OBJECT_HPP
+#endif //SIMPLE_PYVM_OBJECT_HPP
