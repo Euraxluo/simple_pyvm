@@ -42,6 +42,7 @@ public:
 
 
     virtual Object *add(Object *x, Object *y) { return 0 ;};
+    virtual Object *i_add(Object *x, Object *y) { return 0 ;};
 
     virtual Object *sub(Object *x, Object *y) { return 0 ;};
 

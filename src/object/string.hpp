@@ -1,16 +1,48 @@
 //
-// Created by euraxluo on 2020/11/24.
-// test pass
+// Created by euraxluo on 2021/1/21.
 //
 
-#ifndef _STRING_HPP
-#define _STRING_HPP
+#ifndef SIMPLE_PYVM_STRING_HPP
+#define SIMPLE_PYVM_STRING_HPP
 
-#include <assert.h>
-#include <stdio.h>
+#include "klass.hpp"
 #include "object.hpp"
-class String : public Object {
+#include "stdio.h"
+class StringKlass :public Klass{
 private:
+    static StringKlass* _instance;
+    StringKlass();
+    ~StringKlass();
+
+public:
+    static StringKlass* getInstance();
+    virtual void print(Object *obj);
+
+//    virtual Object *greater(Object *x, Object *y);
+
+//    virtual Object *less(Object *x, Object *y);
+
+    virtual Object *equal(Object *x, Object *y);
+
+    virtual Object *not_equal(Object *x, Object *y);
+
+//    virtual Object *ge(Object *x, Object *y);
+
+//    virtual Object *le(Object *x, Object *y);
+
+    virtual Object *add(Object *x, Object *y);
+    virtual Object *i_add(Object *x, Object *y);
+
+//    virtual Object *sub(Object *x, Object *y);
+//
+//    virtual Object *mul(Object *x, Object *y);
+//
+//    virtual Object *div(Object *x, Object *y);
+//
+//    virtual Object *mod(Object *x, Object *y);
+};
+class String : public Object {
+protected:
     char *_string= nullptr;
     size_t _length=0;
 
@@ -20,27 +52,7 @@ private:
         return ret;
     }
 
-    inline void *memcpy(void *dst, const void *src, size_t count) {
-        void *ret = dst;
-        if (dst <= src || (char *) dst >= ((char *) src + count))//源地址和目的地址不重叠，低字节向高字节拷贝
-        {
-            while (count--) {
-                *(char *) dst = *(char *) src;
-                dst = (char *) dst + 1;
-                src = (char *) src + 1;
-            }
-        } else//源地址和目的地址重叠，高字节向低字节拷贝
-        {
-            dst = (char *) dst + count - 1;
-            src = (char *) src + count - 1;
-            while (count--) {
-                *(char *) dst = *(char *) src;
-                dst = (char *) dst - 1;
-                src = (char *) src - 1;
-            }
-        }
-        return ret;
-    }
+
 
     inline size_t strlen(const char *s) {
         const char *p = s;
@@ -81,59 +93,48 @@ private:
 
 public:
     //初始化列表
-    String(size_t length = 0) {
-        _length = length;
-        if (_length == 0) {
-            _string = new char[1];
-        } else {
-            _string = new char[_length];
-        }
-        _string[_length] = '\0';
-    }
-
+    String(size_t length = 0);
     //char* 构造器
-    String(const char *str) {
-        _length = 0;
-        if (str) {
-            _length = strlen(str);
-            _string = new char[_length + 1];
-            strcpy(_string, str);
-        }
-        _string[_length] = '\0';
-    }
-
+    String(const char *str) ;
     //char* 构造器，但是可以指定长度,注意这里不要超出了字符的长度，否则会cpy到其他内存区
-    String(const char *x, size_t length) {
-        _length = length;
-        _string = new char[length];
-        memcpy(_string, x, _length);
-    }
-
-    String(const size_t times, const char ch) {
-        _length = times;
-        _string = new char[_length + 1];
-        *(_string + _length) = '\0';
-        strset(_string, ch);
-    }
+    String(const char *x, size_t length);
+    String(const size_t times, const char ch);
 
     //拷贝构造
-
-    String(const String &str) {
-        _length = str._length;
-        _string = new char[_length + 1];
-        strcpy(_string, str._string);
-    }
-
-    ~String() {
-        delete[] _string;
-    }
+    String(const String &str);
+    ~String();
 
     inline const char *c_str() {
+        return _string;
+    }
+    inline char *_str(){
         return _string;
     }
 
     inline size_t length() {
         return _length;
+    }
+
+    inline void *memcpy(void *dst, const void *src, size_t count) {
+        void *ret = dst;
+        if (dst <= src || (char *) dst >= ((char *) src + count))//源地址和目的地址不重叠，低字节向高字节拷贝
+        {
+            while (count--) {
+                *(char *) dst = *(char *) src;
+                dst = (char *) dst + 1;
+                src = (char *) src + 1;
+            }
+        } else//源地址和目的地址重叠，高字节向低字节拷贝
+        {
+            dst = (char *) dst + count - 1;
+            src = (char *) src + count - 1;
+            while (count--) {
+                *(char *) dst = *(char *) src;
+                dst = (char *) dst - 1;
+                src = (char *) src - 1;
+            }
+        }
+        return ret;
     }
 
     inline bool empty() {
@@ -333,4 +334,4 @@ public:
 };
 
 
-#endif //_STRING_HPP
+#endif //SIMPLE_PYVM_STRING_HPP

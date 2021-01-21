@@ -200,25 +200,25 @@ void MapTest() {
     String str6("a_bc1");
     String str7("a_bc2");
     String str8("a_bc3");
-    printf("get1 %d\n",hashMap->get(&str, 0));
-    hashMap->put(&str, 31);
-    printf("get2 %d\n",hashMap->get(&str, 0));
-    hashMap->put(&str1, 1);
-    printf("get3 %d\n",hashMap->get(&str, 0));
-    hashMap->put(&str2, 2);
-    printf("get4 %d\n",hashMap->get(&str, 0));
-    hashMap->put(&str3, 3);
-    printf("get5 %d\n",hashMap->get(&str, 0));
-    hashMap->put(&str4, 4);
-    printf("get6 %d\n",hashMap->get(&str, 0));
-    hashMap->put(&str5, 5);
-    printf("get7 %d\n",hashMap->get(&str, 0));
-    hashMap->put(&str6, 6);
-    printf("get8 %d\n",hashMap->get(&str, 0));
-    hashMap->put(&str7, 7);
-    printf("get9 %d\n",hashMap->get(&str, 0));
-    hashMap->put(&str8, 8);
-    printf("get10 %d\n",hashMap->get(&str, 0));
+//    printf("get1 %d\n",hashMap->get(&str, 0));
+//    hashMap->put(&str, 31);
+//    printf("get2 %d\n",hashMap->get(&str, 0));
+//    hashMap->put(&str1, 1);
+//    printf("get3 %d\n",hashMap->get(&str, 0));
+//    hashMap->put(&str2, 2);
+//    printf("get4 %d\n",hashMap->get(&str, 0));
+//    hashMap->put(&str3, 3);
+//    printf("get5 %d\n",hashMap->get(&str, 0));
+//    hashMap->put(&str4, 4);
+//    printf("get6 %d\n",hashMap->get(&str, 0));
+//    hashMap->put(&str5, 5);
+//    printf("get7 %d\n",hashMap->get(&str, 0));
+//    hashMap->put(&str6, 6);
+//    printf("get8 %d\n",hashMap->get(&str, 0));
+//    hashMap->put(&str7, 7);
+//    printf("get9 %d\n",hashMap->get(&str, 0));
+//    hashMap->put(&str8, 8);
+//    printf("get10 %d\n",hashMap->get(&str, 0));
 
     printf("%d %d %d %d %d %d %d %d %d\n",
            hashMap->hash_key(&str),
@@ -240,8 +240,8 @@ void MapTest() {
     hashMap->remove(&str6);
     hashMap->remove(&str7);
     hashMap->remove(&str8);
-    hashMap->put(&str, 1);
-    hashMap->put(&str1, 2);
+//    hashMap->put(&str, 1);
+//    hashMap->put(&str1, 2);
 
     printf("%d %d %d %d %d %d %d %d %d\n",
            hashMap->get(&str, 0),

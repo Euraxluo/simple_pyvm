@@ -11,6 +11,9 @@ void  Object::print() {
 Object *Object::add(Object *rhs) {
     return klass()->add(this, rhs);
 }
+Object *Object::i_add(Object *rhs) {
+    return klass()->i_add(this, rhs);
+}
 
 Object *Object::sub(Object *rhs) {
     return klass()->sub(this, rhs);

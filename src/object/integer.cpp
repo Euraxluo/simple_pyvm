@@ -132,6 +132,15 @@ Object *IntegerKlass::add(Object *x, Object *y) {
 
     return new Integer(ix->value() + iy->value());
 }
+Object *IntegerKlass::i_add(Object *x, Object *y){
+    Integer *ix = (Integer *) x;
+    Integer *iy = (Integer *) y;
+
+    assert(ix && (ix->klass() == (Klass *) this));
+    assert(iy && (iy->klass() == (Klass *) this));
+
+    return new Integer(ix->value() + iy->value());
+}
 
 Object *IntegerKlass::sub(Object *x, Object *y) {
     Integer *ix = (Integer *) x;

@@ -34,6 +34,7 @@ public:
     virtual Object *le(Object *x, Object *y);
 
     virtual Object *add(Object *x, Object *y);
+    virtual Object *i_add(Object *x, Object *y);
 
     virtual Object *sub(Object *x, Object *y);
 

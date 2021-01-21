@@ -35,7 +35,7 @@ public:
 
     Object *mod(Object *rhs);
 
-    Object *i_add(Object *x) {}
+    Object *i_add(Object *x);
 
     Object *greater(Object *rhs);
 

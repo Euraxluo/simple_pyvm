@@ -9,14 +9,15 @@
 
 
 #include <assert.h>
+#include "stdio.h"
 
 template<typename K, typename V>
 class MapEntry {
 public:
-    K _k;
-    V _v;
-    unsigned int _hash;
-    MapEntry<K, V> *_next = NULL;
+    K _k= nullptr;
+    V _v= nullptr;
+    unsigned int _hash=0;
+    MapEntry<K, V> *_next = nullptr;
 public:
     MapEntry(const MapEntry<K, V> &entry) {
         _k = entry._k;
@@ -24,18 +25,16 @@ public:
         _hash = entry._hash;
     };
 
-    MapEntry(K k, V v, unsigned int hash) : _k(k), _v(v), _hash(hash) {}
+    MapEntry(K k= nullptr, V v= nullptr, unsigned int hash=0) : _k(k), _v(v), _hash(hash) {}
 
-    MapEntry() : _k(nullptr), _v(NULL), _hash(NULL) {}
-
-    MapEntry(K k, unsigned int hash) : _k(k), _v(NULL), _hash(hash) {}
+    MapEntry(K k, unsigned int hash) : _k(k), _v(nullptr), _hash(hash) {}
 
     ~MapEntry() {
         printf("~MapEntry v %d  ;",_v);
-        printf("~MapEntry _hash %lu ;",_hash);
-        _k = nullptr;
-        _v = NULL;
-        _hash = NULL;
+        printf("~MapEntry _hash %u ;",_hash);
+        _k = (K)NULL;
+        _v = (V)NULL;
+        _hash = 0;
         _next = nullptr;
         printf("~MapEntry done\n");
     }
@@ -77,7 +76,7 @@ public:
     void _init_table() {
         _table = _size == 0 ? nullptr : new MapEntry<K, V> *[_size];
         for (int i = 0; i < _size; i++) {
-            _table[i] = new MapEntry<K, V>;
+            _table[i] = nullptr;
             printf("_table %d\n", i);
         }
         printf("_table done\n");
@@ -92,7 +91,7 @@ public:
      * 最后记得把_table设置为nullptr，如果是delete[] _table,则会生成一个默认为空的 ew MapEntry<K, V>*;
      */
     void _del_table() {
-        printf("del_table  begin;table %d;entry: %d\n",_size,_used);
+        printf("del_table  begin;table %lu;entry: %lu\n",_size,_used);
         for (int i = 0; i < _size; ++i) {
             printf("del_table %d\n", i);
             _table[i] = nullptr;
@@ -276,7 +275,7 @@ private:
         size_t newSize = _loadFactor(table) <= 0.1 ? _tableSizeToSmall(table->_used) : table->_size;
         //如果小于0.1,那么需要将tableSize变小
         newSize = _loadFactor(table) >= 0.75 ? _tableSizeToBig(table->_used) : newSize;
-        return newSize;
+        return (unsigned int)newSize;
     }
 
     /**
@@ -421,7 +420,8 @@ private:
         MapEntry<K, V> *mapEntry = _keyAtHashTable(ht, k);
         if (mapEntry == nullptr) {
             //创建出键值对
-            mapEntry = new MapEntry<K, V>(k, (*_hashFunc)(k));
+            unsigned int hash = (*_hashFunc)(k);
+            mapEntry = new MapEntry<K, V>(k, hash);
             //将这个键值对放在链子的头部
             mapEntry->_next = ht->_table[_hashTableKeyIndex(ht, k)];
             ht->_table[_hashTableKeyIndex(ht, k)] = mapEntry;
