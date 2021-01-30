@@ -9,6 +9,7 @@
 //template <typename T>
 //class ArrayList;
 #include "helper.hpp"
+#include "arrayList.hpp"
 
 class CodeObject : public Object {
 public:
