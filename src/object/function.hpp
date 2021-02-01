@@ -7,6 +7,7 @@
 
 #include "klass.hpp"
 #include "object.hpp"
+#include "hashMap.hpp"
 #include "code/codeObject.hpp"
 
 class FunctionKlass : public Klass {
@@ -31,12 +32,18 @@ class Function : public Object {
 
     friend class FrameObject;
 
+
 private:
     CodeObject *_func_code;
     String *_func_name;
     unsigned int _flags;
+    HashMap<Object *, Object *> *_globals;
 
 public:
+    HashMap<Object *, Object *> *globals() { return _globals; }
+
+    void set_globals(HashMap<Object *, Object *> *globals) { _globals = globals; }
+
     Function(Object *code_object);
 
     String *func_name() { return _func_name; }

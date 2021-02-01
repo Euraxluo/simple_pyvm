@@ -6,9 +6,12 @@
 #define SIMPLE_PYVM_FRAMEOBJECT_HPP
 
 
-#include <code/codeObject.hpp>
-#include <util/hashMap.hpp>
-#include "util/arrayList.hpp"
+#include "../object/object.hpp"
+#include "../object/function.hpp"
+#include "../util/arrayList.hpp"
+#include "../util/helper.hpp"
+#include "../util/hashMap.hpp"
+#include "../code/codeObject.hpp"
 
 class Block {
 public:
@@ -35,7 +38,8 @@ private:
     ArrayList<Object *> *_consts;
     ArrayList<Object *> *_names;
 
-    HashMap<Object *, Object *> *_locals = new HashMap<Object *, Object *>();
+    HashMap<Object *, Object *> *_locals;
+    HashMap<Object *, Object *> *_globals;
 
     CodeObject *_codes;
     FrameObject *_sender;
@@ -46,6 +50,8 @@ public:
         _names = codes->_names;
 
         _locals = new HashMap<Object *, Object *>();
+        _globals = _locals;
+
 
         _stack = new ArrayList<Object *>();
         _loop_stack = new ArrayList<Block *>();
@@ -60,6 +66,7 @@ public:
         _consts = _codes->_consts;
         _names = _codes->_names;
         _locals = new HashMap<Object *, Object *>();
+        _globals = func->globals();
         _stack = new ArrayList<Object *>();
         _loop_stack = new ArrayList<Block *>();
         _ptr_c = 0;
@@ -68,8 +75,11 @@ public:
     }
 
     FrameObject() {};
+
     ~FrameObject() {};
 public:
+    HashMap<Object *, Object *>* globals(){ return _globals;}
+
     void set_sender(FrameObject *f) { _sender = f; }
 
     FrameObject *sender() { return _sender; }

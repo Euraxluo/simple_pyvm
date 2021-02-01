@@ -506,7 +506,7 @@ public:
 
     }
 
-    V get(K k, V defaultV = NULL) {
+    V get(K k, V defaultV = nullptr) {
         //如果此时在进行rehash，那么我们这里也进行单步rehash
         if (rehashIdxNotInit() && _reHash(&_hashTable[0], &_hashTable[1], 1) == 0) {
             //将新的设置为常用table

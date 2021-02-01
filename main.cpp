@@ -306,9 +306,10 @@ int main(int argc, char **argv) {
     CodeObject *main_code = parser.parse();
     printf("main_code is %s \n", main_code->toString());
 
+    Universe::genesis();//初始化一些值
     Interpreter interpreter;
 
-    Universe::genesis();//初始化一些值
+
 
     interpreter.run(main_code);
     return 0;

@@ -5,8 +5,8 @@
 #ifndef SIMPLE_PYVM_INTERPRETER_HPP
 #define SIMPLE_PYVM_INTERPRETER_HPP
 
-#include <util/hashMap.hpp>
-#include <object/function.hpp>
+#include "hashMap.hpp"
+#include "object/function.hpp"
 #include "util/arrayList.hpp"
 #include "object/object.hpp"
 #include "code/codeObject.hpp"
@@ -14,6 +14,7 @@
 #include "object/integer.hpp"
 #include "universe.hpp"
 #include "frameObject.hpp"
+#include "../code/bytecode.hpp"
 
 class Interpreter {
 private:
@@ -33,8 +34,24 @@ private:
         return _frame->stack()->size();
     }
 
+    inline Object* BUILTIN_TRUE() {
+        return Universe::Real;
+    }
+    inline Object* BUILTIN_FALSE() {
+        return Universe::Inveracious;
+    }
+    inline Object* BUILTIN_NONE() {
+        return Universe::None;
+    }
+    HashMap<Object *, Object *> *_builtins;
+
 public:
-    Interpreter() {}
+    Interpreter() {
+        _builtins = new HashMap<Object *, Object *>();
+        _builtins->put(new String("True"), BUILTIN_TRUE());
+        _builtins->put(new String("False"), BUILTIN_FALSE());
+        _builtins->put(new String("None"), BUILTIN_NONE());
+    }
 
     void build_frame(Object *callable) {
         FrameObject *frame = new FrameObject((Function *) callable);
@@ -51,7 +68,7 @@ public:
     }
 
     void leave_frame(Object *ret_value) {
-        if (!_frame->sender()) {
+        if (!_frame->sender()) {//如果该栈是最顶层，那么直接退出，否则需要回收该栈
 //            delete _frame;
 //            _frame = nullptr;
             return;
@@ -73,6 +90,9 @@ public:
             }
 
             switch (option_code) {
+                case ByteCode::POP_TOP:
+                    POP();
+                    break;
                 case ByteCode::LOAD_CONST:
                     PUSH(_frame->consts()->get(option_arg));
                     break;
@@ -125,6 +145,12 @@ public:
                         case ByteCode::LESS_EQUAL:
                             PUSH(v->le(w));
                             break;
+                        case ByteCode::IS:
+                            PUSH(v->equal(w));
+                            break;
+                        case ByteCode::IS_NOT:
+                            PUSH(v->not_equal(w));
+                            break;
                         default:
                             printf("Error:Unrecongnized compare op %d\n", option_arg);
                     }
@@ -135,7 +161,17 @@ public:
                 case ByteCode::LOAD_NAME:
                     v = _frame->names()->get(option_arg);
                     w = _frame->locals()->get(v);
-                    if (w != Universe::None) {
+                    if (w && w != Universe::None) {
+                        PUSH(w);
+                        break;
+                    }
+                    w = _frame->globals()->get(v);
+                    if (w && w != Universe::None) {
+                        PUSH(w);
+                        break;
+                    }
+                    w = _builtins->get(v);
+                    if (w && w != Universe::None) {
                         PUSH(w);
                         break;
                     }
@@ -168,6 +204,7 @@ public:
                 case ByteCode::MAKE_FUNCTION:
                     v = POP();
                     fo = new Function(v);
+                    fo->set_globals(_frame->globals());//将创建函数时的环境变量传递给函数
                     PUSH(fo);//读取func对象，压入栈内
                     break;
                 case ByteCode::CALL_FUNCTION:
@@ -177,6 +214,15 @@ public:
                     leave_frame(POP());
                     if (!_frame)
                         return;//主程序中，直接结束调用
+                    break;
+                case ByteCode::LOAD_GLOBAL:
+                    v = _frame->names()->get(option_arg);
+                    w = _frame->globals()->get(v);
+                    PUSH(w);
+                    break;
+                case ByteCode::STORE_GLOBAL:
+                    v = _frame->names()->get(option_arg);
+                    _frame->globals()->put(v, POP());
                     break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
