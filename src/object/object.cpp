@@ -56,3 +56,7 @@ Object *Object::ge(Object *rhs) {
 Object *Object::le(Object *rhs) {
     return klass()->le(this, rhs);
 };
+
+Object * Object::len() {
+    klass()->len(this);
+}

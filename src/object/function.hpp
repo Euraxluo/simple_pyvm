@@ -9,7 +9,11 @@
 #include "object.hpp"
 #include "hashMap.hpp"
 #include "code/codeObject.hpp"
+//typedef
+typedef ArrayList<Object*>* ObjectArr;
+typedef Object* (*NativeFuncPtr)(ObjectArr args);
 
+//FunctionKlass
 class FunctionKlass : public Klass {
 private:
 
@@ -26,7 +30,7 @@ public:
     virtual void print(Object *obj);
 };
 
-
+//Function
 class Function : public Object {
     friend class FunctionKlass;
 
@@ -38,26 +42,48 @@ private:
     String *_func_name;
     unsigned int _flags;
     HashMap<Object *, Object *> *_globals;
-    ArrayList<Object *> *_defaults;
+    ObjectArr _defaults;
+
+    NativeFuncPtr _native_func;//函数指针
 
 public:
     Function(Object *code_object);
+    Function(NativeFuncPtr native_func_ptr);
 
+
+    Object* call(ObjectArr args);
+    const char *toString();
+
+    //attr getset
     String *func_name() { return _func_name; }
 
     int flags() { return _flags; }
+
     CodeObject *func_code() { return _func_code; }
 
-    const char *toString();
-
-    HashMap<Object *, Object *> *globals() { return _globals; }
-
+    HashMap<Object *, Object *> * globals() { return _globals; }
     void set_globals(HashMap<Object *, Object *> *globals) { _globals = globals; }
 
     ArrayList<Object *> *defaults() { return _defaults; }
-
-    void set_default(ArrayList<Object *> *defaults);
+    void set_default(ObjectArr defaults);
 };
+
+//NativeFunctionKlass
+class NativeFunctionKlass: public Klass{
+private:
+    NativeFunctionKlass();
+    static NativeFunctionKlass *_instance;
+public:
+    static NativeFunctionKlass *getInstance();
+};
+
+//native 方法区
+Object* len(ObjectArr args);
+Object* iter(ObjectArr args);
+Object* type_of(ObjectArr args);
+Object* isinstance(ObjectArr args);
+Object* builtin_super(ObjectArr args);
+Object* sysgc(ObjectArr args);
 
 
 #endif //SIMPLE_PYVM_FUNCTION_HPP

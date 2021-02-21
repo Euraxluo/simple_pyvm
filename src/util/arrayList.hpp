@@ -6,6 +6,8 @@
 #define PYTHONVM_ARRAYLIST_HPP
 
 #include <assert.h>
+//typedef
+typedef __SIZE_TYPE__ size_t;
 
 template<typename T>
 class ArrayList {

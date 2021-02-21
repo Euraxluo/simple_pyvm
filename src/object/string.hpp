@@ -18,6 +18,8 @@ public:
     static StringKlass* getInstance();
     virtual void print(Object *obj);
 
+    //Klass Function
+
 //    virtual Object *greater(Object *x, Object *y);
 
 //    virtual Object *less(Object *x, Object *y);
@@ -40,6 +42,9 @@ public:
 //    virtual Object *div(Object *x, Object *y);
 //
 //    virtual Object *mod(Object *x, Object *y);
+
+    //Native Function
+    virtual Object* len(Object* x);
 };
 class String : public Object {
 protected:

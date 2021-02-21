@@ -14,7 +14,7 @@
 #include "object/integer.hpp"
 #include "universe.hpp"
 #include "frameObject.hpp"
-
+typedef ArrayList<Object*>* ObjectArr;
 class Interpreter {
 private:
 
@@ -50,12 +50,17 @@ public:
         _builtins->put(new String("True"), BUILTIN_TRUE());
         _builtins->put(new String("False"), BUILTIN_FALSE());
         _builtins->put(new String("None"), BUILTIN_NONE());
+        _builtins->put(new String("len"),      new Function(len));
     }
 
-    void build_frame(Object *callable, ArrayList<Object *> *args) {
-        FrameObject *frame = new FrameObject((Function *) callable, args);
-        frame->set_sender(_frame);//一个指针，设置调用者的栈桢
-        _frame = frame;
+    void build_frame(Object *callable, ObjectArr args) {
+        if (callable->klass() == NativeFunctionKlass::getInstance()){//NativeFunctionKlass
+            PUSH(((Function*)callable)->call(args));
+        } else{//FunctionKlass
+            FrameObject *frame = new FrameObject((Function *) callable, args);
+            frame->set_sender(_frame);//一个指针，设置调用者的栈桢
+            _frame = frame;
+        }
     }
 
     void destroy_frame() {
@@ -160,17 +165,17 @@ public:
                     break;
                 case ByteCode::LOAD_NAME:
                     v = _frame->names()->get(option_arg);
-                    w = _frame->locals()->get(v);
+                    w = _frame->locals()->get(v,Universe::None);
                     if (w && w != Universe::None) {
                         PUSH(w);
                         break;
                     }
-                    w = _frame->globals()->get(v);
+                    w = _frame->globals()->get(v,Universe::None);
                     if (w && w != Universe::None) {
                         PUSH(w);
                         break;
                     }
-                    w = _builtins->get(v);
+                    w = _builtins->get(v,Universe::None);
                     if (w && w != Universe::None) {
                         PUSH(w);
                         break;
@@ -238,8 +243,17 @@ public:
                     break;
                 case ByteCode::LOAD_GLOBAL:
                     v = _frame->names()->get(option_arg);
-                    w = _frame->globals()->get(v);
-                    PUSH(w);
+                    w = _frame->globals()->get(v,Universe::None);
+                    if (w != Universe::None){//check
+                        PUSH(w);
+                        break;
+                    }
+                    w = _builtins->get(v,Universe::None);
+                    if (w!=Universe::None){
+                        PUSH(w);
+                        break;
+                    }
+                    PUSH(Universe::None);
                     break;
                 case ByteCode::STORE_GLOBAL:
                     v = _frame->names()->get(option_arg);

@@ -4,9 +4,7 @@
 
 #ifndef SIMPLE_PYVM_KLASS_HPP
 #define SIMPLE_PYVM_KLASS_HPP
-
-//#include "string.hpp"
-//#include "object.hpp"
+#include "util/arrayList.hpp"
 class Object;
 class String;
 class Klass {
@@ -27,7 +25,7 @@ public:
 
     virtual void print(Object *obj) {};
 
-
+    //类型支持函数虚拟声明
     virtual Object *greater(Object *x, Object *y) { return 0 ;};
 
     virtual Object *less(Object *x, Object *y) { return 0 ;};
@@ -52,6 +50,9 @@ public:
 
     virtual Object *mod(Object *x, Object *y) { return 0 ;};
 
+    //native func define
+    virtual Object* call(ArrayList<Object*>* args) { return 0; }
+    virtual Object* len(Object* x) {return 0;}
 
 };
 

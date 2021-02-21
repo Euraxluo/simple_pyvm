@@ -48,6 +48,10 @@ public:
     Object *ge(Object *rhs);
 
     Object *le(Object *rhs);
+
+    //native funcion
+    Object* len();
+
 };
 
 #endif //SIMPLE_PYVM_OBJECT_HPP

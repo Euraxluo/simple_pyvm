@@ -4,11 +4,15 @@ def show_file(fname):
     f = open(fname, "rb")
     magic = f.read(4)
     moddate = f.read(4)
-    # print(int(moddate))
-    print(struct.unpack('L', moddate))
-    modtime = time.asctime(time.localtime(struct.unpack('L', moddate)[0]))
-    print("magic %s" % (magic.encode('hex')))
-    print("moddate %s (%s)" % (moddate.encode('hex'), modtime))
+
+    try:
+        print(int(moddate))
+        print(struct.unpack('L', moddate))
+        modtime = time.asctime(time.localtime(struct.unpack('L', moddate)[0]))
+        print("magic %s" % (magic.encode('hex')))
+        print("moddate %s (%s)" % (moddate.encode('hex'), modtime))
+    except:
+        pass
     code = marshal.load(f)
     show_code(code)
 
@@ -56,4 +60,4 @@ def show_hex(label, h, indent):
         print("%s</%s>" % (indent, label))
 
 
-show_file("var.pyc" if len(sys.argv)<=1 else sys.argv[1])
+show_file("native.pyc" if len(sys.argv)<=1 else sys.argv[1])
