@@ -19,7 +19,7 @@ String::String(size_t length) {
     if (_length == 0) {
         _string = new char[1];
     } else {
-        _string = new char[_length];
+        _string = new char[_length+1];
     }
     _string[_length] = '\0';
     setKlass(StringKlass::getInstance());

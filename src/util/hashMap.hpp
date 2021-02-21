@@ -30,13 +30,13 @@ public:
     MapEntry(K k, unsigned int hash) : _k(k), _v(nullptr), _hash(hash) {}
 
     ~MapEntry() {
-        printf("~MapEntry v %d  ;",_v);
-        printf("~MapEntry _hash %u ;",_hash);
+//        printf("~MapEntry v %d  ;",_v);
+//        printf("~MapEntry _hash %u ;",_hash);
         _k = (K)NULL;
         _v = (V)NULL;
         _hash = 0;
         _next = nullptr;
-        printf("~MapEntry done\n");
+//        printf("~MapEntry done\n");
     }
 };
 
@@ -53,7 +53,7 @@ public:
         _sizeMask = _size == 0 ? 0 : _size - 1;
         _used = 0;
         _init_table();
-        printf(" HashTable done\n");
+//        printf(" HashTable done\n");
     }
 
     ~HashTable() {
@@ -61,7 +61,7 @@ public:
         _size = 0;
         _sizeMask = _size == 0 ? 0 : _size - 1;
         _used = 0;
-        printf("~HashTable done\n");
+//        printf("~HashTable done\n");
     }
 
     /**
@@ -77,9 +77,9 @@ public:
         _table = _size == 0 ? nullptr : new MapEntry<K, V> *[_size];
         for (int i = 0; i < _size; i++) {
             _table[i] = nullptr;
-            printf("_table %d\n", i);
+//            printf("_table %d\n", i);
         }
-        printf("_table done\n");
+//        printf("_table done\n");
     }
 
     /**
@@ -91,13 +91,13 @@ public:
      * 最后记得把_table设置为nullptr，如果是delete[] _table,则会生成一个默认为空的 ew MapEntry<K, V>*;
      */
     void _del_table() {
-        printf("del_table  begin;table %lu;entry: %lu\n",_size,_used);
+//        printf("del_table  begin;table %lu;entry: %lu\n",_size,_used);
         for (int i = 0; i < _size; ++i) {
-            printf("del_table %d\n", i);
+//            printf("del_table %d\n", i);
             _table[i] = nullptr;
         }
         _table= nullptr;
-        printf("del_table  done\n");
+//        printf("del_table  done\n");
     }
 };
 
@@ -198,7 +198,7 @@ private:
         *_hashTable = *(_hashTable + 1);
         //将原来的地方设置为旧的那个
         *(_hashTable + 1) = oldTable;
-        printf("_swap done\n");
+//        printf("_swap done\n");
     }
 
     /**
@@ -288,7 +288,7 @@ private:
         table->_size = 0;
         table->_sizeMask = 0;
         table->_used = 0;
-        printf("_tableReset done\n");
+//        printf("_tableReset done\n");
     }
 
     void _tableInit(HashTable<K, V> *table, size_t newSize) {
@@ -296,7 +296,7 @@ private:
         table->_sizeMask = newSize - 1;
         table->_used = 0;
         table->_init_table();
-        printf("_tableInit done\n");
+//        printf("_tableInit done\n");
     }
 
     /**
@@ -320,11 +320,11 @@ private:
         }
         //如果size发生了变化，但是当前table没有被初始化，那么就进行初始化
         if (table->_size == 0) {
-            printf("\ninit table\n");
+//            printf("\ninit table\n");
             _tableInit(table, newSize);
             return;
         } else {
-            printf("\ninit table\n");
+//            printf("\ninit table\n");
             _tableInit(&_hashTable[1], newSize);
         }
         //否则需要进行rehash，需要新创建一个table，或者直接使用1号table进行rehash操作
@@ -460,12 +460,12 @@ public:
     }
 
     ~HashMap(){
-        printf("~HashMap\n");
+//        printf("~HashMap\n");
         delete[] _hashTable;
         _hashTable= nullptr;
         _rehashidx = -1;
         _hashFunc = nullptr;
-        printf("~HashMap done\n");
+//        printf("~HashMap done\n");
     }
     void setHashFunction(unsigned int (*hashFunc)(K k)) {
         _hashFunc = hashFunc;
@@ -506,7 +506,7 @@ public:
 
     }
 
-    V get(K k, V defaultV = NULL) {
+    V get(K k, V defaultV = nullptr) {
         //如果此时在进行rehash，那么我们这里也进行单步rehash
         if (rehashIdxNotInit() && _reHash(&_hashTable[0], &_hashTable[1], 1) == 0) {
             //将新的设置为常用table

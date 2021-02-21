@@ -21,7 +21,7 @@ public:
 
     virtual const char *toString() {}
 
-    virtual unsigned int hashCode() {};
+    virtual unsigned int hashCode() {}
 
     void print();
 
