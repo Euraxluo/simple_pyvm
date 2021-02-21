@@ -14,7 +14,6 @@
 #include "object/integer.hpp"
 #include "universe.hpp"
 #include "frameObject.hpp"
-#include "../code/bytecode.hpp"
 
 class Interpreter {
 private:
@@ -53,8 +52,8 @@ public:
         _builtins->put(new String("None"), BUILTIN_NONE());
     }
 
-    void build_frame(Object *callable) {
-        FrameObject *frame = new FrameObject((Function *) callable);
+    void build_frame(Object *callable, ArrayList<Object *> *args) {
+        FrameObject *frame = new FrameObject((Function *) callable, args);
         frame->set_sender(_frame);//一个指针，设置调用者的栈桢
         _frame = frame;
     }
@@ -69,8 +68,6 @@ public:
 
     void leave_frame(Object *ret_value) {
         if (!_frame->sender()) {//如果该栈是最顶层，那么直接退出，否则需要回收该栈
-//            delete _frame;
-//            _frame = nullptr;
             return;
         }
         destroy_frame();
@@ -79,11 +76,14 @@ public:
 
     void eval_frame() {
         Block *loopBlock;
+        ArrayList<Object *> *args = nullptr;
+        Function *fo;
+        Object *v, *w, *u, *attr;
+
         while (_frame->has_more_codes()) {
             auto option_code = _frame->get_op_code();
             bool has_argument = option_code >= ByteCode::HAVE_ARGUMENT;//判断是否有参数
-            Function *fo;
-            Object *v, *w, *u, *attr;
+
             int option_arg = -1;
             if (has_argument) {
                 option_arg = _frame->get_op_arg();
@@ -205,10 +205,31 @@ public:
                     v = POP();
                     fo = new Function(v);
                     fo->set_globals(_frame->globals());//将创建函数时的环境变量传递给函数
+                    if (option_arg > 0) {
+                        args = new ArrayList<Object *>(option_arg);
+                        while (option_arg--) {
+                            args->set(option_arg, POP());
+                        }
+                    }
+                    fo->set_default(args);
+                    if (args != nullptr) {
+                        delete args;
+                        args = nullptr;
+                    }
                     PUSH(fo);//读取func对象，压入栈内
                     break;
                 case ByteCode::CALL_FUNCTION:
-                    build_frame(POP());//将栈顶的func对象取出，替换当前栈桢，运行frame内的字节码
+                    if (option_arg > 0) {//该字节码的参数是，函数参数个数
+                        args = new ArrayList<Object *>(option_arg);
+                        while (option_arg--) {
+                            args->set(option_arg, POP());
+                        }
+                    }
+                    build_frame(POP(), args);//将栈顶的func对象取出，替换当前栈桢，运行frame内的字节码
+                    if (args != nullptr) {
+                        delete args;
+                        args = nullptr;
+                    }
                     break;
                 case ByteCode::RETURN_VALUE :
                     leave_frame(POP());
@@ -223,6 +244,12 @@ public:
                 case ByteCode::STORE_GLOBAL:
                     v = _frame->names()->get(option_arg);
                     _frame->globals()->put(v, POP());
+                    break;
+                case ByteCode::LOAD_FAST:
+                    PUSH(_frame->fast_locals()->get(option_arg));
+                    break;
+                case ByteCode::STORE_FAST:
+                    _frame->fast_locals()->set(option_arg, POP());
                     break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);

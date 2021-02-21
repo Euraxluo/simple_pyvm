@@ -38,20 +38,25 @@ private:
     String *_func_name;
     unsigned int _flags;
     HashMap<Object *, Object *> *_globals;
+    ArrayList<Object *> *_defaults;
 
 public:
-    HashMap<Object *, Object *> *globals() { return _globals; }
-
-    void set_globals(HashMap<Object *, Object *> *globals) { _globals = globals; }
-
     Function(Object *code_object);
 
     String *func_name() { return _func_name; }
 
     int flags() { return _flags; }
-
+    CodeObject *func_code() { return _func_code; }
 
     const char *toString();
+
+    HashMap<Object *, Object *> *globals() { return _globals; }
+
+    void set_globals(HashMap<Object *, Object *> *globals) { _globals = globals; }
+
+    ArrayList<Object *> *defaults() { return _defaults; }
+
+    void set_default(ArrayList<Object *> *defaults);
 };
 
 

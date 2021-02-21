@@ -40,10 +40,13 @@ private:
 
     HashMap<Object *, Object *> *_locals;
     HashMap<Object *, Object *> *_globals;
+    ArrayList<Object*>      *_fast_locals;
 
     CodeObject *_codes;
     FrameObject *_sender;
     int _ptr_c = 0;//程序计数器
+
+
 public:
     FrameObject(CodeObject *codes) {
         _consts = codes->_consts;
@@ -51,6 +54,7 @@ public:
 
         _locals = new HashMap<Object *, Object *>();
         _globals = _locals;
+        _fast_locals = nullptr;
 
 
         _stack = new ArrayList<Object *>();
@@ -59,10 +63,12 @@ public:
         _codes = codes;
         _ptr_c = 0;
         _sender = nullptr;
+
+
     }
 
-    FrameObject(Function *func) {
-        _codes = func->_func_code;
+    FrameObject(Function *func,ArrayList<Object*>* args) {
+        _codes = func->func_code();
         _consts = _codes->_consts;
         _names = _codes->_names;
         _locals = new HashMap<Object *, Object *>();
@@ -72,6 +78,19 @@ public:
         _ptr_c = 0;
         _sender = nullptr;
 
+        _fast_locals = new ArrayList<Object*>();
+        if(func->defaults()){
+            int defaults_cnt = func->defaults()->length();
+            int arg_cnt = _codes->_argcount;
+            while (defaults_cnt--){
+                _fast_locals->set(--arg_cnt,func->defaults()->get(defaults_cnt));
+            }
+        }
+        if (args){
+            for (int i = 0; i <args->size() ; ++i) {
+                _fast_locals->set(i,args->get(i));
+            }
+        }
     }
 
     FrameObject() {};
@@ -100,6 +119,8 @@ public:
     ArrayList<Object *> *names() { return _names; }
 
     HashMap<Object *, Object *> *locals() { return _locals; }
+
+    ArrayList<Object *> *fast_locals() { return _fast_locals; }
 
     bool has_more_codes() {
         return _ptr_c < _codes->_bytecodes->length();//获取字节码长度

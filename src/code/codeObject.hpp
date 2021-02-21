@@ -115,6 +115,7 @@ public:
         //避免幽灵变量
         String *string = new String(to_string);
         delete bytecodesHex;
+        delete notableHex;
         delete intv;
         return string->toString();
     }
