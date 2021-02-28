@@ -28,24 +28,27 @@ Function::Function(Object *code_object) {
     _func_code = (CodeObject *) code_object;
     _func_name = _func_code->_co_name;
     _flags = _func_code->_flag;
-    _defaults= nullptr;
-    _globals= nullptr;
+    _defaults = nullptr;
+    _globals = nullptr;
     _native_func = nullptr;
     setKlass(FunctionKlass::getInstance());
 
 }
-Function::Function(NativeFuncPtr native_func_ptr){
+
+Function::Function(NativeFuncPtr native_func_ptr) {
     _func_code = nullptr;
     _func_name = nullptr;
-    _flags     = 0;
-    _defaults= nullptr;
-    _globals= nullptr;
+    _flags = 0;
+    _defaults = nullptr;
+    _globals = nullptr;
     _native_func = native_func_ptr;
     setKlass(NativeFunctionKlass::getInstance());
 }
-Object* Function::call(ObjectArr args) {
+
+Object *Function::call(ObjectArr args) {
     return (_native_func)(args);
 }
+
 const char *Function::toString() {
     return func_name()->c_str();
 }
@@ -64,6 +67,7 @@ void Function::set_default(ArrayList<Object *> *defaults) {
 
 //NativeFunctionKlass
 NativeFunctionKlass *NativeFunctionKlass::_instance = nullptr;
+
 NativeFunctionKlass *NativeFunctionKlass::getInstance() {
     if (_instance == nullptr) {
         _instance = new NativeFunctionKlass();
@@ -76,8 +80,8 @@ NativeFunctionKlass::NativeFunctionKlass() {
 }
 
 //NativeFunctions
-Object* len(ObjectArr args) {
-    Object* arg0 = args->get(0);
-    assert(arg0->klass() == StringKlass::getInstance());
-    return new Integer(((String*)arg0)->length());
+Object *len(ObjectArr args) {
+    Object *argtmp = args->get(0);
+    assert(argtmp->klass() == StringKlass::getInstance());
+    return argtmp->klass()->len(argtmp);
 }

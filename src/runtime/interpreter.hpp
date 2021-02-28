@@ -50,7 +50,7 @@ public:
         _builtins->put(new String("True"), BUILTIN_TRUE());
         _builtins->put(new String("False"), BUILTIN_FALSE());
         _builtins->put(new String("None"), BUILTIN_NONE());
-        _builtins->put(new String("len"),      new Function(len));
+        _builtins->put(new String("len"),      new Function(len)); //native func
     }
 
     void build_frame(Object *callable, ObjectArr args) {
