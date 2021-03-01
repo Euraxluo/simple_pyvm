@@ -50,7 +50,9 @@ public:
     Object *le(Object *rhs);
 
     //native funcion
-    Object* len();
+//    Object* len();
+
+    Object* getattr(Object* x);
 
 };
 

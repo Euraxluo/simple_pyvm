@@ -85,3 +85,10 @@ Object *len(ObjectArr args) {
     assert(argtmp->klass() == StringKlass::getInstance());
     return argtmp->klass()->len(argtmp);
 }
+
+//Klass Functions
+Object *upper(ObjectArr args) {
+    Object *argtmp = args->get(0);
+    assert(argtmp->klass() == StringKlass::getInstance());
+    return StringKlass::getInstance()->upper(argtmp);
+}

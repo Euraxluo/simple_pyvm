@@ -5,10 +5,10 @@
 #ifndef SIMPLE_PYVM_FUNCTION_HPP
 #define SIMPLE_PYVM_FUNCTION_HPP
 
+#include <code/codeObject.hpp>
 #include "klass.hpp"
 #include "object.hpp"
 #include "hashMap.hpp"
-#include "code/codeObject.hpp"
 //typedef
 typedef ArrayList<Object*>* ObjectArr;
 typedef Object* (*NativeFuncPtr)(ObjectArr args);
@@ -85,5 +85,7 @@ Object* isinstance(ObjectArr args);
 Object* builtin_super(ObjectArr args);
 Object* sysgc(ObjectArr args);
 
+//klass 方法区
+Object* upper(ObjectArr args);
 
 #endif //SIMPLE_PYVM_FUNCTION_HPP

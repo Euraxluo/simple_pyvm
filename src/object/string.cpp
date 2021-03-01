@@ -19,7 +19,7 @@ String::String(size_t length) {
     if (_length == 0) {
         _string = new char[1];
     } else {
-        _string = new char[_length+1];
+        _string = new char[_length + 1];
     }
     _string[_length] = '\0';
     setKlass(StringKlass::getInstance());
@@ -159,7 +159,7 @@ Object *StringKlass::add(Object *x, Object *y) {
 
     String *sx = (String *) x;
     String *sy = (String *) y;
-    String* sz = new String();
+    String *sz = new String();
     sz->append(sx->c_str());
     sz->append(sy->c_str());
     sz->insert(sx->length() + sy->length(), '\0');
@@ -186,8 +186,30 @@ Object *StringKlass::i_add(Object *x, Object *y) {
 }
 
 //Native Function
-Object* StringKlass::len(Object *obj) {
+Object *StringKlass::len(Object *obj) {
     String *str = (String *) obj;
     assert(str && str->klass() == (Klass *) this);
     return new Integer(str->length());
+}
+
+//Klass Func
+Object *StringKlass::upper(Object *obj) {
+    String *str = (String *) obj;
+    assert(str && obj->klass() == StringKlass::getInstance());
+
+    int length = str->length();
+    if (length <= 0)
+        return Universe::None;
+
+    char *v = new char[length];
+    char c;
+    for (int i = 0; i < length; i++) {
+        c = str->c_str()[i];
+        if (c >= 'a' && c <= 'z')
+            v[i] = c - 0x20;
+        else
+            v[i] = c;
+    }
+
+    return new String(v, length);
 }

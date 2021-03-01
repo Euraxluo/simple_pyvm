@@ -2,8 +2,13 @@
 // Created by euraxluo on 2021/1/16.
 //
 
+#include <runtime/universe.hpp>
+#include <util/helper.hpp>
 #include "object.hpp"
 #include "klass.hpp"
+#include "method.hpp"
+#include "checkKlass.hpp"
+
 void  Object::print() {
     klass()->print(this);
 }
@@ -57,6 +62,23 @@ Object *Object::le(Object *rhs) {
     return klass()->le(this, rhs);
 };
 
-Object * Object::len() {
-    klass()->len(this);
+//todo 不是所有的类型都有len
+//Object * Object::len() {
+//    klass()->len(this);
+//}
+
+
+Object* Object::getattr(Object* x) {
+    Object* attr = Universe::None;
+
+    attr = klass()->klass_dict()->get(x);
+
+    if (attr == Universe::None)
+        return attr;
+
+    // Only klass attribute needs bind.
+    if (CheckKlass::isFunction(attr)) {
+        attr = new Method((Function*)attr, this);
+    }
+    return attr;
 }
