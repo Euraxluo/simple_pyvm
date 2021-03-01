@@ -9,9 +9,36 @@ include_directories(src/study)
 include_directories(src/util)
 
 add_executable(simple_pyvm
-        src/object/object.hpp
-        src/object/string.hpp
+        main.cpp
+        
         src/study/study.hpp
+
+        src/code/bytecode.hpp
+        src/code/codeObject.hpp
+        src/code/binaryFileParser.hpp
+
+        src/util/hashMap.hpp
         src/util/arrayList.hpp
         src/util/bufferedInputStream.hpp
-        main.cpp src/util/heap.hpp src/object/integer.hpp src/code/codeObject.hpp src/code/binaryFileParser.hpp src/util/helper.hpp src/code/bytecode.hpp src/runtime/interpreter.hpp src/runtime/universe.cpp src/runtime/universe.hpp src/util/hashMap.hpp src/object/klass.hpp src/object/object.cpp src/object/object.hpp src/object/integer.cpp src/object/integer.hpp src/object/string.cpp src/object/string.hpp src/runtime/frameObject.hpp src/object/function.cpp src/object/function.hpp)
+        src/util/heap.hpp
+        src/util/helper.hpp
+
+        src/runtime/interpreter.hpp
+        src/runtime/universe.cpp
+        src/runtime/universe.hpp
+        src/runtime/frameObject.hpp
+
+        src/object/object.cpp
+        src/object/object.hpp
+        src/object/integer.cpp
+        src/object/integer.hpp
+        src/object/string.cpp
+        src/object/string.hpp
+        src/object/function.cpp
+        src/object/function.hpp
+        src/object/method.cpp
+        src/object/method.hpp
+        src/object/klass.hpp
+        src/object/checkKlass.hpp
+        )
+

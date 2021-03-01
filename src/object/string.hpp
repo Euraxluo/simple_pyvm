@@ -8,15 +8,21 @@
 #include "klass.hpp"
 #include "object.hpp"
 #include "stdio.h"
-class StringKlass :public Klass{
+
+class StringKlass : public Klass {
 private:
-    static StringKlass* _instance;
+    static StringKlass *_instance;
+
     StringKlass();
+
     ~StringKlass();
 
 public:
-    static StringKlass* getInstance();
+    static StringKlass *getInstance();
+
     virtual void print(Object *obj);
+
+    //Klass Function
 
 //    virtual Object *greater(Object *x, Object *y);
 
@@ -31,6 +37,7 @@ public:
 //    virtual Object *le(Object *x, Object *y);
 
     virtual Object *add(Object *x, Object *y);
+
     virtual Object *i_add(Object *x, Object *y);
 
 //    virtual Object *sub(Object *x, Object *y);
@@ -40,18 +47,23 @@ public:
 //    virtual Object *div(Object *x, Object *y);
 //
 //    virtual Object *mod(Object *x, Object *y);
+
+    //Native Function
+    virtual Object *len(Object *x);
+
+    //Klass Function
+    virtual Object *upper(Object *args);
 };
 class String : public Object {
 protected:
-    char *_string= nullptr;
-    size_t _length=0;
+    char *_string = nullptr;
+    size_t _length = 0;
 
     inline char *strcpy(char *dst, const char *src) {
         char *ret = dst;
         memcpy(dst, src, strlen(src) + 1);
         return ret;
     }
-
 
 
     inline size_t strlen(const char *s) {
@@ -94,20 +106,25 @@ protected:
 public:
     //初始化列表
     String(size_t length = 0);
+
     //char* 构造器
-    String(const char *str) ;
+    String(const char *str);
+
     //char* 构造器，但是可以指定长度,注意这里不要超出了字符的长度，否则会cpy到其他内存区
     String(const char *x, size_t length);
+
     String(const size_t times, const char ch);
 
     //拷贝构造
     String(const String &str);
+
     ~String();
 
     inline const char *c_str() {
         return _string;
     }
-    inline char *_str(){
+
+    inline char *_str() {
         return _string;
     }
 
@@ -281,7 +298,7 @@ public:
         return strcmp(_string, rhs) >= 0;
     }
 
-    inline static char* int2String(int num, char *str = new char[16], int radix=10) {
+    inline static char *int2String(int num, char *str = new char[16], int radix = 10) {
 
         char index[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";//索引表
         unsigned unum;//存放要转换的整数的绝对值,转换的整数可能是负数
@@ -321,11 +338,12 @@ public:
     inline const char *toString() {
         return _string;
     }
-    unsigned int hashCode(){
-        unsigned int hash = 5381;
-        char * key = _string;
 
-        while (*key){
+    unsigned int hashCode() {
+        unsigned int hash = 5381;
+        char *key = _string;
+
+        while (*key) {
             hash = ((hash << 5) + hash) + (*key++); /* times 33 */
         }
         hash &= ~(1 << 31); /* strip the highest bit */
