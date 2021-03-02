@@ -7,6 +7,7 @@
 
 #include <object/method.hpp>
 #include <object/checkKlass.hpp>
+#include <object/list.hpp>
 #include "hashMap.hpp"
 #include "object/function.hpp"
 #include "util/arrayList.hpp"
@@ -286,6 +287,13 @@ public:
                     v = POP();
                     w = _frame->names()->get(option_arg);
                     PUSH(v->getattr(w));
+                    break;
+                case ByteCode::BUILD_LIST:
+                    v  = new List();
+                    while(option_arg--){
+                        ((List*)v)->set(option_arg,POP());
+                    }
+                    PUSH(v);
                     break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
