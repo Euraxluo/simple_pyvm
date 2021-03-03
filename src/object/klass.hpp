@@ -51,6 +51,8 @@ public:
     virtual Object *ge(Object *x, Object *y) { return 0; };
 
     virtual Object *le(Object *x, Object *y) { return 0; };
+    virtual Object *contains(Object *x, Object *y) { return 0; };
+    virtual Object *not_contains(Object *x, Object *y) { return 0; };
 
 
     virtual Object *add(Object *x, Object *y) { return 0; };

@@ -49,6 +49,9 @@ public:
 
     Object *le(Object *rhs);
 
+    Object *contains(Object *rhs);
+    Object *not_contains(Object* rhs);
+
     //native funcion
 //    Object* len();
 

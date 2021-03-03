@@ -62,6 +62,15 @@ Object *Object::le(Object *rhs) {
     return klass()->le(this, rhs);
 };
 
+Object *Object::contains(Object* rhs){
+    return klass()->contains(this, rhs);
+};
+
+Object *Object::not_contains(Object *rhs) {
+    return klass()->not_contains(this, rhs);
+};
+
+
 //todo 不是所有的类型都有len
 //Object * Object::len() {
 //    klass()->len(this);

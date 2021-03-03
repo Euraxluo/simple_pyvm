@@ -174,6 +174,12 @@ public:
                         case ByteCode::IS_NOT:
                             PUSH(v->not_equal(w));
                             break;
+                        case ByteCode::IN:
+                            PUSH(w->contains(v));
+                            break;
+                        case ByteCode::NOT_IN:
+                            PUSH(w->not_contains(v));
+                            break;
                         default:
                             printf("Error:Unrecongnized compare op %d\n", option_arg);
                     }

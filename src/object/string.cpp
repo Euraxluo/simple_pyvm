@@ -153,6 +153,27 @@ Object *StringKlass::not_equal(Object *x, Object *y) {
     return Universe::Inveracious;
 }
 
+Object *StringKlass::contains(Object *x, Object *y) {
+    String *lx = (String *) x;
+    String *ly = (String *) y;
+    assert(lx && lx->klass() == (Klass *) this);
+    assert(ly && ly->klass() == (Klass *) this);
+
+    if (lx->contains(ly->c_str())){
+        return Universe::Real;
+    } else{
+        return Universe::Inveracious;
+    }
+}
+
+Object *StringKlass::not_contains(Object *x, Object *y) {
+    if (contains(x, y) == Universe::Real) {
+        return Universe::Inveracious;
+    } else {
+        return Universe::Real;
+    }
+}
+
 Object *StringKlass::add(Object *x, Object *y) {
     assert(x && x->klass() == this);
     assert(y && y->klass() == this);

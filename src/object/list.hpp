@@ -19,6 +19,9 @@ public:
 
     virtual Object *subscr(Object *x, Object *y);
 
+    virtual Object *contains(Object *x, Object *y);
+    virtual Object *not_contains(Object *x, Object *y);
+
     virtual Object *iter(Object *x);
 };
 

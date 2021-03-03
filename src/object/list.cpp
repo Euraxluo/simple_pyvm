@@ -9,40 +9,40 @@
 #include "function.hpp"
 
 //ListKlass
-ListKlass* ListKlass::_instance= nullptr;
+ListKlass *ListKlass::_instance = nullptr;
 
-ListKlass* ListKlass::getInstance() {
-    if (_instance== nullptr){
+ListKlass *ListKlass::getInstance() {
+    if (_instance == nullptr) {
         _instance = new ListKlass();
     }
     return _instance;
 }
 
 ListKlass::ListKlass() {
-    Dict* klass_dict = new Dict();
-    klass_dict->put(new String("append"),new Function(list_append));
+    Dict *klass_dict = new Dict();
+    klass_dict->put(new String("append"), new Function(list_append));
     set_klass_dict(klass_dict);
 }
 
-Object* list_append(ArrayList<Object*>* args) {
-    ((List*)(args->get(0)))->append(args->get(1));
+Object *list_append(ArrayList<Object *> *args) {
+    ((List *) (args->get(0)))->append(args->get(1));
     return Universe::None;
 }
 
-void ListKlass::print(Object* x) {
-    List * lx = (List*)x;
-    assert(lx && lx->klass() == (Klass*) this);
+void ListKlass::print(Object *x) {
+    List *lx = (List *) x;
+    assert(lx && lx->klass() == (Klass *) this);
 
     printf("[");
 
     int size = lx->list()->size();
-    if (size >= 1){
-        Object* obj = lx->list()->get(0);
-        if (obj->klass()==StringKlass::getInstance()){
+    if (size >= 1) {
+        Object *obj = lx->list()->get(0);
+        if (obj->klass() == StringKlass::getInstance()) {
             printf("'");
             obj->print();
             printf("'");
-        } else{
+        } else {
             obj->print();
         }
 
@@ -50,12 +50,12 @@ void ListKlass::print(Object* x) {
 
     for (int i = 1; i < size; i++) {
         printf(", ");
-        Object* obj = lx->list()->get(i);
-        if (obj->klass()==StringKlass::getInstance()){
+        Object *obj = lx->list()->get(i);
+        if (obj->klass() == StringKlass::getInstance()) {
             printf("'");
             obj->print();
             printf("'");
-        } else{
+        } else {
             obj->print();
         }
 
@@ -63,26 +63,49 @@ void ListKlass::print(Object* x) {
     printf("]");
 }
 
-Object* ListKlass::subscr(Object* x, Object* y) {
-    assert(x && x->klass() == (Klass*) this);
-    assert(y && y->klass() == (Klass*) IntegerKlass::getInstance());
+Object *ListKlass::subscr(Object *x, Object *y) {
+    assert(x && x->klass() == (Klass *) this);
+    assert(y && y->klass() == (Klass *) IntegerKlass::getInstance());
 
-    List * lx = (List*)x;
-    Integer* iy = (Integer*)y;
+    List *lx = (List *) x;
+    Integer *iy = (Integer *) y;
 
     return lx->list()->get(iy->value());
 }
 
-Object* ListKlass::iter(Object* x) {
+Object *ListKlass::contains(Object *x, Object *y) {
+    List *lx = (List *) x;
+    assert(lx && lx->klass() == (Klass *) this);
+
+    int size = lx->list()->size();
+    for (int i = 0; i < size; i++) {
+        if (lx->list()->get(i)->equal(y) == Universe::Real)
+            return Universe::Real;
+    }
+
+    return Universe::Inveracious;
+}
+
+Object *ListKlass::not_contains(Object *x, Object *y) {
+    if (contains(x, y) == Universe::Real) {
+        return Universe::Inveracious;
+    } else {
+        return Universe::Real;
+    }
+}
+
+
+Object *ListKlass::iter(Object *x) {
     return Universe::None;
 }
 
 //List
 List::List() {
     setKlass(ListKlass::getInstance());
-    _list = new ArrayList<Object*>();
+    _list = new ArrayList<Object *>();
 }
-List::List(ArrayList<Object*>* objs) {
+
+List::List(ArrayList<Object *> *objs) {
     setKlass(ListKlass::getInstance());
     _list = objs;
 }

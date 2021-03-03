@@ -12,4 +12,19 @@ print(strx[0])
 if "832" in list:
     print("yes")
 else:
+    print ("no")
+
+if "3" in list:
+    print("yes")
+else:
     print("no")
+
+if "3" not in list:
+    print("yes")
+else:
+    print ("no")
+
+if "Eu" in "Euraxluo":
+    print("Eu in Euraxluo,yes")
+else:
+    print("Eu in Euraxluo,yes")
