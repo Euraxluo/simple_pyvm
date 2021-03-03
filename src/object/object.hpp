@@ -52,8 +52,11 @@ public:
     //native funcion
 //    Object* len();
 
+    //method sup
     Object* getattr(Object* x);
 
+    //type function
+    Object* subscr(Object* x);
 };
 
 #endif //SIMPLE_PYVM_OBJECT_HPP

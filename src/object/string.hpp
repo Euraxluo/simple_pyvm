@@ -53,7 +53,12 @@ public:
 
     //Klass Function
     virtual Object *upper(Object *args);
+
+    //type function
+    virtual Object *subscr(Object *x, Object *y);
+
 };
+
 class String : public Object {
 protected:
     char *_string = nullptr;

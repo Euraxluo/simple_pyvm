@@ -295,6 +295,11 @@ public:
                     }
                     PUSH(v);
                     break;
+                case ByteCode::BINARY_SUBSCR:
+                    v=POP();
+                    w=POP();
+                    PUSH(w->subscr(v));
+                    break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
             }

@@ -54,6 +54,7 @@ public:
 
 
     virtual Object *add(Object *x, Object *y) { return 0; };
+
     virtual Object *i_add(Object *x, Object *y) { return 0; };
 
     virtual Object *sub(Object *x, Object *y) { return 0; };
@@ -66,7 +67,11 @@ public:
 
     //native func define
     virtual Object *call(ArrayList<Object *> *args) { return 0; }
+
     virtual Object *len(Object *x) { return 0; }
+
+    //type function
+    virtual Object *subscr(Object *x, Object *y) { return 0; }
 };
 
 

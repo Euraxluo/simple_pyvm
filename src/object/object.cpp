@@ -82,3 +82,7 @@ Object* Object::getattr(Object* x) {
     }
     return attr;
 }
+
+Object* Object::subscr(Object *x) {
+    return klass()->subscr(this,x);
+}

@@ -213,3 +213,13 @@ Object *StringKlass::upper(Object *obj) {
 
     return new String(v, length);
 }
+
+Object * StringKlass::subscr(Object *x, Object *y){
+    assert(x && x->klass() == (Klass*) this);
+    assert(y && y->klass() == (Klass*) IntegerKlass::getInstance());
+
+    String * sx = (String*)x;
+    Integer* iy = (Integer*)y;
+
+    return new String(&(sx->c_str()[iy->value()]), 1);
+}
