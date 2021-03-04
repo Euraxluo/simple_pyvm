@@ -99,3 +99,6 @@ Object* Object::subscr(Object *x) {
 void Object::store_subscr(Object *x,Object *y) {
     return klass()->store_subscr(this,x,y);
 }
+void Object::del_subscr(Object *x) {
+    return klass()->del_subscr(this,x);
+}

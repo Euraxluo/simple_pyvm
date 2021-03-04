@@ -102,12 +102,16 @@ public:
         /**
          * 移除指定位置的元素
          */
+        if (index<0){
+            index = size()+index;
+        }
         if (index<_size){
             for (int i = index; i < _size; i++) {
                 _array[i] = _array[i+1];
             }
             pop();
         }
+
     }
 
     T get(int index=-1) {

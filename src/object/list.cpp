@@ -24,6 +24,7 @@ ListKlass::ListKlass() {
     klass_dict->put(new String("insert"), new Function(list_insert));
     klass_dict->put(new String("index"), new Function(list_index));
     klass_dict->put(new String("pop"), new Function(list_pop));
+    klass_dict->put(new String("remove"), new Function(list_remove));
     set_klass_dict(klass_dict);
 }
 
@@ -34,6 +35,19 @@ Object *list_append(ArrayList<Object *> *args) {
 
 Object *list_insert(ArrayList<Object *> *args) {
     ((List *) (args->get(0)))->insert(args->get(1), args->get(2));
+    return Universe::None;
+}
+
+Object *list_remove(ArrayList<Object *> *args) {
+    List *list = (List *) (args->get(0));
+    Object *target = (Object *) (args->get(1));
+    assert(list && list->klass() == ListKlass::getInstance());
+
+    for (int i = 0; i < list->list()->size(); ++i) {
+        if (list->get(i)->equal(target) == Universe::Real) {
+            list->list()->remove(i);
+        }
+    }
     return Universe::None;
 }
 
@@ -67,7 +81,7 @@ Object *list_pop(ArrayList<Object *> *args) {
 
     int target = list->list()->size()-1;
     if (args->size() > 1) {
-        target = ((Integer *) (args->get(1)))->value()-1;
+        target = ((Integer *) (args->get(1)))->value();
 
     }
     list->list()->remove(target);
@@ -127,6 +141,15 @@ void ListKlass::store_subscr(Object *x, Object *y, Object *z) {
     Integer *iy = (Integer *) y;
 
     return lx->list()->set(iy->value(), z);
+}
+
+void ListKlass::del_subscr(Object *x, Object *y) {
+    assert(x && x->klass() == (Klass *) this);
+    assert(y && y->klass() == (Klass *) IntegerKlass::getInstance());
+
+    List *lx = (List *) x;
+    Integer *iy = (Integer *) y;
+    return lx->list()->remove(iy->value());
 }
 
 Object *ListKlass::contains(Object *x, Object *y) {

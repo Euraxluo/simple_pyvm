@@ -312,6 +312,11 @@ public:
                     w=POP();
                     v->store_subscr(u,w);
                     break;
+                case ByteCode::DELETE_SUBSCR:
+                    w=POP();
+                    v=POP();
+                    v->del_subscr(w);
+                    break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
             }

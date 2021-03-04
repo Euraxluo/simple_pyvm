@@ -75,6 +75,7 @@ public:
     //type function
     virtual Object *subscr(Object *x, Object *y) { return 0; }
     virtual void store_subscr(Object *x, Object *y,Object *z) { return; }
+    virtual void del_subscr(Object *x, Object *y) { return; }
 };
 
 

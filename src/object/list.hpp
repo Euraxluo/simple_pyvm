@@ -22,6 +22,7 @@ public:
 
     virtual Object *subscr(Object *x, Object *y);
     virtual void store_subscr(Object *x, Object *y, Object *z);
+    virtual void del_subscr(Object *x, Object *y);
 
     virtual Object *contains(Object *x, Object *y);
 
@@ -44,7 +45,7 @@ public:
 
     void append(Object *obj) { _list->push(obj); }
 
-    void insert(Object *idx, Object *obj) { _list->set(((Integer*)idx)->value(),obj); }
+    void insert(Object *idx, Object *obj) { _list->insert(((Integer*)idx)->value(),obj); }
 
     Object *pop() { return _list->pop(); }
 
@@ -61,5 +62,6 @@ Object *list_insert(ArrayList<Object *> *args);
 
 Object *list_index(ArrayList<Object *> *args);
 Object *list_pop(ArrayList<Object *> *args);
+Object *list_remove(ArrayList<Object *> *args);
 
 #endif //SIMPLE_PYVM_LIST_HPP

@@ -54,6 +54,7 @@ public:
 
     Object* subscr(Object* x);
     void store_subscr(Object* x,Object *y);
+    void del_subscr(Object* x);
 
     //native funcion
 //    Object* len();
