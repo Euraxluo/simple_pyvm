@@ -31,7 +31,7 @@ Object *list_append(ArrayList<Object *> *args) {
 }
 
 Object *list_insert(ArrayList<Object *> *args) {
-    ((List *) (args->get(0)))->insert(args->get(1),args->get(2));
+    ((List *) (args->get(0)))->insert(args->get(1), args->get(2));
     return Universe::None;
 }
 
@@ -78,6 +78,16 @@ Object *ListKlass::subscr(Object *x, Object *y) {
     Integer *iy = (Integer *) y;
 
     return lx->list()->get(iy->value());
+}
+
+void ListKlass::store_subscr(Object *x, Object *y, Object *z) {
+    assert(x && x->klass() == (Klass *) this);
+    assert(y && y->klass() == (Klass *) IntegerKlass::getInstance());
+
+    List *lx = (List *) x;
+    Integer *iy = (Integer *) y;
+
+    return lx->list()->set(iy->value(), z);
 }
 
 Object *ListKlass::contains(Object *x, Object *y) {

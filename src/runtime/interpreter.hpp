@@ -306,6 +306,12 @@ public:
                     w=POP();
                     PUSH(w->subscr(v));
                     break;
+                case ByteCode::STORE_SUBSCR:
+                    u=POP();
+                    v=POP();
+                    w=POP();
+                    v->store_subscr(u,w);
+                    break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
             }

@@ -21,6 +21,7 @@ public:
     virtual void print(Object *obj);
 
     virtual Object *subscr(Object *x, Object *y);
+    virtual void store_subscr(Object *x, Object *y, Object *z);
 
     virtual Object *contains(Object *x, Object *y);
 

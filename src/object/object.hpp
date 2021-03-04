@@ -52,14 +52,15 @@ public:
     Object *contains(Object *rhs);
     Object *not_contains(Object* rhs);
 
+    Object* subscr(Object* x);
+    void store_subscr(Object* x,Object *y);
+
     //native funcion
 //    Object* len();
 
     //method sup
     Object* getattr(Object* x);
 
-    //type function
-    Object* subscr(Object* x);
 };
 
 #endif //SIMPLE_PYVM_OBJECT_HPP

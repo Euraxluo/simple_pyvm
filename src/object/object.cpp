@@ -95,3 +95,7 @@ Object* Object::getattr(Object* x) {
 Object* Object::subscr(Object *x) {
     return klass()->subscr(this,x);
 }
+
+void Object::store_subscr(Object *x,Object *y) {
+    return klass()->store_subscr(this,x,y);
+}

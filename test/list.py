@@ -34,3 +34,18 @@ print(list)
 
 list.insert(0,[1,2,3])
 print(list)
+
+
+list[1]=["t","e","s","t"]
+print(list)
+
+print ("remove from list")
+
+list.pop(1)
+print(list)
+
+list.remove('9')
+print(list)
+
+del list[0]
+print(list)
