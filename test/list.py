@@ -28,3 +28,9 @@ if "Eu" in "Euraxluo":
     print("Eu in Euraxluo,yes")
 else:
     print("Eu in Euraxluo,yes")
+
+list.append([1,2,3])
+print(list)
+
+list.insert(0,[1,2,3])
+print(list)

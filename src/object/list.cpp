@@ -21,6 +21,7 @@ ListKlass *ListKlass::getInstance() {
 ListKlass::ListKlass() {
     Dict *klass_dict = new Dict();
     klass_dict->put(new String("append"), new Function(list_append));
+    klass_dict->put(new String("insert"), new Function(list_insert));
     set_klass_dict(klass_dict);
 }
 
@@ -28,6 +29,12 @@ Object *list_append(ArrayList<Object *> *args) {
     ((List *) (args->get(0)))->append(args->get(1));
     return Universe::None;
 }
+
+Object *list_insert(ArrayList<Object *> *args) {
+    ((List *) (args->get(0)))->insert(args->get(1),args->get(2));
+    return Universe::None;
+}
+
 
 void ListKlass::print(Object *x) {
     List *lx = (List *) x;
