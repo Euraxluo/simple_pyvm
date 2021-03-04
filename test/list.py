@@ -29,12 +29,19 @@ if "Eu" in "Euraxluo":
 else:
     print("Eu in Euraxluo,yes")
 
+
+
 list.append([1,2,3])
 print(list)
 
 list.insert(0,[1,2,3])
 print(list)
 
+print (list.index('832',0))
+print (list.index('832',1))
+print (list.index('832',2))
+print (list.index('832',0,1))
+print (list.index('832'))
 
 list[1]=["t","e","s","t"]
 print(list)

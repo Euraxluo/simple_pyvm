@@ -22,6 +22,7 @@ ListKlass::ListKlass() {
     Dict *klass_dict = new Dict();
     klass_dict->put(new String("append"), new Function(list_append));
     klass_dict->put(new String("insert"), new Function(list_insert));
+    klass_dict->put(new String("index"), new Function(list_index));
     set_klass_dict(klass_dict);
 }
 
@@ -33,6 +34,31 @@ Object *list_append(ArrayList<Object *> *args) {
 Object *list_insert(ArrayList<Object *> *args) {
     ((List *) (args->get(0)))->insert(args->get(1), args->get(2));
     return Universe::None;
+}
+
+Object *list_index(ArrayList<Object *> *args) {
+    List *list = (List *) (args->get(0));
+    Object *target = (Object *) (args->get(1));
+
+    int start = 0;
+    int end = list->list()->size();
+    if (args->size() > 2) {
+        start = ((Integer *) (args->get(2)))->value();
+    }
+
+    if (args->size() > 3) {
+        end = ((Integer *) (args->get(3)))->value();
+    }
+
+
+    assert(list && list->klass() == ListKlass::getInstance());
+
+    for (int i = start; i < end; ++i) {
+        if (list->get(i)->equal(target) == Universe::Real) {
+            return new Integer(i);
+        }
+    }
+    return Universe::Inveracious;
 }
 
 
