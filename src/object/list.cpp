@@ -23,6 +23,7 @@ ListKlass::ListKlass() {
     klass_dict->put(new String("append"), new Function(list_append));
     klass_dict->put(new String("insert"), new Function(list_insert));
     klass_dict->put(new String("index"), new Function(list_index));
+    klass_dict->put(new String("pop"), new Function(list_pop));
     set_klass_dict(klass_dict);
 }
 
@@ -58,6 +59,18 @@ Object *list_index(ArrayList<Object *> *args) {
             return new Integer(i);
         }
     }
+    return Universe::Inveracious;
+}
+Object *list_pop(ArrayList<Object *> *args) {
+    List *list = (List *) (args->get(0));
+    assert(list && list->klass() == ListKlass::getInstance());
+
+    int target = list->list()->size()-1;
+    if (args->size() > 1) {
+        target = ((Integer *) (args->get(1)))->value()-1;
+
+    }
+    list->list()->remove(target);
     return Universe::Inveracious;
 }
 

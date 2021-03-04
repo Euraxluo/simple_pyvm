@@ -60,5 +60,6 @@ Object *list_append(ArrayList<Object *> *args);
 Object *list_insert(ArrayList<Object *> *args);
 
 Object *list_index(ArrayList<Object *> *args);
+Object *list_pop(ArrayList<Object *> *args);
 
 #endif //SIMPLE_PYVM_LIST_HPP
