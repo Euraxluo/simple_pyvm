@@ -73,3 +73,7 @@ print(list)
 
 del list[-1]
 print(list)
+
+while True:
+    # list.append(0)
+    print(list)

@@ -127,14 +127,14 @@ public:
     }
 
     unsigned char get_op_code() {
-        return (unsigned char) Helper::byte2int(_codes->_bytecodes->c_str()[_ptr_c++]);//获取当前操作码
+        return _codes->_bytecodes->c_str()[_ptr_c++];//获取当前操作码
     }
 
     int get_op_arg() {
-        int arg_index = Helper::byte2int(_codes->_bytecodes->c_str()[_ptr_c++]);
-        int null_v = Helper::byte2int(_codes->_bytecodes->c_str()[_ptr_c++]);
+        int arg_index = _codes->_bytecodes->c_str()[_ptr_c++]& 0xff;
+        int null_v = _codes->_bytecodes->c_str()[_ptr_c++]& 0xff;
         auto tmp = null_v << 8;//左移8位
-        return null_v | arg_index;
+        return tmp | arg_index;
     }
 
 
