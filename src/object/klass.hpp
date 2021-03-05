@@ -39,6 +39,8 @@ public:
 
     Dict *klass_dict() { return _klass_dict; }
 
+    static int compare_klass(Klass * x,Klass * y);
+
     //类型支持函数虚拟声明
     virtual Object *greater(Object *x, Object *y) { return 0; };
 

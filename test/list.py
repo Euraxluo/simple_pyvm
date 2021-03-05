@@ -48,6 +48,12 @@ print(list)
 list[1]=["t","e","s","t","2"]
 print(list)
 
+list.reverse()
+print(list)
+
+list.sort()
+print(list)
+
 
 print ("remove from list")
 
@@ -57,15 +63,17 @@ print(list)
 list.pop(0)
 print(list)
 
-list.pop()
-print(list)
-
-list.remove('832')
-print(list)
-
 
 list.append("xixixi")
 print(list)
+
+list.pop()
+print(list)
+
+list.remove('9')
+print(list)
+
+
 
 del list[-2]
 print(list)
@@ -74,6 +82,9 @@ print(list)
 del list[-1]
 print(list)
 
-while True:
-    # list.append(0)
-    print(list)
+print ([1,2,3]<[1,2,3,4])
+print ([1,3,3]>[1,2,3,4])
+
+# while True:
+#     list.append(0)
+#     print(list)

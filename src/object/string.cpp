@@ -80,36 +80,35 @@ void StringKlass::print(Object *obj) {
     }
 }
 
-//Object* StringKlass::less(Object *x, Object *y) {
-//    String* sx = (String*) x;
-//    assert(sx && (sx->klass() == (Klass *)this));
-//
-//    if (x->klass() != y->klass()) {
-//        if (Klass::compare_klass(x->klass(), y->klass()) < 0)
-//            return Universe::Real;
-//        else
-//            return Universe::Inveracious;
-//    }
-//
-//    String* sy = (String*)y;
-//    assert(sy && (sy->klass() == (Klass *)this));
-//
-//    int len = sx->length() < sy->length() ?
-//              sx->length() : sy->length();
-//
-//    for (int i = 0; i < len; i++) {
-//        if (sx->c_str()[i] < sy->c_str()[i])
-//            return Universe::Real;
-//        else if (sx->c_str()[i] > sy->c_str()[i])
-//            return Universe::Inveracious;
-//    }
-//
-//    if (sx->length() < sy->length()) {
-//        return Universe::Real;
-//    }
-//
-//    return Universe::Inveracious;
-//}
+Object* StringKlass::less(Object *x, Object *y) {
+    String* sx = (String*) x;
+    assert(sx && (sx->klass() == (Klass *)this));
+
+    if (x->klass() != y->klass()) {
+        if (Klass::compare_klass(x->klass(), y->klass()) < 0)
+            return Universe::Real;
+        else
+            return Universe::Inveracious;
+    }
+
+    String* sy = (String*)y;
+    assert(sy && (sy->klass() == (Klass *)this));
+
+    auto len = sx->length() < sy->length() ? sx->length() : sy->length();
+
+    for (int i = 0; i < len; i++) {
+        if (sx->c_str()[i] < sy->c_str()[i])
+            return Universe::Real;
+        else if (sx->c_str()[i] > sy->c_str()[i])
+            return Universe::Inveracious;
+    }
+
+    if (sx->length() < sy->length()) {
+        return Universe::Real;
+    }
+
+    return Universe::Inveracious;
+}
 
 Object *StringKlass::equal(Object *x, Object *y) {
     if (x->klass() != y->klass())

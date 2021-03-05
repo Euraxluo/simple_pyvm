@@ -26,7 +26,7 @@ public:
 
 //    virtual Object *greater(Object *x, Object *y);
 
-//    virtual Object *less(Object *x, Object *y);
+    virtual Object *less(Object *x, Object *y);
 
     virtual Object *equal(Object *x, Object *y);
 

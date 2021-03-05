@@ -7,9 +7,9 @@
 #include "stdio.h"
 #include "string.hpp"
 #include "function.hpp"
-Integer *Universe::Real = NULL;
-Integer *Universe::Inveracious = NULL;
-Object *Universe::None = NULL;
+Object *Universe::Real = nullptr;
+Object *Universe::Inveracious = nullptr;
+Object *Universe::None = nullptr;
 
 void Universe::genesis(){
     Real = new Integer(1);
@@ -19,6 +19,7 @@ void Universe::genesis(){
     //init StringKlass
     Dict* klass_dict = new Dict();
     StringKlass::getInstance()->set_klass_dict(klass_dict);
+    StringKlass::getInstance()->setName(new String("str"));
     klass_dict->put(new String("upper"),new Function(upper));
 }
 

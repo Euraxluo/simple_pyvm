@@ -20,6 +20,9 @@ public:
 
     virtual void print(Object *obj);
 
+    virtual Object *less(Object *x, Object *y);
+    virtual Object *equal(Object *x, Object *y);
+
     virtual Object *subscr(Object *x, Object *y);
     virtual void store_subscr(Object *x, Object *y, Object *z);
     virtual void del_subscr(Object *x, Object *y);
@@ -57,11 +60,14 @@ public:
 };
 
 Object *list_append(ArrayList<Object *> *args);
-
 Object *list_insert(ArrayList<Object *> *args);
-
 Object *list_index(ArrayList<Object *> *args);
 Object *list_pop(ArrayList<Object *> *args);
 Object *list_remove(ArrayList<Object *> *args);
+Object *list_reverse(ArrayList<Object *> *args);
+Object *list_sort(ArrayList<Object *> *args);
+
+void qsort(List *list,int left,int right,void * key);
+void qrsort(List *list,int left,int right,void * key);
 
 #endif //SIMPLE_PYVM_LIST_HPP

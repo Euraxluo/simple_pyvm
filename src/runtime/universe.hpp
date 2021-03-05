@@ -11,8 +11,8 @@ class Object;
 
 class Universe  {
 public:
-    static Integer* Inveracious;
-    static Integer* Real;
+    static Object* Inveracious;
+    static Object* Real;
     static Object* None;
 public:
     static void genesis();
