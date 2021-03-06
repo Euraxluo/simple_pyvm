@@ -82,9 +82,16 @@ print(list)
 del list[-1]
 print(list)
 
-print ([1,2,3]<[1,2,3,4])
-print ([1,3,3]>[1,2,3,4])
+# print ([1,2,3]<[1,2,3,4])
+# print ([1,3,3]>[1,2,3,4])
 
 # while True:
 #     list.append(0)
 #     print(list)
+
+
+list =[1,2,3,4]
+# it = iter(list)
+# print(it)
+for i in list:
+    print(i)

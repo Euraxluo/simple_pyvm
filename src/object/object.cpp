@@ -102,3 +102,6 @@ void Object::store_subscr(Object *x,Object *y) {
 void Object::del_subscr(Object *x) {
     return klass()->del_subscr(this,x);
 }
+Object* Object::iter() {
+    return klass()->iter(this);
+}

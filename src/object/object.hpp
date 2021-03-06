@@ -57,10 +57,12 @@ public:
     void del_subscr(Object* x);
 
     //native funcion
+    Object* iter();
 //    Object* len();
 
     //method sup
     Object* getattr(Object* x);
+
 
 };
 

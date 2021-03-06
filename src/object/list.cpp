@@ -116,7 +116,7 @@ void qrsort(List *list, int left, int right, void *key) {
         }
 
     }
-    qrsort(list, left, gt-1, key);
+    qrsort(list, left, gt - 1, key);
     qrsort(list, lt + 1, right, key);
 }
 
@@ -285,7 +285,7 @@ Object *ListKlass::equal(Object *x, Object *y) {
         if (lx->get(i)->equal(ly->get(i)) == Universe::Inveracious)
             return Universe::Inveracious;
     }
-    return  Universe::Real;
+    return Universe::Real;
 }
 
 Object *ListKlass::subscr(Object *x, Object *y) {
@@ -340,7 +340,45 @@ Object *ListKlass::not_contains(Object *x, Object *y) {
 
 
 Object *ListKlass::iter(Object *x) {
-    return Universe::None;
+    assert(x && x->klass() == (Klass *) this);
+//    return Universe::None;
+    return new ListIterator((List *) x);
+}
+
+
+//ListIteratorKlass
+ListIteratorKlass *ListIteratorKlass::_instance = nullptr;
+
+Object *listiterator_next(ArrayList<Object *> *args) {
+    ListIterator *iter = (ListIterator *) (args->get(0));
+    List *alist = iter->owner();
+    int iter_cnt = iter->iter_cnt();
+    if (iter_cnt < alist->list()->size()) {
+        Object *obj = alist->get(iter_cnt);
+        iter->inc_cnt();
+        return obj;
+    } else // TODO :StopIteration 异常
+        return nullptr;
+}
+
+ListIteratorKlass::ListIteratorKlass() {
+    Dict *klass_dict = new Dict();
+    klass_dict->put(new String("next"), new Function(listiterator_next));
+    set_klass_dict(klass_dict);
+}
+
+ListIteratorKlass *ListIteratorKlass::getInstance() {
+    if (_instance == nullptr) {
+        _instance = new ListIteratorKlass();
+    }
+    return _instance;
+}
+
+//ListIterator
+ListIterator::ListIterator(List* list){
+    _owner = list;
+    _iter_cnt = 0;
+    setKlass(ListIteratorKlass::getInstance());
 }
 
 //List

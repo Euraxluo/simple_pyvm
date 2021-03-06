@@ -31,7 +31,7 @@ public:
 
 class FrameObject {
 private:
-    ArrayList<Object *> *_stack;
+    List *_stack;
     ArrayList<Block *> *_loop_stack;
 
 
@@ -60,7 +60,7 @@ public:
         _fast_locals = nullptr;
 
 
-        _stack = new ArrayList<Object *>();
+        _stack = new List();
         _loop_stack = new ArrayList<Block *>();
 
         _codes = codes;
@@ -76,7 +76,7 @@ public:
         _names = _codes->_names;
         _locals = new HashMap<Object *, Object *>();
         _globals = func->globals();
-        _stack = new ArrayList<Object *>();
+        _stack = new List();
         _loop_stack = new ArrayList<Block *>();
         _ptr_c = 0;
         _sender = nullptr;
@@ -113,7 +113,7 @@ public:
 
     int get_pc() { return _ptr_c; }
 
-    ArrayList<Object *> *stack() { return _stack; }
+    List *stack() { return _stack; }
 
     ArrayList<Block *> *loop_stack() { return _loop_stack; }
 

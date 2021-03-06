@@ -27,11 +27,15 @@ private:
 
     template<typename T>
     inline void PUSH(const T &x) {
-        _frame->stack()->push((x));
+        _frame->stack()->append(x);
     }
 
     inline Object *POP() {
         return _frame->stack()->pop();
+    }
+
+    inline Object *TOP() {
+        return _frame->stack()->top();
     }
 
     inline int STACK_LEVEL() {
@@ -317,6 +321,19 @@ public:
                     v=POP();
                     v->del_subscr(w);
                     break;
+                case ByteCode::GET_ITER:
+                    v=POP();
+                    PUSH(v->iter());
+                    break;
+                case ByteCode::FOR_ITER:
+                    v=TOP();
+                    w = v->getattr(new String("next"));
+                    build_frame(w, nullptr);
+                    if (TOP() == nullptr){
+                        _frame->set_pc(_frame->get_pc()+option_arg);
+                        POP();
+                    }
+                    break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
             }
@@ -327,7 +344,6 @@ public:
         _frame = new FrameObject(co);
         eval_frame();
         destroy_frame();
-
     }
 
 };
