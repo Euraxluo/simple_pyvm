@@ -17,6 +17,7 @@
 #include "object/integer.hpp"
 #include "universe.hpp"
 #include "frameObject.hpp"
+#include "stringTable.hpp"
 
 typedef ArrayList<Object *> *ObjectArr;
 
@@ -139,6 +140,11 @@ public:
                     v = POP();
                     w = POP();
                     PUSH(w->i_add(v));
+                    break;
+                case ByteCode::BINARY_MULTIPLY:
+                    v = POP();
+                    w = POP();
+                    PUSH(w->mul(v));
                     break;
                 case ByteCode::POP_JUMP_IF_FALSE:
                     //如果栈顶元素是0，那么将程序计数器跳转到该指令的参数处
@@ -327,7 +333,8 @@ public:
                     break;
                 case ByteCode::FOR_ITER:
                     v=TOP();
-                    w = v->getattr(new String("next"));
+                    w = v->getattr(StringTable::getInstance()->next_str);
+                    //不断地从build_frame中调用next方法
                     build_frame(w, nullptr);
                     if (TOP() == nullptr){
                         _frame->set_pc(_frame->get_pc()+option_arg);

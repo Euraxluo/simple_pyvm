@@ -95,3 +95,19 @@ list =[1,2,3,4]
 # print(it)
 for i in list:
     print(i)
+
+m = [1,2,3,4]
+print(m)
+
+n = [1,2,3,4]
+print(n)
+
+qq = m+n
+print(qq)
+
+qq+=[1,2,3]
+print(qq)
+
+mul = [2]*100
+# mul = 'xx'*10
+print(mul)

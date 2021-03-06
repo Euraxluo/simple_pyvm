@@ -40,5 +40,5 @@ add_executable(simple_pyvm
         src/object/method.hpp
         src/object/klass.hpp
         src/object/checkKlass.hpp
-        src/object/list.cpp src/object/list.hpp src/object/klass.cpp)
+        src/object/list.cpp src/object/list.hpp src/object/klass.cpp src/runtime/stringTable.cpp src/runtime/stringTable.hpp)
 

@@ -341,8 +341,53 @@ Object *ListKlass::not_contains(Object *x, Object *y) {
 
 Object *ListKlass::iter(Object *x) {
     assert(x && x->klass() == (Klass *) this);
-//    return Universe::None;
     return new ListIterator((List *) x);
+}
+
+Object *ListKlass::add(Object *x, Object *y) {
+    //类型校验
+    List *lx = (List *) x;
+    List *ly = (List *) y;
+    assert(ly && ly->klass() == (Klass *) this);
+    assert(lx && lx->klass() == (Klass *) this);
+    List *z = new List();
+    for (int i = 0; i < lx->size(); ++i) {
+        z->list()->set(i,lx->list()->get(i));
+    }
+    for (int i = 0; i < ly->size(); ++i) {
+        z->list()->set(i+lx->list()->size(),lx->list()->get(i));
+    }
+    return z;
+}
+
+Object *ListKlass::i_add(Object *x, Object *y) {
+    //类型校验
+    List *lx = (List *) x;
+    List *ly = (List *) y;
+    assert(ly && ly->klass() == (Klass *) this);
+    assert(lx && lx->klass() == (Klass *) this);
+    for (int i = 0; i < ly->size(); ++i) {
+        lx->list()->push(lx->list()->get(i));
+    }
+    return lx;
+}
+
+
+Object *ListKlass::mul(Object *x, Object *y) {
+    //类型校验
+    List *lx = (List *) x;
+    assert(lx && lx->klass() == (Klass *) this);
+    Integer *iy = (Integer *) y;
+    assert(iy && iy->klass() == IntegerKlass::getInstance());
+
+    List *z = new List();
+
+    for (int i = 0; i < iy->value(); ++i) {
+        for (int j = 0; j < lx->size(); ++j) {
+            z->list()->set(i*lx->size()+j,lx->list()->get(j));
+        }
+    }
+    return z;
 }
 
 

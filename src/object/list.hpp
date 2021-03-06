@@ -35,6 +35,12 @@ public:
     virtual Object *not_contains(Object *x, Object *y);
 
     virtual Object *iter(Object *x);
+
+    virtual Object *add(Object *x, Object *y);
+
+    virtual Object *i_add(Object *x, Object *y);
+
+    virtual Object *mul(Object *x, Object *y);
 };
 
 class ListIteratorKlass : public Klass {
