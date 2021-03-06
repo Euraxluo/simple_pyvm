@@ -80,36 +80,35 @@ void StringKlass::print(Object *obj) {
     }
 }
 
-//Object* StringKlass::less(Object *x, Object *y) {
-//    String* sx = (String*) x;
-//    assert(sx && (sx->klass() == (Klass *)this));
-//
-//    if (x->klass() != y->klass()) {
-//        if (Klass::compare_klass(x->klass(), y->klass()) < 0)
-//            return Universe::Real;
-//        else
-//            return Universe::Inveracious;
-//    }
-//
-//    String* sy = (String*)y;
-//    assert(sy && (sy->klass() == (Klass *)this));
-//
-//    int len = sx->length() < sy->length() ?
-//              sx->length() : sy->length();
-//
-//    for (int i = 0; i < len; i++) {
-//        if (sx->c_str()[i] < sy->c_str()[i])
-//            return Universe::Real;
-//        else if (sx->c_str()[i] > sy->c_str()[i])
-//            return Universe::Inveracious;
-//    }
-//
-//    if (sx->length() < sy->length()) {
-//        return Universe::Real;
-//    }
-//
-//    return Universe::Inveracious;
-//}
+Object* StringKlass::less(Object *x, Object *y) {
+    String* sx = (String*) x;
+    assert(sx && (sx->klass() == (Klass *)this));
+
+    if (x->klass() != y->klass()) {
+        if (Klass::compare_klass(x->klass(), y->klass()) < 0)
+            return Universe::Real;
+        else
+            return Universe::Inveracious;
+    }
+
+    String* sy = (String*)y;
+    assert(sy && (sy->klass() == (Klass *)this));
+
+    auto len = sx->length() < sy->length() ? sx->length() : sy->length();
+
+    for (int i = 0; i < len; i++) {
+        if (sx->c_str()[i] < sy->c_str()[i])
+            return Universe::Real;
+        else if (sx->c_str()[i] > sy->c_str()[i])
+            return Universe::Inveracious;
+    }
+
+    if (sx->length() < sy->length()) {
+        return Universe::Real;
+    }
+
+    return Universe::Inveracious;
+}
 
 Object *StringKlass::equal(Object *x, Object *y) {
     if (x->klass() != y->klass())
@@ -151,6 +150,27 @@ Object *StringKlass::not_equal(Object *x, Object *y) {
     }
 
     return Universe::Inveracious;
+}
+
+Object *StringKlass::contains(Object *x, Object *y) {
+    String *lx = (String *) x;
+    String *ly = (String *) y;
+    assert(lx && lx->klass() == (Klass *) this);
+    assert(ly && ly->klass() == (Klass *) this);
+
+    if (lx->contains(ly->c_str())){
+        return Universe::Real;
+    } else{
+        return Universe::Inveracious;
+    }
+}
+
+Object *StringKlass::not_contains(Object *x, Object *y) {
+    if (contains(x, y) == Universe::Real) {
+        return Universe::Inveracious;
+    } else {
+        return Universe::Real;
+    }
 }
 
 Object *StringKlass::add(Object *x, Object *y) {
@@ -212,4 +232,14 @@ Object *StringKlass::upper(Object *obj) {
     }
 
     return new String(v, length);
+}
+
+Object * StringKlass::subscr(Object *x, Object *y){
+    assert(x && x->klass() == (Klass*) this);
+    assert(y && y->klass() == (Klass*) IntegerKlass::getInstance());
+
+    String * sx = (String*)x;
+    Integer* iy = (Integer*)y;
+
+    return new String(&(sx->c_str()[iy->value()]), 1);
 }

@@ -31,7 +31,7 @@ public:
 
 class FrameObject {
 private:
-    ArrayList<Object *> *_stack;
+    List *_stack;
     ArrayList<Block *> *_loop_stack;
 
 
@@ -40,12 +40,15 @@ private:
 
     HashMap<Object *, Object *> *_locals;
     HashMap<Object *, Object *> *_globals;
-    ArrayList<Object*>      *_fast_locals;
+    ArrayList<Object *> *_fast_locals;
 
     CodeObject *_codes;
     FrameObject *_sender;
     int _ptr_c = 0;//程序计数器
 
+    inline int byte2int(char byte) {
+        return (byte & 0xFF);
+    }
 
 public:
     FrameObject(CodeObject *codes) {
@@ -57,7 +60,7 @@ public:
         _fast_locals = nullptr;
 
 
-        _stack = new ArrayList<Object *>();
+        _stack = new List();
         _loop_stack = new ArrayList<Block *>();
 
         _codes = codes;
@@ -67,28 +70,28 @@ public:
 
     }
 
-    FrameObject(Function *func,ArrayList<Object*>* args) {
+    FrameObject(Function *func, ArrayList<Object *> *args) {
         _codes = func->func_code();
         _consts = _codes->_consts;
         _names = _codes->_names;
         _locals = new HashMap<Object *, Object *>();
         _globals = func->globals();
-        _stack = new ArrayList<Object *>();
+        _stack = new List();
         _loop_stack = new ArrayList<Block *>();
         _ptr_c = 0;
         _sender = nullptr;
 
-        _fast_locals = new ArrayList<Object*>();
-        if(func->defaults()){
+        _fast_locals = new ArrayList<Object *>();
+        if (func->defaults()) {
             int defaults_cnt = func->defaults()->length();
             int arg_cnt = _codes->_argcount;
-            while (defaults_cnt--){
-                _fast_locals->set(--arg_cnt,func->defaults()->get(defaults_cnt));
+            while (defaults_cnt--) {
+                _fast_locals->set(--arg_cnt, func->defaults()->get(defaults_cnt));
             }
         }
-        if (args){
-            for (int i = 0; i <args->size() ; ++i) {
-                _fast_locals->set(i,args->get(i));
+        if (args) {
+            for (int i = 0; i < args->size(); ++i) {
+                _fast_locals->set(i, args->get(i));
             }
         }
     }
@@ -97,7 +100,7 @@ public:
 
     ~FrameObject() {};
 public:
-    HashMap<Object *, Object *>* globals(){ return _globals;}
+    HashMap<Object *, Object *> *globals() { return _globals; }
 
     void set_sender(FrameObject *f) { _sender = f; }
 
@@ -110,7 +113,7 @@ public:
 
     int get_pc() { return _ptr_c; }
 
-    ArrayList<Object *> *stack() { return _stack; }
+    List *stack() { return _stack; }
 
     ArrayList<Block *> *loop_stack() { return _loop_stack; }
 
@@ -127,14 +130,14 @@ public:
     }
 
     unsigned char get_op_code() {
-        return (unsigned char) Helper::byte2int(_codes->_bytecodes->c_str()[_ptr_c++]);//获取当前操作码
+        return _codes->_bytecodes->c_str()[_ptr_c++];//获取当前操作码
     }
 
     int get_op_arg() {
-        int arg_index = Helper::byte2int(_codes->_bytecodes->c_str()[_ptr_c++]);
-        int null_v = Helper::byte2int(_codes->_bytecodes->c_str()[_ptr_c++]);
+        int arg_index = byte2int(_codes->_bytecodes->c_str()[_ptr_c++]);
+        int null_v = byte2int(_codes->_bytecodes->c_str()[_ptr_c++]);
         auto tmp = null_v << 8;//左移8位
-        return null_v | arg_index;
+        return tmp | arg_index;
     }
 
 

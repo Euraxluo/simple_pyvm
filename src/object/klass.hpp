@@ -39,6 +39,8 @@ public:
 
     Dict *klass_dict() { return _klass_dict; }
 
+    static int compare_klass(Klass * x,Klass * y);
+
     //类型支持函数虚拟声明
     virtual Object *greater(Object *x, Object *y) { return 0; };
 
@@ -51,9 +53,12 @@ public:
     virtual Object *ge(Object *x, Object *y) { return 0; };
 
     virtual Object *le(Object *x, Object *y) { return 0; };
+    virtual Object *contains(Object *x, Object *y) { return 0; };
+    virtual Object *not_contains(Object *x, Object *y) { return 0; };
 
 
     virtual Object *add(Object *x, Object *y) { return 0; };
+
     virtual Object *i_add(Object *x, Object *y) { return 0; };
 
     virtual Object *sub(Object *x, Object *y) { return 0; };
@@ -66,7 +71,14 @@ public:
 
     //native func define
     virtual Object *call(ArrayList<Object *> *args) { return 0; }
+    virtual Object *iter(Object*args) { return 0; }
+
     virtual Object *len(Object *x) { return 0; }
+
+    //type function
+    virtual Object *subscr(Object *x, Object *y) { return 0; }
+    virtual void store_subscr(Object *x, Object *y,Object *z) { return; }
+    virtual void del_subscr(Object *x, Object *y) { return; }
 };
 
 

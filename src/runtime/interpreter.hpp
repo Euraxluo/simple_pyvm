@@ -7,6 +7,7 @@
 
 #include <object/method.hpp>
 #include <object/checkKlass.hpp>
+#include <object/list.hpp>
 #include "hashMap.hpp"
 #include "object/function.hpp"
 #include "util/arrayList.hpp"
@@ -16,6 +17,7 @@
 #include "object/integer.hpp"
 #include "universe.hpp"
 #include "frameObject.hpp"
+#include "stringTable.hpp"
 
 typedef ArrayList<Object *> *ObjectArr;
 
@@ -26,11 +28,15 @@ private:
 
     template<typename T>
     inline void PUSH(const T &x) {
-        _frame->stack()->push((x));
+        _frame->stack()->append(x);
     }
 
     inline Object *POP() {
         return _frame->stack()->pop();
+    }
+
+    inline Object *TOP() {
+        return _frame->stack()->top();
     }
 
     inline int STACK_LEVEL() {
@@ -135,6 +141,11 @@ public:
                     w = POP();
                     PUSH(w->i_add(v));
                     break;
+                case ByteCode::BINARY_MULTIPLY:
+                    v = POP();
+                    w = POP();
+                    PUSH(w->mul(v));
+                    break;
                 case ByteCode::POP_JUMP_IF_FALSE:
                     //如果栈顶元素是0，那么将程序计数器跳转到该指令的参数处
                     v = POP();
@@ -172,6 +183,12 @@ public:
                             break;
                         case ByteCode::IS_NOT:
                             PUSH(v->not_equal(w));
+                            break;
+                        case ByteCode::IN:
+                            PUSH(w->contains(v));
+                            break;
+                        case ByteCode::NOT_IN:
+                            PUSH(w->not_contains(v));
                             break;
                         default:
                             printf("Error:Unrecongnized compare op %d\n", option_arg);
@@ -287,6 +304,43 @@ public:
                     w = _frame->names()->get(option_arg);
                     PUSH(v->getattr(w));
                     break;
+                case ByteCode::BUILD_LIST:
+                    v  = new List();
+                    while(option_arg--){
+                        ((List*)v)->set(option_arg,POP());
+                    }
+                    PUSH(v);
+                    break;
+                case ByteCode::BINARY_SUBSCR:
+                    v=POP();
+                    w=POP();
+                    PUSH(w->subscr(v));
+                    break;
+                case ByteCode::STORE_SUBSCR:
+                    u=POP();
+                    v=POP();
+                    w=POP();
+                    v->store_subscr(u,w);
+                    break;
+                case ByteCode::DELETE_SUBSCR:
+                    w=POP();
+                    v=POP();
+                    v->del_subscr(w);
+                    break;
+                case ByteCode::GET_ITER:
+                    v=POP();
+                    PUSH(v->iter());
+                    break;
+                case ByteCode::FOR_ITER:
+                    v=TOP();
+                    w = v->getattr(StringTable::getInstance()->next_str);
+                    //不断地从build_frame中调用next方法
+                    build_frame(w, nullptr);
+                    if (TOP() == nullptr){
+                        _frame->set_pc(_frame->get_pc()+option_arg);
+                        POP();
+                    }
+                    break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
             }
@@ -297,7 +351,6 @@ public:
         _frame = new FrameObject(co);
         eval_frame();
         destroy_frame();
-
     }
 
 };

@@ -62,6 +62,15 @@ Object *Object::le(Object *rhs) {
     return klass()->le(this, rhs);
 };
 
+Object *Object::contains(Object* rhs){
+    return klass()->contains(this, rhs);
+};
+
+Object *Object::not_contains(Object *rhs) {
+    return klass()->not_contains(this, rhs);
+};
+
+
 //todo 不是所有的类型都有len
 //Object * Object::len() {
 //    klass()->len(this);
@@ -81,4 +90,18 @@ Object* Object::getattr(Object* x) {
         attr = new Method((Function*)attr, this);
     }
     return attr;
+}
+
+Object* Object::subscr(Object *x) {
+    return klass()->subscr(this,x);
+}
+
+void Object::store_subscr(Object *x,Object *y) {
+    return klass()->store_subscr(this,x,y);
+}
+void Object::del_subscr(Object *x) {
+    return klass()->del_subscr(this,x);
+}
+Object* Object::iter() {
+    return klass()->iter(this);
 }

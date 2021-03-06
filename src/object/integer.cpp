@@ -11,6 +11,7 @@
 IntegerKlass *IntegerKlass::_instance = nullptr;
 
 IntegerKlass::IntegerKlass() {
+    setName(new String("int"));
 }
 Integer::Integer(int x) {
     _value = x;
@@ -57,9 +58,18 @@ Object *IntegerKlass::greater(Object *x, Object *y) {
 
 Object *IntegerKlass::less(Object *x, Object *y) {
     Integer *ix = (Integer *) x;
-    Integer *iy = (Integer *) y;
 
     assert(ix && (ix->klass() == (Klass *) this));
+
+    if (x->klass() != y->klass()) {
+        if (Klass::compare_klass(x->klass(), y->klass()) < 0)
+            return Universe::Real;
+        else
+            return Universe::Inveracious;
+    }
+
+    Integer *iy = (Integer *) y;
+
     assert(iy && (iy->klass() == (Klass *) this));
 
     if (ix->value() < iy->value())

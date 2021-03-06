@@ -26,15 +26,20 @@ public:
 
 //    virtual Object *greater(Object *x, Object *y);
 
-//    virtual Object *less(Object *x, Object *y);
+    virtual Object *less(Object *x, Object *y);
 
     virtual Object *equal(Object *x, Object *y);
 
     virtual Object *not_equal(Object *x, Object *y);
 
+    virtual Object *contains(Object *x, Object *y);
+
+    virtual Object *not_contains(Object *x, Object *y);
 //    virtual Object *ge(Object *x, Object *y);
 
 //    virtual Object *le(Object *x, Object *y);
+
+
 
     virtual Object *add(Object *x, Object *y);
 
@@ -53,7 +58,12 @@ public:
 
     //Klass Function
     virtual Object *upper(Object *args);
+
+    //type function
+    virtual Object *subscr(Object *x, Object *y);
+
 };
+
 class String : public Object {
 protected:
     char *_string = nullptr;
@@ -103,6 +113,28 @@ protected:
         return *str1 - *str2;
     }
 
+    inline char *strstr(const char *str1, const char *str2) {
+        char *cur = (char *) str1;
+        char *s1 = nullptr;
+        char *s2 = nullptr;
+        if (!*str2) {
+            return ((char *) str1);
+        }
+        while (*cur) {
+            s1 = cur;
+            s2 = (char *) str2;
+            while (*s2 && !(*s1 - *s2)) {
+                s1++;
+                s2++;
+            }
+            if (!*s2) {
+                return cur;
+            }
+            cur++;
+        }
+        return nullptr;
+    }
+
 public:
     //初始化列表
     String(size_t length = 0);
@@ -131,6 +163,8 @@ public:
     inline size_t length() {
         return _length;
     }
+
+
 
     inline void *memcpy(void *dst, const void *src, size_t count) {
         void *ret = dst;
@@ -297,6 +331,16 @@ public:
     inline bool operator>=(const char *rhs) {
         return strcmp(_string, rhs) >= 0;
     }
+
+    inline bool contains(const char *rhs){
+        if (strstr(_string,rhs) != nullptr){
+            return true;
+        } else{
+            return false;
+        }
+
+    }
+
 
     inline static char *int2String(int num, char *str = new char[16], int radix = 10) {
 

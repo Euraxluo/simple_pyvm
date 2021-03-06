@@ -49,10 +49,20 @@ public:
 
     Object *le(Object *rhs);
 
+    Object *contains(Object *rhs);
+    Object *not_contains(Object* rhs);
+
+    Object* subscr(Object* x);
+    void store_subscr(Object* x,Object *y);
+    void del_subscr(Object* x);
+
     //native funcion
+    Object* iter();
 //    Object* len();
 
+    //method sup
     Object* getattr(Object* x);
+
 
 };
 
