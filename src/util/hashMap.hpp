@@ -18,6 +18,8 @@ public:
     V _v= nullptr;
     unsigned int _hash=0;
     MapEntry<K, V> *_next = nullptr;
+    void * extend;
+
 public:
     MapEntry(const MapEntry<K, V> &entry) {
         _k = entry._k;
@@ -38,6 +40,25 @@ public:
         _next = nullptr;
 //        printf("~MapEntry done\n");
     }
+};
+template<typename K, typename V>
+class EntriesNode{
+public:
+    EntriesNode(){}
+    EntriesNode(MapEntry<K,V> * self,EntriesNode<K,V> * pre){
+        entry = self;
+        preEntryNode = pre;
+    }
+    ~EntriesNode(){}
+    //该结构用于保存entries
+    //结构需求：
+    // 在putRaw时，将entry指针放到这里来
+    // 查询时返回该结构head
+    // remove时，需要删除该entry指针 from该结构
+    // 原始的HashTable应该需要存储该指针！
+    MapEntry<K,V>* entry = nullptr;
+    EntriesNode<K,V>* nextEntryNode = nullptr;
+    EntriesNode<K,V>* preEntryNode = nullptr;
 };
 
 template<typename K, typename V>
@@ -152,7 +173,7 @@ class HashMap {
 private:
     int _rehashidx=-1;
     HashTable<K, V> *_hashTable = nullptr;
-
+    EntriesNode<K,V> *entries = new EntriesNode<K,V>();
     unsigned int (*_hashFunc)(K k);
 
     /**
@@ -247,10 +268,19 @@ private:
                 return true;
             }
 
+            /**
+            * 操作entries
+            */
+            EntriesNode<K,V>* selfNode = (EntriesNode<K,V>*)(mapEntry->extend);//get removeNode EntryNode
+            selfNode->preEntryNode->nextEntryNode = selfNode->nextEntryNode;//remove current
+
+
             //首先将前置指针保存下来
             preMapEntry = mapEntry;
             //推进后置指针
             mapEntry = mapEntry->_next;
+
+
         }
         return false;
     }
@@ -429,6 +459,17 @@ private:
         }
         //设置节点的值
         mapEntry->_v = v;
+        /**
+         * 操作entries
+         */
+        EntriesNode<K,V>* curNode = entries;//cur
+        while (curNode->nextEntryNode != nullptr){
+             curNode = curNode->nextEntryNode;//move to end
+        }
+        EntriesNode<K,V>* newEntryNode  = new EntriesNode<K,V>(mapEntry,curNode);//init,self:mapEntry,pre:curNode
+        curNode->nextEntryNode = newEntryNode;
+        mapEntry->extend = newEntryNode;
+
         //返回这个节点
         return mapEntry;
     }
@@ -471,6 +512,9 @@ public:
         _hashFunc = hashFunc;
     }
 
+    int size(){
+        return _hashTable[0]._used+_hashTable[1]._used;
+    }
     MapEntry<K, V> *put(K k, V v) {
         if (rehashIdxNotInit() && _reHash(&_hashTable[0], &_hashTable[1], 1) == 0) {
             //将新的设置为常用table
@@ -479,7 +523,12 @@ public:
             //将原来的地方设置为旧的那个
             _hashTable[1] = *tmpTable;
         }
-        return putRaw(k, v);
+        return putRaw(k,v);
+    }
+
+    //返回MapEntriesLinked结构
+    EntriesNode<K,V> * MapEntries(){
+        return entries->nextEntryNode;
     }
 
     /**
@@ -527,6 +576,7 @@ public:
     void remove(K k) {
         for (int table = 0; table <= 1; ++table) {
             HashTable<K, V> *ht = &_hashTable[table];
+            //无法删除时，返回false
             if (_keyRemoveFromHashTable(ht, k))
                 return;
             //如果此时在进行rehash，那么我们这里也进行单步rehash

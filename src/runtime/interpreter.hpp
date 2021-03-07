@@ -8,6 +8,7 @@
 #include <object/method.hpp>
 #include <object/checkKlass.hpp>
 #include <object/list.hpp>
+#include <object/map.hpp>
 #include "hashMap.hpp"
 #include "object/function.hpp"
 #include "util/arrayList.hpp"
@@ -340,6 +341,19 @@ public:
                         _frame->set_pc(_frame->get_pc()+option_arg);
                         POP();
                     }
+                    break;
+                case ByteCode::BUILD_MAP:
+                    v = new Map();
+                    while(option_arg--){
+                        PUSH(v);
+                    }
+                    PUSH(v);
+                    break;
+                case ByteCode::STORE_MAP:
+                    w = POP();
+                    u = POP();
+                    v = POP();
+                    ((Map* )v)->put(w,u);
                     break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
