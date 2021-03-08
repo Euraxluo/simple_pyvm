@@ -83,6 +83,7 @@ public:
 
     void inc_cnt() { _iter_cnt++; }
 };
-
+Object *map_set_default(ArrayList<Object *> *args);
+Object *map_remove(ArrayList<Object *> *args);
 
 #endif //SIMPLE_PYVM_MAP_HPP

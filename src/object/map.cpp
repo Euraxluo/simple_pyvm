@@ -20,24 +20,29 @@ MapKlass *MapKlass::getInstance() {
 
 MapKlass::MapKlass() {
     Dict *klass_dict = new Dict();
-//    klass_dict->put(new String("remove"), new Function(list_remove));
+    klass_dict->put(new String("setdefault"), new Function(map_set_default));
+    klass_dict->put(new String("remove"), new Function(map_remove));
     set_klass_dict(klass_dict);
     setName(new String("map"));
 }
 
 
-//Object *map_remove(ArrayList<Object *> *args) {
-//    Map *map = (Map *) (args->get(0));
-//    Object *target = (Object *) (args->get(1));
-//    assert(map && map->klass() == MapKlass::getInstance());
-//
-//    for (int i = 0; i < map->map()->size(); ++i) {
-//        if (map->get(i)->equal(target) == Universe::Real) {
-//            map->map()->remove(i);
-//        }
-//    }
-//    return Universe::None;
-//}
+
+Object *map_set_default(ArrayList<Object *> *args) {
+    Map *map = (Map *) (args->get(0));
+    Object *key = (Object *) (args->get(1));
+    Object *value = (Object *) (args->get(2));
+    if (! map->hash_key(key))
+        map->put(key,value);
+    return Universe::None;
+}
+
+Object *map_remove(ArrayList<Object *> *args) {
+    Map *map = (Map *) (args->get(0));
+    Object *key = (Object *) (args->get(1));
+    map->remove(key);
+    return Universe::None;
+}
 
 
 //Object *map_sort(ArrayList<Object *> *args) {
@@ -129,7 +134,13 @@ void MapKlass::print(Object *x) {
     int size = mx->size();
     EntriesNode<Object*,Object*>* cur =mx->map()->MapEntries();
     if (size >= 1) {
-        cur->entry->_k->print();
+        if (cur->entry->_k->klass() == StringKlass::getInstance()) {
+            printf("'");
+            cur->entry->_k->print();
+            printf("'");
+        } else {
+            cur->entry->_k->print();
+        }
         printf(":");
         if (cur->entry->_v->klass() == StringKlass::getInstance()) {
             printf("'");
@@ -143,7 +154,14 @@ void MapKlass::print(Object *x) {
 
     for (int i = 1; i < size; i++) {
         printf(", ");
-        cur->entry->_k->print();
+        if (cur->entry->_k->klass() == StringKlass::getInstance()) {
+            printf("'");
+            cur->entry->_k->print();
+            printf("'");
+        } else {
+            cur->entry->_k->print();
+        }
+
         printf(":");
         if (cur->entry->_v->klass() == StringKlass::getInstance()) {
             printf("'");
@@ -225,35 +243,25 @@ void MapKlass::store_subscr(Object *x, Object *y, Object *z) {
 }
 
 void MapKlass::del_subscr(Object *x, Object *y) {
-//    assert(x && x->klass() == (Klass *) this);
-//    assert(y && y->klass() == (Klass *) IntegerKlass::getInstance());
-//
-//    List *lx = (List *) x;
-//    Integer *iy = (Integer *) y;
-//    return lx->list()->remove(iy->value());
-    return;
+    assert(x && x->klass() == (Klass *) this);
+    return ((Map *) x)->remove(y);
 }
 
 Object *MapKlass::contains(Object *x, Object *y) {
-//    List *lx = (List *) x;
-//    assert(lx && lx->klass() == (Klass *) this);
-//
-//    int size = lx->list()->size();
-//    for (int i = 0; i < size; i++) {
-//        if (lx->list()->get(i)->equal(y) == Universe::Real)
-//            return Universe::Real;
-//    }
-//
-//    return Universe::Inveracious;
-    return nullptr;
+    Map *mx = (Map *) x;
+    assert(mx && mx->klass() == (Klass *) this);
+    if (mx->hash_key(y)){
+        return Universe::Real;
+    }
+    return Universe::Inveracious;
 }
 
 Object *MapKlass::not_contains(Object *x, Object *y) {
-//    if (contains(x, y) == Universe::Real) {
-//        return Universe::Inveracious;
-//    } else {
-//        return Universe::Real;
-//    }
+    if (contains(x, y) == Universe::Real) {
+        return Universe::Inveracious;
+    } else {
+        return Universe::Real;
+    }
     return nullptr;
 }
 
