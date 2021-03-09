@@ -2,11 +2,13 @@
 // Created by euraxluo on 2021/3/7.
 //
 
+#include <runtime/stringTable.hpp>
 #include "map.hpp"
 #include "integer.hpp"
 #include "string.hpp"
 #include "runtime/universe.hpp"
 #include "function.hpp"
+#include "list.hpp"
 
 //MapKlass
 MapKlass *MapKlass::_instance = nullptr;
@@ -22,6 +24,12 @@ MapKlass::MapKlass() {
     Dict *klass_dict = new Dict();
     klass_dict->put(new String("setdefault"), new Function(map_set_default));
     klass_dict->put(new String("remove"), new Function(map_remove));
+    klass_dict->put(new String("keys"), new Function(map_keys));
+    klass_dict->put(new String("values"), new Function(map_values));
+    klass_dict->put(new String("items"), new Function(map_items));
+    klass_dict->put(new String("iterkeys"), new Function(map_iterkeys));
+    klass_dict->put(new String("itervalues"), new Function(map_itervalues));
+    klass_dict->put(new String("iteritems"), new Function(map_iteritems));
     set_klass_dict(klass_dict);
     setName(new String("map"));
 }
@@ -42,6 +50,64 @@ Object *map_remove(ArrayList<Object *> *args) {
     Object *key = (Object *) (args->get(1));
     map->remove(key);
     return Universe::None;
+}
+Object *map_keys(ArrayList<Object *> *args) {
+    Map *map = (Map *) (args->get(0));
+    auto tmp = map->map()->MapEntries();
+    List *collection = new List();
+    while (tmp){
+        collection->append(tmp->entry->_k);
+        tmp = tmp->nextEntryNode;
+    }
+    return collection;
+}
+
+Object *map_values(ArrayList<Object *> *args) {
+    Map *map = (Map *) (args->get(0));
+    auto tmp = map->map()->MapEntries();
+    List *collection = new List();
+    while (tmp){
+        collection->append(tmp->entry->_v);
+        tmp = tmp->nextEntryNode;
+    }
+    return collection;
+}
+
+Object *map_items(ArrayList<Object *> *args) {
+    Map *map = (Map *) (args->get(0));
+    auto tmp = map->map()->MapEntries();
+    List *items = new List();
+    while (tmp){
+        List* item = new List();
+        item->append(tmp->entry->_k);
+        item->append(tmp->entry->_v);
+        items->append(item);
+        tmp = tmp->nextEntryNode;
+    }
+    return items;
+}
+
+Object *map_iterkeys(ArrayList<Object *> *args) {
+    Map *map = (Map *) (args->get(0));
+    Object* map_iter = new MapIterator(map);
+    map_iter->setKlass(MapIteratorKlass<ITER_KEY>::getInstance());
+    return map_iter;
+}
+
+
+Object *map_itervalues(ArrayList<Object *> *args) {
+    Map *map = (Map *) (args->get(0));
+    Object* map_iter = new MapIterator(map);
+    map_iter->setKlass(MapIteratorKlass<ITER_VALUE>::getInstance());
+    return map_iter;
+}
+
+
+Object *map_iteritems(ArrayList<Object *> *args) {
+    Map *map = (Map *) (args->get(0));
+    Object* map_iter = new MapIterator(map);
+    map_iter->setKlass(MapIteratorKlass<ITER_ITEM>::getInstance());
+    return map_iter;
 }
 
 
@@ -267,9 +333,12 @@ Object *MapKlass::not_contains(Object *x, Object *y) {
 
 
 Object *MapKlass::iter(Object *x) {
-//    assert(x && x->klass() == (Klass *) this);
-//    return new ListIterator((List *) x);
-    return nullptr;
+    //此处是调用迭代器，然后我们设置为迭代Key
+    assert(x && x->klass() == (Klass *) this);
+    Object* iter =new MapIterator((Map*)x);
+    iter->setKlass(MapIteratorKlass<ITER_KEY>::getInstance());
+
+    return iter;
 }
 
 Object *MapKlass::add(Object *x, Object *y) {
@@ -323,41 +392,96 @@ Object *MapKlass::mul(Object *x, Object *y) {
 
 
 //MapIteratorKlass
-MapIteratorKlass *MapIteratorKlass::_instance = nullptr;
+template <ITER_TYPE n>
+MapIteratorKlass<n> *MapIteratorKlass<n>::_instance = nullptr;
 
-//Object *mapiterator_next(HashMap<Object*,Object*> *map) {
-////    MapIterator *iter = (MapIterator *) (args->get(0));
-//////    Map *amap = iter->owner();
-//////    int iter_cnt = iter->iter_cnt();
-//////    if (iter_cnt < amap->map()->size()) {
-//////        Object *obj = amap->get(iter_cnt);
-//////        iter->inc_cnt();
-//////        return obj;
-//////    } else // TODO :StopIteration 异常
-//        return nullptr;
-//}
-
-MapIteratorKlass::MapIteratorKlass() {
-    Dict *klass_dict = new Dict();
-//    klass_dict->put(new String("next"), new Function(mapiterator_next));
-    set_klass_dict(klass_dict);
-}
-
-MapIteratorKlass *MapIteratorKlass::getInstance() {
+template <ITER_TYPE n>
+MapIteratorKlass<n> *MapIteratorKlass<n>::getInstance() {
     if (_instance == nullptr) {
-        _instance = new MapIteratorKlass();
+        _instance = new MapIteratorKlass<n>();
     }
     return _instance;
 }
+
+template <ITER_TYPE n>
+MapIteratorKlass<n>::MapIteratorKlass() {
+    const char * klass_name[] = {
+            "map-keyiterator",
+            "map-valueiterator",
+            "map-itemiterator",
+    };
+    //初始化时设置iter的类型
+    setName(new String(klass_name[n]));//set not equal name
+    Dict* klass_dict = new Dict();
+    //将next放到klass dict属性中，对应的是mapiterator_next
+    klass_dict->put(StringTable::getInstance()->next_str,new Function(mapiterator_next<n>));
+    set_klass_dict(klass_dict);
+
+}
+template <ITER_TYPE iter_type>
+Object *mapiterator_next(ArrayList<Object *> *args) {
+    MapIterator * iter = (MapIterator*)(args->get(0));
+
+    int iter_cnt = iter->iter_cnt();
+    if (iter_cnt <  iter->owner()->size()) {
+
+        Object *obj ;
+        if (iter_type == ITER_KEY){
+            obj = iter->keys()->get(iter_cnt);
+        } else if (iter_type == ITER_VALUE){
+            obj = iter->values()->get(iter_cnt);
+        }else if (iter_type == ITER_ITEM){
+            obj = iter->items()->get(iter_cnt);
+        }
+        iter->inc_cnt();
+        return obj;
+    } else // TODO :StopIteration 异常
+        return nullptr;
+}
+
 
 //MapIterator
 MapIterator::MapIterator(Map* map){
     _owner = map;
     _iter_cnt = 0;
-    setKlass(MapIteratorKlass::getInstance());
+    // 下面这一行在不同的迭代函数中new的对象不同
+//    setKlass(MapIteratorKlass<>::getInstance());
 }
 
-//List
+
+//辅助函数，帮助统一入口，但是返回不同的可迭代对象
+List* MapIterator::keys(){
+    auto tmp = _owner->map()->MapEntries();
+    List *keys = new List();
+    while (tmp){
+        keys->append(tmp->entry->_k);
+        tmp = tmp->nextEntryNode;
+    }
+    return keys;
+};
+List* MapIterator::values(){
+    auto tmp = _owner->map()->MapEntries();
+    List *values = new List();
+    while (tmp){
+        values->append(tmp->entry->_v);
+        tmp = tmp->nextEntryNode;
+    }
+    return values;
+};
+List* MapIterator::items(){
+    auto tmp = _owner->map()->MapEntries();
+    List *items = new List();
+    while (tmp){
+        List* item = new List();
+        item->append(tmp->entry->_k);
+        item->append(tmp->entry->_v);
+        items->append(item);
+        tmp = tmp->nextEntryNode;
+    }
+    return items;
+};
+
+//Map
 Map::Map() {
     setKlass(MapKlass::getInstance());
     _map = new HashMap<Object*,Object*>();

@@ -42,14 +42,20 @@ public:
 
     virtual Object *mul(Object *x, Object *y);
 };
+enum ITER_TYPE{
+    ITER_KEY = 0,
+    ITER_VALUE,
+    ITER_ITEM
+};
 
+template <ITER_TYPE n>
 class MapIteratorKlass : public Klass {
 private:
     MapIteratorKlass();
     static MapIteratorKlass *_instance;
 public:
     static MapIteratorKlass *getInstance();
-
+    virtual Object* iter(Object *x){ return x;}//直接返回迭代器
 };
 
 class Map : public Object {
@@ -70,6 +76,7 @@ public:
 
 };
 
+class List;
 class MapIterator : public Object {
 private:
     Map *_owner;
@@ -79,11 +86,24 @@ public:
 
     Map *owner() { return _owner; }
 
+    //返回map的linked对象形式=>并且转为Arrlist 可迭代，设置索引
+    List* keys();
+    List* values();
+    List* items();
+
     int iter_cnt() { return _iter_cnt; }
 
     void inc_cnt() { _iter_cnt++; }
 };
 Object *map_set_default(ArrayList<Object *> *args);
 Object *map_remove(ArrayList<Object *> *args);
+Object *map_keys(ArrayList<Object *> *args);
+Object *map_values(ArrayList<Object *> *args);
+Object *map_items(ArrayList<Object *> *args);
+Object *map_iterkeys(ArrayList<Object *> *args);
+Object *map_itervalues(ArrayList<Object *> *args);
+Object *map_iteritems(ArrayList<Object *> *args);
 
+template <ITER_TYPE iter_type>
+Object *mapiterator_next(ArrayList<Object *> *args);
 #endif //SIMPLE_PYVM_MAP_HPP

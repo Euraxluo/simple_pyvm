@@ -334,6 +334,7 @@ public:
                     break;
                 case ByteCode::FOR_ITER:
                     v=TOP();
+                    //这里迭代时么有去查变量表。。所以只能拿对象的“next”属性
                     w = v->getattr(StringTable::getInstance()->next_str);
                     //不断地从build_frame中调用next方法
                     build_frame(w, nullptr);
@@ -355,6 +356,13 @@ public:
                     v = POP();
                     ((Map* )v)->put(w,u);
                     break;
+                case ByteCode::UNPACK_SEQUENCE:
+                    v = POP();
+                    while (option_arg--){
+                        PUSH(v->subscr(new Integer(option_arg)));
+                    }
+                    break;
+
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
             }
