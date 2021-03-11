@@ -67,22 +67,32 @@ public:
         _builtins->put(new String("len"), new Function(len)); //native func
     }
 
-    void build_frame(Object *callable, ObjectArr args) {
+    void build_frame(Object *callable, ObjectArr args,int option_arg) {
+
         if (CheckKlass::isNative(callable)) {//NativeFunctionKlass
             PUSH(((Function *) callable)->call(args));
+
+
         } else if (CheckKlass::isMethod(callable)) {//MethodKlass
             Method *method = (Method *) callable;
             if (!args) {
                 args = new ArrayList<Object *>(1);
             }
             args->insert(0, method->owner());
-            build_frame(method->func(), args);
+            build_frame(method->func(), args,option_arg+1);
+
+
         } else if (CheckKlass::isFunction(callable)) {//FunctionKlass
-            FrameObject *frame = new FrameObject((Function *) callable, args);
+
+            FrameObject *frame = new FrameObject((Function *) callable, args,option_arg);
             frame->set_sender(_frame);//一个指针，设置调用者的栈桢
             _frame = frame;
+
+
         } else {
             printf("Error:Build Frame Faild\n");
+
+
         }
 
     }
@@ -259,13 +269,19 @@ public:
                     PUSH(fo);//读取func对象，压入栈内
                     break;
                 case ByteCode::CALL_FUNCTION:
-                    if (option_arg > 0) {//该字节码的参数是，函数参数个数
-                        args = new ArrayList<Object *>(option_arg);
-                        while (option_arg--) {
-                            args->set(option_arg, POP());
+                    if (option_arg > 0) {
+                        int num_arg = option_arg & 0xff;//低8位代表位置参数的个数
+                        int num_kwarg = option_arg >> 8;//高8位代表键参数个数
+
+                        int arg_cnt = num_arg+2*num_kwarg;//真实的参数个数
+
+                        //该字节码的参数是，函数参数个数
+                        args = new ArrayList<Object *>(arg_cnt);
+                        while (arg_cnt--) {
+                            args->set(arg_cnt, POP());
                         }
                     }
-                    build_frame(POP(), args);//将栈顶的func对象取出，替换当前栈桢，运行frame内的字节码
+                    build_frame(POP(), args,option_arg);//将栈顶的func对象取出，替换当前栈桢，运行frame内的字节码
                     if (args != nullptr) {
                         delete args;
                         args = nullptr;
@@ -312,6 +328,15 @@ public:
                     }
                     PUSH(v);
                     break;
+                case ByteCode::BUILD_TUPLE:
+                    //todo 用list替代tuple
+                    v  = new List();
+                    while(option_arg--){
+                        ((List*)v)->set(option_arg,POP());
+                    }
+                    PUSH(v);
+                    break;
+
                 case ByteCode::BINARY_SUBSCR:
                     v=POP();
                     w=POP();
@@ -337,7 +362,7 @@ public:
                     //这里迭代时么有去查变量表。。所以只能拿对象的“next”属性
                     w = v->getattr(StringTable::getInstance()->next_str);
                     //不断地从build_frame中调用next方法
-                    build_frame(w, nullptr);
+                    build_frame(w, nullptr,option_arg);
                     if (TOP() == nullptr){
                         _frame->set_pc(_frame->get_pc()+option_arg);
                         POP();

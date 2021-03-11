@@ -25,8 +25,7 @@ print(d)
 print ("keys......")
 print (d.keys())
 for k in d.keys():
-    print(k)
-    print(d[k])
+    print(k,d[k],';')
 
 
 print ("values......")
@@ -36,21 +35,15 @@ for v in d.values():
 print ("items......")
 print(d.items())
 for k,v in d.items():
-    print(k)
-    print(d[k])
-    print(";")
+    print(k,d[k],';')
 
 print ("container......")
 for k in d:
-    print(k)
-    print(d[k])
-    print(";")
+    print(k,d[k],';')
 
 print ("iterkeys......")
 for k in d.iterkeys():
-    print(k)
-    print(d[k])
-    print(";")
+    print(k,d[k],';')
 
 print ("itervalues......")
 for v in d.itervalues():
@@ -58,7 +51,4 @@ for v in d.itervalues():
 
 print ("iteritems......")
 for k,v in d.iteritems():
-    print(k)
-    print(d[k])
-    print(";")
-
+    print(k,d[k],';')
