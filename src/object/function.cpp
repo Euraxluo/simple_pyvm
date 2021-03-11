@@ -65,6 +65,11 @@ void Function::set_default(ArrayList<Object *> *defaults) {
 }
 
 
+void Function::set_closure(List *closure) {
+    _closure = closure;
+}
+
+
 //NativeFunctionKlass
 NativeFunctionKlass *NativeFunctionKlass::_instance = nullptr;
 

@@ -9,6 +9,8 @@
 #include "klass.hpp"
 #include "object.hpp"
 #include "hashMap.hpp"
+#include "list.hpp"
+
 //typedef
 typedef ArrayList<Object*>* ObjectArr;
 typedef Object* (*NativeFuncPtr)(ObjectArr args);
@@ -43,6 +45,7 @@ private:
     unsigned int _flags;
     HashMap<Object *, Object *> *_globals;
     ObjectArr _defaults;
+    List* _closure;
 
     NativeFuncPtr _native_func;//函数指针
 
@@ -72,6 +75,9 @@ public:
 
     ArrayList<Object *> *defaults() { return _defaults; }
     void set_default(ObjectArr defaults);
+
+    List* closure(){return _closure;}
+    void set_closure(List* closure);
 };
 
 //NativeFunctionKlass

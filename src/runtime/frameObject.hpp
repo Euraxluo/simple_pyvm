@@ -41,6 +41,7 @@ private:
     HashMap<Object *, Object *> *_locals;
     HashMap<Object *, Object *> *_globals;
     ArrayList<Object *> *_fast_locals;
+    ArrayList<Object *> *_closure;
 
     CodeObject *_codes;
     FrameObject *_sender;
@@ -58,6 +59,7 @@ public:
         _locals = new HashMap<Object *, Object *>();
         _globals = _locals;
         _fast_locals = nullptr;
+        _closure = nullptr;
 
 
         _stack = new List();
@@ -165,14 +167,27 @@ public:
                 assert(false);
             }
         }
-//
-//
-//
-//        if (args) {
-//            for (int i = 0; i < args->size(); ++i) {
-//                _fast_locals->set(i, args->get(i));
-//            }
-//        }
+
+        _closure = nullptr;
+        ArrayList<Object*>* cells = _codes->_cell_vars;
+
+        //判断codeobj中有多少cell变量
+        if (cells && cells->size()>0){
+            _closure = new ArrayList<Object*>();
+            for (int i = 0; i < cells->size(); ++i) {
+                _closure->push(nullptr);
+            }
+        }
+        //将传进来的cell变量加到closure中
+        if (func->closure() && func->closure()->size() > 0) {
+            if (_closure == nullptr)
+                _closure = func->closure()->list();//funtion中的这东西是个tuple
+            else {
+                List* tmpclosure = new List(_closure);
+                _closure = (ArrayList<Object*>*)tmpclosure->add(func->closure());
+                delete tmpclosure;
+            }
+        }
     }
 
     //未实现参数增强
@@ -230,6 +245,19 @@ public:
     HashMap<Object *, Object *> *locals() { return _locals; }
 
     ArrayList<Object *> *fast_locals() { return _fast_locals; }
+    ArrayList<Object *> *closure() { return _closure; }
+
+    Object *get_cell_from_parameter(int i) {
+        Object* cecll_name = _codes->_cell_vars->get(i);
+
+        int index = -1;
+        for (int j = 0; j < _codes->_var_names->size(); ++j) {
+            if (_codes->_var_names->get(j)->equal(cecll_name) == Universe::Real){
+                index = j;
+            }
+        }
+        return _fast_locals->get(index);
+    }
 
     bool has_more_codes() {
         return _ptr_c < _codes->_bytecodes->length();//获取字节码长度

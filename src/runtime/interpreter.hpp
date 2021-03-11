@@ -19,6 +19,7 @@
 #include "universe.hpp"
 #include "frameObject.hpp"
 #include "stringTable.hpp"
+#include "cellObject.hpp"
 
 typedef ArrayList<Object *> *ObjectArr;
 
@@ -42,6 +43,11 @@ private:
 
     inline int STACK_LEVEL() {
         return _frame->stack()->size();
+    }
+
+    template<typename T>
+    inline Object* PEEK(const T &x) {
+        return _frame->stack()->get(x);
     }
 
     inline Object *BUILTIN_TRUE() {
@@ -131,6 +137,20 @@ public:
             switch (option_code) {
                 case ByteCode::POP_TOP:
                     POP();
+                    break;
+                case ByteCode::ROT_TWO:
+                    v = POP();
+                    w = POP();
+                    PUSH(v);
+                    PUSH(w);
+                    break;
+                case ByteCode::ROT_THREE:
+                    v = POP();
+                    w = POP();
+                    u = POP();
+                    PUSH(v);
+                    PUSH(w);
+                    PUSH(u);
                     break;
                 case ByteCode::LOAD_CONST:
                     PUSH(_frame->consts()->get(option_arg));
@@ -287,6 +307,25 @@ public:
                         args = nullptr;
                     }
                     break;
+                case ByteCode::MAKE_CLOSURE:
+                    v = POP();//此时栈上的对象是load_closure字节码加载的对象
+                    fo = new Function(v);
+                    fo->set_closure((List*) POP());//这个对象上次入栈时被转包装为了List；
+                    fo->set_globals(_frame->globals());
+                    if (option_arg > 0) {
+                        args = new ArrayList<Object*>(option_arg);
+                        while (option_arg--) {
+                            args->set(option_arg, POP());
+                        }
+                    }
+                    fo->set_default(args);
+
+                    if (args != nullptr) {
+                        args = nullptr;
+                    }
+
+                    PUSH(fo);
+                    break;
                 case ByteCode::RETURN_VALUE :
                     leave_frame(POP());
                     if (!_frame)
@@ -320,6 +359,37 @@ public:
                     v = POP();
                     w = _frame->names()->get(option_arg);
                     PUSH(v->getattr(w));
+                    break;
+                case ByteCode::LOAD_CLOSURE:
+                    //从closure中取出对应序号的对象
+                    v = _frame->closure()->get(option_arg);
+                    //如果为空，说明这个值不是局部变量，而是一个参数
+                    if (v == nullptr) {
+                        //将这个cell变量从参数列表中，再存到colure中
+                        v = _frame->get_cell_from_parameter(option_arg);
+                        _frame->closure()->set(option_arg,v);
+                    }
+                    if (v->klass() == CellKlass::getInstance()){
+                        PUSH(v);
+                    }
+                    else{
+                        // _frame->closure()->set(option_arg,v);
+                        //option_arg 是v在_frame->closure()中的序号
+                        //_table是变量所在的表
+                        PUSH(new CellObject(_frame->closure(),option_arg));
+                    }
+
+                    break;
+
+                case ByteCode::LOAD_DEREF:
+                   v =  _frame->closure()->get(option_arg);
+                    if (v->klass() == CellKlass::getInstance()) {
+                        v = ((CellObject*)v)->value();
+                    }
+                    PUSH(v);
+                    break;
+                case ByteCode::STORE_DEREF:
+                    _frame->closure()->set(option_arg,POP());
                     break;
                 case ByteCode::BUILD_LIST:
                     v  = new List();
