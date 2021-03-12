@@ -168,18 +168,19 @@ public:
             }
         }
 
-        _closure = nullptr;
+        _closure = nullptr;//x90aa0
+        //locals+params
         ArrayList<Object*>* cells = _codes->_cell_vars;
 
-        //判断codeobj中有多少cell变量
+        //判断codeobj中有多少cell变量,把他们放到_closure前边
         if (cells && cells->size()>0){
-            _closure = new ArrayList<Object*>();
+            _closure = new ArrayList<Object*>(); //addr1
             for (int i = 0; i < cells->size(); ++i) {
                 _closure->push(nullptr);
             }
         }
-        //将传进来的cell变量加到closure中
-        if (func->closure() && func->closure()->size() > 0) {
+        //函数中传进来的cell变量放到closure中
+        if (func->closure() && func->closure()->size() > 0) {//addr2
             if (_closure == nullptr)
                 _closure = func->closure()->list();//funtion中的这东西是个tuple
             else {

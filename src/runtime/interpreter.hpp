@@ -145,12 +145,21 @@ public:
                     PUSH(w);
                     break;
                 case ByteCode::ROT_THREE:
-                    v = POP();
-                    w = POP();
-                    u = POP();
+                    v = POP(); //值
+                    w = POP(); //操作数
+                    u = POP(); //索引，操作数上的
                     PUSH(v);
-                    PUSH(w);
                     PUSH(u);
+                    PUSH(w);
+                    break;
+                case ByteCode::DUP_TOP:
+                    PUSH(TOP());
+                    break;
+                case ByteCode::DUP_TOPX:
+                    for (int i = 0; i < option_arg; i++) {
+                        int index = STACK_LEVEL() - option_arg;
+                        PUSH(PEEK(index));
+                    }
                     break;
                 case ByteCode::LOAD_CONST:
                     PUSH(_frame->consts()->get(option_arg));
@@ -382,6 +391,7 @@ public:
                     break;
 
                 case ByteCode::LOAD_DEREF:
+                    //加载闭包变量
                    v =  _frame->closure()->get(option_arg);
                     if (v->klass() == CellKlass::getInstance()) {
                         v = ((CellObject*)v)->value();
@@ -399,8 +409,8 @@ public:
                     PUSH(v);
                     break;
                 case ByteCode::BUILD_TUPLE:
-                    //todo 用list替代tuple
-                    v  = new List();
+                    //todo 当前只是用list替代tuple
+                    v  = new List(); //用来将闭包变量打包放到FO中
                     while(option_arg--){
                         ((List*)v)->set(option_arg,POP());
                     }
@@ -457,7 +467,31 @@ public:
                         PUSH(v->subscr(new Integer(option_arg)));
                     }
                     break;
+                case ByteCode::CALL_FUNCTION_VAR:
+                    v = POP();
+                    if (option_arg > 0 || (v && ((List*)v)->size() > 0)) {
+                        int na = option_arg & 0xff;
+                        int nk = option_arg >> 8;
+                        int arg_cnt = na + 2 * nk;
+                        args = new ArrayList<Object*>();
+                        while (arg_cnt--) {
+                            args->set(arg_cnt, POP());
+                        }
 
+                        int s = ((List*)v)->size();
+                        for (int i = 0; i < s; i++) {
+                            args->push(((List*)v)->get(i));
+                        }
+                        na += s;
+                        option_arg = (nk << 8) | na;
+                    }
+
+                    build_frame(POP(), args, option_arg);
+
+                    if (args != nullptr) {
+                        args = nullptr;
+                    }
+                    break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
             }
