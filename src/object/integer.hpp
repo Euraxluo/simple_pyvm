@@ -56,6 +56,17 @@ public:
     int value() { return _value; }
 
     const char *toString();
+
+    unsigned int hashCode() {
+        unsigned int key = (unsigned int) _value;
+        key += ~(key << 15);
+        key ^= (key >> 10);
+        key += (key << 3);
+        key ^= (key >> 6);
+        key += ~(key << 11);
+        key ^= (key >> 16);
+        return key;
+    }
 };
 
 

@@ -31,6 +31,7 @@ Function::Function(Object *code_object) {
     _defaults = nullptr;
     _globals = nullptr;
     _native_func = nullptr;
+    _closure = nullptr;
     setKlass(FunctionKlass::getInstance());
 
 }
@@ -41,6 +42,7 @@ Function::Function(NativeFuncPtr native_func_ptr) {
     _flags = 0;
     _defaults = nullptr;
     _globals = nullptr;
+    _closure = nullptr;
     _native_func = native_func_ptr;
     setKlass(NativeFunctionKlass::getInstance());
 }
@@ -62,6 +64,11 @@ void Function::set_default(ArrayList<Object *> *defaults) {
     for (int i = 0; i < defaults->length(); ++i) {
         _defaults->set(i, defaults->get(i));
     }
+}
+
+
+void Function::set_closure(List *closure) {
+    _closure = closure;
 }
 
 
