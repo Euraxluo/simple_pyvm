@@ -4,7 +4,8 @@
 
 #include "function.hpp"
 #include "integer.hpp"
-
+#include "type.hpp"
+#include "runtime/universe.hpp"
 //FunctionKlass
 FunctionKlass *FunctionKlass::_instance = nullptr;
 
@@ -91,6 +92,25 @@ Object *len(ObjectArr args) {
     Object *argtmp = args->get(0);
     assert(argtmp->klass() == StringKlass::getInstance());
     return argtmp->klass()->len(argtmp);
+}
+
+Object* type_of(ObjectArr args) {
+    Object* arg0 = args->get(0);
+    return arg0->klass()->type();
+}
+
+Object *isinstance(ObjectArr args) {
+    Object *x = args->get(0);
+    Object *y = args->get(1);
+    assert(y&&y->klass() == TypeKlass::getInstance());
+
+    Klass* k = x->klass();
+    while (k!= nullptr){
+        if (k==((Type*)y)->sign())
+            return Universe::Real;
+        k = k->super();
+    }
+    return Universe::Inveracious;
 }
 
 //Klass Functions

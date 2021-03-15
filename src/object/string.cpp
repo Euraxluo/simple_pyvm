@@ -13,6 +13,7 @@ StringKlass *StringKlass::_instance = nullptr;
 
 StringKlass::StringKlass() {
     (new Type())->setSign(this);
+    setSuper(ObjectKlass::getInstance());
 }
 
 StringKlass::~StringKlass() {}

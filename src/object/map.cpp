@@ -34,6 +34,7 @@ MapKlass::MapKlass() {
     set_klass_dict(klass_dict);
     (new Type())->setSign(this);
     setName(new String("map"));
+    setSuper(ObjectKlass::getInstance());
 }
 
 

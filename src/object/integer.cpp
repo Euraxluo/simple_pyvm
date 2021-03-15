@@ -15,6 +15,7 @@ IntegerKlass::IntegerKlass() {
     setName(new String("int"));
 
     (new Type())->setSign(this);
+    setSuper(ObjectKlass::getInstance());
 }
 Integer::Integer(int x) {
     _value = x;

@@ -72,8 +72,8 @@ public:
         _builtins->put(new String("None"), BUILTIN_NONE());
         _builtins->put(new String("len"), new Function(len)); //native func
 
-//        _builtins->put(new String("type"),     new Function(type_of));
-//        _builtins->put(new String("isinstance"),new Function(isinstance));
+        _builtins->put(new String("type"),     new Function(type_of));
+        _builtins->put(new String("isinstance"),new Function(isinstance));
 
         _builtins->put(new String("int"), (Object *) IntegerKlass::getInstance()->type());
         _builtins->put(new String("object"), (Object *) ObjectKlass::getInstance()->type());

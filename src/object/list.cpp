@@ -31,6 +31,7 @@ ListKlass::ListKlass() {
     set_klass_dict(klass_dict);
     (new Type())->setSign(this);
     setName(new String("list"));
+    setSuper(ObjectKlass::getInstance());
 }
 
 Object *list_append(ArrayList<Object *> *args) {
