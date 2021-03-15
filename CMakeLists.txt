@@ -48,5 +48,5 @@ add_executable(simple_pyvm
         src/object/map.cpp
         src/object/map.hpp
         src/runtime/cellObject.cpp
-        src/runtime/cellObject.hpp)
+        src/runtime/cellObject.hpp src/object/type.cpp src/object/type.hpp)
 

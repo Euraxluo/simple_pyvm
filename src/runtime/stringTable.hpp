@@ -15,6 +15,7 @@ public:
     static StringTable* getInstance();
 
     String* next_str;
+    String* mod_str;
 };
 
 

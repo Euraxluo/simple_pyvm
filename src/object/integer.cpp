@@ -7,11 +7,14 @@
 #include "integer.hpp"
 #include "runtime/universe.hpp"
 #include "stdio.h"
+#include "type.hpp"
 
 IntegerKlass *IntegerKlass::_instance = nullptr;
 
 IntegerKlass::IntegerKlass() {
     setName(new String("int"));
+
+    (new Type())->setSign(this);
 }
 Integer::Integer(int x) {
     _value = x;

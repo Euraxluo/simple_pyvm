@@ -9,6 +9,7 @@
 #include "runtime/universe.hpp"
 #include "function.hpp"
 #include "list.hpp"
+#include "type.hpp"
 
 //MapKlass
 MapKlass *MapKlass::_instance = nullptr;
@@ -31,6 +32,7 @@ MapKlass::MapKlass() {
     klass_dict->put(new String("itervalues"), new Function(map_itervalues));
     klass_dict->put(new String("iteritems"), new Function(map_iteritems));
     set_klass_dict(klass_dict);
+    (new Type())->setSign(this);
     setName(new String("map"));
 }
 

@@ -7,6 +7,7 @@
 #include "string.hpp"
 #include "runtime/universe.hpp"
 #include "function.hpp"
+#include "type.hpp"
 
 //ListKlass
 ListKlass *ListKlass::_instance = nullptr;
@@ -28,6 +29,7 @@ ListKlass::ListKlass() {
     klass_dict->put(new String("reverse"), new Function(list_reverse));
     klass_dict->put(new String("sort"), new Function(list_sort));
     set_klass_dict(klass_dict);
+    (new Type())->setSign(this);
     setName(new String("list"));
 }
 

@@ -9,6 +9,20 @@
 #include "method.hpp"
 #include "checkKlass.hpp"
 
+
+ObjectKlass* ObjectKlass::_instance = NULL;
+
+ObjectKlass::ObjectKlass() {
+    setSuper(nullptr);
+}
+
+ObjectKlass* ObjectKlass::getInstance(){
+    if ( _instance == NULL)
+        _instance = new ObjectKlass();
+
+    return _instance;
+}
+
 void  Object::print() {
     klass()->print(this);
 }

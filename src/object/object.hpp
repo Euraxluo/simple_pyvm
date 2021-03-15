@@ -6,7 +6,17 @@
 #define SIMPLE_PYVM_OBJECT_HPP
 
 #include "assert.h"
+#include "klass.hpp"
 class Klass;
+class ObjectKlass : public Klass{
+private:
+    ObjectKlass();
+    static ObjectKlass* _instance;
+public:
+    static ObjectKlass* getInstance();
+};
+
+
 class Object {
 private:
     Klass *_klass = nullptr;

@@ -18,6 +18,7 @@ private:
     ~StringKlass();
 
 public:
+
     static StringKlass *getInstance();
 
     virtual void print(Object *obj);

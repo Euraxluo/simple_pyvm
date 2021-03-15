@@ -46,7 +46,7 @@ private:
     }
 
     template<typename T>
-    inline Object* PEEK(const T &x) {
+    inline Object *PEEK(const T &x) {
         return _frame->stack()->get(x);
     }
 
@@ -71,9 +71,17 @@ public:
         _builtins->put(new String("False"), BUILTIN_FALSE());
         _builtins->put(new String("None"), BUILTIN_NONE());
         _builtins->put(new String("len"), new Function(len)); //native func
+
+//        _builtins->put(new String("type"),     new Function(type_of));
+//        _builtins->put(new String("isinstance"),new Function(isinstance));
+
+        _builtins->put(new String("int"), (Object *) IntegerKlass::getInstance()->type());
+        _builtins->put(new String("object"), (Object *) ObjectKlass::getInstance()->type());
+        _builtins->put(new String("str"), (Object *) StringKlass::getInstance()->type());
+        _builtins->put(new String("list"), (Object *) ListKlass::getInstance()->type());
     }
 
-    void build_frame(Object *callable, ObjectArr args,int option_arg) {
+    void build_frame(Object *callable, ObjectArr args, int option_arg) {
 
         if (CheckKlass::isNative(callable)) {//NativeFunctionKlass
             PUSH(((Function *) callable)->call(args));
@@ -85,12 +93,12 @@ public:
                 args = new ArrayList<Object *>(1);
             }
             args->insert(0, method->owner());
-            build_frame(method->func(), args,option_arg+1);
+            build_frame(method->func(), args, option_arg + 1);
 
 
         } else if (CheckKlass::isFunction(callable)) {//FunctionKlass
 
-            FrameObject *frame = new FrameObject((Function *) callable, args,option_arg);
+            FrameObject *frame = new FrameObject((Function *) callable, args, option_arg);
             frame->set_sender(_frame);//一个指针，设置调用者的栈桢
             _frame = frame;
 
@@ -302,7 +310,7 @@ public:
                         int num_arg = option_arg & 0xff;//低8位代表位置参数的个数
                         int num_kwarg = option_arg >> 8;//高8位代表键参数个数
 
-                        int arg_cnt = num_arg+2*num_kwarg;//真实的参数个数
+                        int arg_cnt = num_arg + 2 * num_kwarg;//真实的参数个数
 
                         //该字节码的参数是，函数参数个数
                         args = new ArrayList<Object *>(arg_cnt);
@@ -310,7 +318,7 @@ public:
                             args->set(arg_cnt, POP());
                         }
                     }
-                    build_frame(POP(), args,option_arg);//将栈顶的func对象取出，替换当前栈桢，运行frame内的字节码
+                    build_frame(POP(), args, option_arg);//将栈顶的func对象取出，替换当前栈桢，运行frame内的字节码
                     if (args != nullptr) {
                         delete args;
                         args = nullptr;
@@ -319,10 +327,10 @@ public:
                 case ByteCode::MAKE_CLOSURE:
                     v = POP();//此时栈上的对象是load_closure字节码加载的对象
                     fo = new Function(v);
-                    fo->set_closure((List*) POP());//这个对象上次入栈时被转包装为了List；
+                    fo->set_closure((List *) POP());//这个对象上次入栈时被转包装为了List；
                     fo->set_globals(_frame->globals());
                     if (option_arg > 0) {
-                        args = new ArrayList<Object*>(option_arg);
+                        args = new ArrayList<Object *>(option_arg);
                         while (option_arg--) {
                             args->set(option_arg, POP());
                         }
@@ -376,81 +384,80 @@ public:
                     if (v == nullptr) {
                         //将这个cell变量从参数列表中，再存到colure中
                         v = _frame->get_cell_from_parameter(option_arg);
-                        _frame->closure()->set(option_arg,v);
+                        _frame->closure()->set(option_arg, v);
                     }
-                    if (v->klass() == CellKlass::getInstance()){
+                    if (v->klass() == CellKlass::getInstance()) {
                         PUSH(v);
-                    }
-                    else{
+                    } else {
                         // _frame->closure()->set(option_arg,v);
                         //option_arg 是v在_frame->closure()中的序号
                         //_table是变量所在的表
-                        PUSH(new CellObject(_frame->closure(),option_arg));
+                        PUSH(new CellObject(_frame->closure(), option_arg));
                     }
 
                     break;
 
                 case ByteCode::LOAD_DEREF:
                     //加载闭包变量
-                   v =  _frame->closure()->get(option_arg);
+                    v = _frame->closure()->get(option_arg);
                     if (v->klass() == CellKlass::getInstance()) {
-                        v = ((CellObject*)v)->value();
+                        v = ((CellObject *) v)->value();
                     }
                     PUSH(v);
                     break;
                 case ByteCode::STORE_DEREF:
-                    _frame->closure()->set(option_arg,POP());
+                    _frame->closure()->set(option_arg, POP());
                     break;
                 case ByteCode::BUILD_LIST:
-                    v  = new List();
-                    while(option_arg--){
-                        ((List*)v)->set(option_arg,POP());
+                    v = new List();
+                    while (option_arg--) {
+                        ((List *) v)->set(option_arg, POP());
                     }
                     PUSH(v);
                     break;
                 case ByteCode::BUILD_TUPLE:
                     //todo 当前只是用list替代tuple
-                    v  = new List(); //用来将闭包变量打包放到FO中
-                    while(option_arg--){
-                        ((List*)v)->set(option_arg,POP());
+                    v = new List(); //用来将闭包变量打包放到FO中
+                    while (option_arg--) {
+                        ((List *) v)->set(option_arg, POP());
                     }
                     PUSH(v);
                     break;
 
                 case ByteCode::BINARY_SUBSCR:
-                    v=POP();
-                    w=POP();
+                    v = POP();
+                    w = POP();
                     PUSH(w->subscr(v));
                     break;
                 case ByteCode::STORE_SUBSCR:
-                    u=POP();
-                    v=POP();
-                    w=POP();
-                    v->store_subscr(u,w);
+                    u = POP();
+                    v = POP();
+                    w = POP();
+                    v->store_subscr(u, w);
                     break;
                 case ByteCode::DELETE_SUBSCR:
-                    w=POP();
-                    v=POP();
+                    w = POP();
+                    v = POP();
                     v->del_subscr(w);
                     break;
                 case ByteCode::GET_ITER:
-                    v=POP();
+                    v = POP();
                     PUSH(v->iter());
                     break;
                 case ByteCode::FOR_ITER:
-                    v=TOP();
+                    v = TOP();
                     //这里迭代时么有去查变量表。。所以只能拿对象的“next”属性
                     w = v->getattr(StringTable::getInstance()->next_str);
                     //不断地从build_frame中调用next方法
-                    build_frame(w, nullptr,option_arg);
-                    if (TOP() == nullptr){
-                        _frame->set_pc(_frame->get_pc()+option_arg);
+                    build_frame(w, nullptr, option_arg);
+                    if (TOP() == nullptr) {
+                        _frame->set_pc(_frame->get_pc() + option_arg);
                         POP();
                     }
                     break;
                 case ByteCode::BUILD_MAP:
                     v = new Map();
-                    while(option_arg--){
+                    while (option_arg--) {
                         PUSH(v);
                     }
                     PUSH(v);
@@ -459,28 +466,28 @@ public:
                     w = POP();
                     u = POP();
                     v = POP();
-                    ((Map* )v)->put(w,u);
+                    ((Map *) v)->put(w, u);
                     break;
                 case ByteCode::UNPACK_SEQUENCE:
                     v = POP();
-                    while (option_arg--){
+                    while (option_arg--) {
                         PUSH(v->subscr(new Integer(option_arg)));
                     }
                     break;
                 case ByteCode::CALL_FUNCTION_VAR:
                     v = POP();
-                    if (option_arg > 0 || (v && ((List*)v)->size() > 0)) {
+                    if (option_arg > 0 || (v && ((List *) v)->size() > 0)) {
                         int na = option_arg & 0xff;
                         int nk = option_arg >> 8;
                         int arg_cnt = na + 2 * nk;
-                        args = new ArrayList<Object*>();
+                        args = new ArrayList<Object *>();
                         while (arg_cnt--) {
                             args->set(arg_cnt, POP());
                         }
 
-                        int s = ((List*)v)->size();
+                        int s = ((List *) v)->size();
                         for (int i = 0; i < s; i++) {
-                            args->push(((List*)v)->get(i));
+                            args->push(((List *) v)->get(i));
                         }
                         na += s;
                         option_arg = (nk << 8) | na;

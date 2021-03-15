@@ -9,15 +9,15 @@
 #include "util/hashMap.hpp"
 
 class Object;
-
 class String;
-
+class Type;
 typedef HashMap<Object *, Object *> Dict;
 
 class Klass {
 private:
     String *_name = nullptr;
     Klass *_super = nullptr;
+    Type* _type = nullptr;
 
     //用于记录某一种类型上的属性和方法
     Dict *_klass_dict = nullptr;
@@ -29,9 +29,14 @@ public:
 
     void setSuper(Klass *super) { _super = super; }
 
+    void setType(Type* type){_type = type;}
+
+
     String *name() { return _name; }
 
     Klass *super() { return _super; }
+
+    Type* type(){ return _type;}
 
     virtual void print(Object *obj) {};
 

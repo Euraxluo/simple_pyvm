@@ -5,13 +5,19 @@
 #include "string.hpp"
 #include "klass.hpp"
 #include "integer.hpp"
+#include "type.hpp"
 #include "runtime/universe.hpp"
+#include "function.hpp"
 
 StringKlass *StringKlass::_instance = nullptr;
 
-StringKlass::StringKlass() {}
+StringKlass::StringKlass() {
+    (new Type())->setSign(this);
+}
 
 StringKlass::~StringKlass() {}
+
+
 
 //初始化列表
 String::String(size_t length) {

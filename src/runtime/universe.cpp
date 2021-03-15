@@ -1,6 +1,7 @@
 //
 // Created by euraxluo on 2021/1/4.
 //
+#include <object/type.hpp>
 #include "universe.hpp"
 #include "integer.hpp"
 #include "object.hpp"
@@ -21,6 +22,16 @@ void Universe::genesis(){
     StringKlass::getInstance()->set_klass_dict(klass_dict);
     StringKlass::getInstance()->setName(new String("str"));
     klass_dict->put(new String("upper"),new Function(upper));
+    //init Type
+
+    Klass* object_klass = ObjectKlass::getInstance();
+    Klass* type_klass   = TypeKlass::getInstance();
+//    Klass* int_klass    = IntegerKlass::getInstance();
+
+    Type* type = new Type();//初始化type
+    type_klass->setName(new String("type"));//新建一个类型
+    type->setSign(type_klass); //为type_obj设置类型
+    type_klass->setSuper(object_klass); //设置其继承Obj类型
 }
 
 void Universe::destroy() {
