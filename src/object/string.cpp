@@ -250,3 +250,11 @@ Object * StringKlass::subscr(Object *x, Object *y){
 
     return new String(&(sx->c_str()[iy->value()]), 1);
 }
+
+
+Object* StringKlass::allocate_instance(ArrayList<Object *> *args) {
+    if (!args || args->length() == 0)
+        return new String("");
+    else
+        return nullptr;
+}

@@ -79,6 +79,7 @@ public:
         _builtins->put(new String("object"), (Object *) ObjectKlass::getInstance()->type());
         _builtins->put(new String("str"), (Object *) StringKlass::getInstance()->type());
         _builtins->put(new String("list"), (Object *) ListKlass::getInstance()->type());
+        _builtins->put(new String("dict"), (Object *) MapKlass::getInstance()->type());
     }
 
     void build_frame(Object *callable, ObjectArr args, int option_arg) {
@@ -103,9 +104,14 @@ public:
             _frame = frame;
 
 
-        } else {
-            printf("Error:Build Frame Faild\n");
+        } else if (CheckKlass::isType(callable)) {//FunctionKlass
 
+            Object* instance = ((Type*)callable)->sign()->allocate_instance(args);
+            PUSH(instance);
+
+        } else {
+
+            printf("Error:Build Frame Faild\n");
 
         }
 

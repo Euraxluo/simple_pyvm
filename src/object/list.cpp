@@ -393,6 +393,12 @@ Object *ListKlass::mul(Object *x, Object *y) {
     return z;
 }
 
+Object* ListKlass::allocate_instance(ArrayList<Object *> *args) {
+    if (!args || args->length() == 0)
+        return new List();
+    else
+        return nullptr;
+}
 
 //ListIteratorKlass
 ListIteratorKlass *ListIteratorKlass::_instance = nullptr;

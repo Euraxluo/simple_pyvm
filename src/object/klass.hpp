@@ -76,6 +76,7 @@ public:
 
     //native func define
     virtual Object *call(ArrayList<Object *> *args) { return 0; }
+    virtual Object *allocate_instance(ArrayList<Object*>* args){ return 0;}
     virtual Object *iter(Object*args) { return 0; }
 
     virtual Object *len(Object *x) { return 0; }

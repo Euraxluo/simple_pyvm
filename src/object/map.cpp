@@ -393,6 +393,12 @@ Object *MapKlass::mul(Object *x, Object *y) {
     return nullptr;
 }
 
+Object* MapKlass::allocate_instance(ArrayList<Object *> *args) {
+    if (!args || args->length() == 0)
+        return new Map();
+    else
+        return nullptr;
+}
 
 //MapIteratorKlass
 template <ITER_TYPE n>

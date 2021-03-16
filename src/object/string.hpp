@@ -63,6 +63,8 @@ public:
     //type function
     virtual Object *subscr(Object *x, Object *y);
 
+
+    virtual Object *allocate_instance(ArrayList<Object*>* args);
 };
 
 class String : public Object {

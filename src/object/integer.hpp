@@ -43,6 +43,8 @@ public:
     virtual Object *div(Object *x, Object *y);
 
     virtual Object *mod(Object *x, Object *y);
+
+    virtual Object *allocate_instance(ArrayList<Object*>* args);
 };
 
 

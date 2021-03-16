@@ -41,6 +41,8 @@ public:
     virtual Object *i_add(Object *x, Object *y);
 
     virtual Object *mul(Object *x, Object *y);
+
+    virtual Object *allocate_instance(ArrayList<Object*>* args);
 };
 
 class ListIteratorKlass : public Klass {

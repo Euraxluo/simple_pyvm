@@ -13,8 +13,8 @@ Object *Universe::Inveracious = nullptr;
 Object *Universe::None = nullptr;
 
 void Universe::genesis(){
-    Real = new Integer(1);
-    Inveracious = new Integer(0);
+    Real = new String("True");
+    Inveracious = new String("False");
     None = new Object();
 
     //init StringKlass

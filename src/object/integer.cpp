@@ -13,7 +13,7 @@ IntegerKlass *IntegerKlass::_instance = nullptr;
 
 IntegerKlass::IntegerKlass() {
     setName(new String("int"));
-
+    set_klass_dict(new Dict);
     (new Type())->setSign(this);
     setSuper(ObjectKlass::getInstance());
 }
@@ -198,3 +198,10 @@ Object *IntegerKlass::mod(Object *x, Object *y) {
     return new Integer(ix->value() % iy->value());
 }
 
+
+Object* IntegerKlass::allocate_instance(ArrayList<Object *> *args) {
+    if (!args || args->length() == 0)
+        return new Integer(0);
+    else
+        return nullptr;
+}
