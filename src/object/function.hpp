@@ -10,6 +10,7 @@
 #include "object.hpp"
 #include "hashMap.hpp"
 #include "list.hpp"
+#include "map.hpp"
 
 //typedef
 typedef ArrayList<Object*>* ObjectArr;
@@ -43,7 +44,7 @@ private:
     CodeObject *_func_code;
     String *_func_name;
     unsigned int _flags;
-    HashMap<Object *, Object *> *_globals;
+    Map *_globals;
     ObjectArr _defaults;
     List* _closure;
 
@@ -70,8 +71,8 @@ public:
 
     CodeObject *func_code() { return _func_code; }
 
-    HashMap<Object *, Object *> * globals() { return _globals; }
-    void set_globals(HashMap<Object *, Object *> *globals) { _globals = globals; }
+    Map * globals() { return _globals; }
+    void set_globals(Map *globals) { _globals = globals; }
 
     ArrayList<Object *> *defaults() { return _defaults; }
     void set_default(ObjectArr defaults);

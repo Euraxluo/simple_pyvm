@@ -44,7 +44,7 @@ public:
 
     virtual Object *mod(Object *x, Object *y);
 
-    virtual Object *allocate_instance(ArrayList<Object*>* args);
+    virtual Object *allocate_instance(Object* callable,ArrayList<Object*>* args);
 };
 
 

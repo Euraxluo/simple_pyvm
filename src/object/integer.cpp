@@ -199,7 +199,7 @@ Object *IntegerKlass::mod(Object *x, Object *y) {
 }
 
 
-Object* IntegerKlass::allocate_instance(ArrayList<Object *> *args) {
+Object* IntegerKlass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
     if (!args || args->length() == 0)
         return new Integer(0);
     else

@@ -16,6 +16,7 @@ public:
 
     String* next_str;
     String* mod_str;
+    String* init_str;
 };
 
 

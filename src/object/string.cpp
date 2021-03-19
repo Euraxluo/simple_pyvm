@@ -252,7 +252,7 @@ Object * StringKlass::subscr(Object *x, Object *y){
 }
 
 
-Object* StringKlass::allocate_instance(ArrayList<Object *> *args) {
+Object* StringKlass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
     if (!args || args->length() == 0)
         return new String("");
     else

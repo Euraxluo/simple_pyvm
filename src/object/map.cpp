@@ -393,7 +393,7 @@ Object *MapKlass::mul(Object *x, Object *y) {
     return nullptr;
 }
 
-Object* MapKlass::allocate_instance(ArrayList<Object *> *args) {
+Object* MapKlass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
     if (!args || args->length() == 0)
         return new Map();
     else

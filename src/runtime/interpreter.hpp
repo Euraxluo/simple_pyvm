@@ -106,7 +106,7 @@ public:
 
         } else if (CheckKlass::isType(callable)) {//FunctionKlass
 
-            Object* instance = ((Type*)callable)->sign()->allocate_instance(args);
+            Object* instance = ((Type*)callable)->sign()->allocate_instance(callable,args);
             PUSH(instance);
 
         } else {
@@ -505,6 +505,16 @@ public:
                         args = nullptr;
                     }
                     break;
+                case ByteCode::LOAD_LOCALS:
+                    PUSH(_frame->locals());
+                    break;
+                case ByteCode::BUILD_CLASS:
+                    v = POP();
+                    u = POP();
+                    w = POP();
+                    v = Klass::create_klass(v,u,w);
+                    PUSH(v);
+                    break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
             }
@@ -513,10 +523,35 @@ public:
 
     void run(CodeObject *co) {
         _frame = new FrameObject(co);
+        _frame->locals()->put(new String("__name__"),new String("__main__"));
         eval_frame();
         destroy_frame();
     }
 
+    Object* call_virtual (Object* func,ObjectArr args){
+            if (func->klass() == NativeFunctionKlass::getInstance()) {
+                // we do not create a virtual frame, but native frame.
+                return ((Function*)func)->call(args);
+            }
+            else if (CheckKlass::isMethod(func)) {
+                Method* method = (Method*) func;
+                if (!args) {
+                    args = new ArrayList<Object*>(1);
+                }
+                args->insert(0, method->owner());
+                return call_virtual(method->func(), args);
+            }
+//            else if (CheckKlass::isFunction(func)) {
+//                FrameObject* frame = new FrameObject((Function*) func, args);
+//                frame->set_sender(true);
+//                frame->sender(frame);
+//                eval_frame();
+//                destroy_frame();
+//                return _ret_value;
+//            }
+
+            return Universe::None;
+        }
 };
 
 

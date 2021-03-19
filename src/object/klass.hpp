@@ -76,7 +76,8 @@ public:
 
     //native func define
     virtual Object *call(ArrayList<Object *> *args) { return 0; }
-    virtual Object *allocate_instance(ArrayList<Object*>* args){ return 0;}
+    virtual Object *allocate_instance(Object* callable,ArrayList<Object*>* args);
+
     virtual Object *iter(Object*args) { return 0; }
 
     virtual Object *len(Object *x) { return 0; }
@@ -85,6 +86,9 @@ public:
     virtual Object *subscr(Object *x, Object *y) { return 0; }
     virtual void store_subscr(Object *x, Object *y,Object *z) { return; }
     virtual void del_subscr(Object *x, Object *y) { return; }
+
+    //type class
+    static Object *create_klass(Object *w, Object *pObject, Object *u);
 };
 
 

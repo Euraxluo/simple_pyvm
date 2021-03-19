@@ -38,8 +38,8 @@ private:
     ArrayList<Object *> *_consts;
     ArrayList<Object *> *_names;
 
-    HashMap<Object *, Object *> *_locals;
-    HashMap<Object *, Object *> *_globals;
+    Map *_locals;
+    Map *_globals;
     ArrayList<Object *> *_fast_locals;
     ArrayList<Object *> *_closure;
 
@@ -56,7 +56,7 @@ public:
         _consts = codes->_consts;
         _names = codes->_names;
 
-        _locals = new HashMap<Object *, Object *>();
+        _locals = new Map();
         _globals = _locals;
         _fast_locals = nullptr;
         _closure = nullptr;
@@ -78,7 +78,7 @@ public:
         _consts = _codes->_consts;
         _names = _codes->_names;
 
-        _locals = new HashMap<Object *, Object *>();
+        _locals = new Map();
         _globals = func->globals();
         _fast_locals = new ArrayList<Object *>();
 
@@ -222,7 +222,7 @@ public:
 
     ~FrameObject() {};
 public:
-    HashMap<Object *, Object *> *globals() { return _globals; }
+    Map *globals() { return _globals; }
 
     void set_sender(FrameObject *f) { _sender = f; }
 
@@ -243,7 +243,7 @@ public:
 
     ArrayList<Object *> *names() { return _names; }
 
-    HashMap<Object *, Object *> *locals() { return _locals; }
+    Map *locals() { return _locals; }
 
     ArrayList<Object *> *fast_locals() { return _fast_locals; }
     ArrayList<Object *> *closure() { return _closure; }
