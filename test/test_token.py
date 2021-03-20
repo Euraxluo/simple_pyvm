@@ -9,3 +9,5 @@ for fruit in fruits:  # 第二个实例
     print('当前水果 :', fruit)
 
 print("Good bye!")
+
+print("TEST SUCCESS!!!")

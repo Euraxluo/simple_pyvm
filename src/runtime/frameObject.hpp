@@ -46,6 +46,7 @@ private:
     CodeObject *_codes;
     FrameObject *_sender;
     int _ptr_c = 0;//程序计数器
+    bool _entry_frame = false;
 
     inline int byte2int(char byte) {
         return (byte & 0xFF);
@@ -224,6 +225,13 @@ public:
 
     ~FrameObject() {};
 public:
+
+
+    void set_entry_frame(bool x)    { _entry_frame = x; }
+    bool is_entry_frame()           { return _entry_frame; }
+    bool is_first_frame()           { return _sender == nullptr; }
+
+
     Map *globals() { return _globals; }
 
     void set_sender(FrameObject *f) { _sender = f; }

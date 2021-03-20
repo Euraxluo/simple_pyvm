@@ -34,7 +34,7 @@ size_t StringSize(const char *s) {
 void Stu() {
     Study().var_type();
     Study().test_0_x_ff();
-    Study().file_stu_1("test/hello.py");
+    Study().file_stu_1("test/test_hello.py");
     Study().const_char_stu();
 
     auto adder = Study().adder();
@@ -307,11 +307,11 @@ int main(int argc, char **argv) {
     printf("main_code is %s \n", main_code->toString());
 
     Universe::genesis();//初始化一些值
-    Interpreter interpreter;
+    Interpreter::getInstance()->run(main_code);
 
 
-
-    interpreter.run(main_code);
+//
+//    interpreter.run(main_code);
     return 0;
 }
 

@@ -112,6 +112,11 @@ Object* Object::getattr(Object* x) {
 }
 
 Object* Object::setattr(Object* x,Object* y) {
+    if(klass() == TypeKlass::getInstance()){
+        Type* type_obj = (Type*) this;
+        type_obj->sign()->klass_dict()->put(x,y);
+        return Universe::None;
+    }
     if (!_obj_dict)
         _obj_dict = new Map();
     _obj_dict->put(x,y);

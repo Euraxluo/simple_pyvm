@@ -70,7 +70,12 @@ Object *Klass::create_klass(Object *attrs, Object *supers, Object *name) {
 //attrs
 
 Object* Klass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
-    Object* new_instance = new Object;
+    Object* new_instance = new Object();
     new_instance->setKlass(((Type*)callable)->sign());
+    //找这个class的__init__函数
+    Object* constructor = new_instance->getattr(StringTable::getInstance()->init_str);
+    if (constructor != Universe::None){
+        Interpreter::getInstance()->call_virtual(constructor,args);
+    }
     return new_instance;
 }

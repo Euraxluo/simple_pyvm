@@ -23,6 +23,7 @@ add_executable(simple_pyvm
         src/util/heap.hpp
         src/util/helper.hpp
 
+        src/runtime/interpreter.cpp
         src/runtime/interpreter.hpp
         src/runtime/universe.cpp
         src/runtime/universe.hpp
@@ -48,5 +49,7 @@ add_executable(simple_pyvm
         src/object/map.cpp
         src/object/map.hpp
         src/runtime/cellObject.cpp
-        src/runtime/cellObject.hpp src/object/type.cpp src/object/type.hpp)
+        src/runtime/cellObject.hpp
+        src/object/type.cpp
+        src/object/type.hpp)
 
