@@ -12,12 +12,12 @@
 class MapKlass : public Klass {
 private:
     MapKlass();
-
     static MapKlass *_instance;
 
 public:
     static MapKlass *getInstance();
 
+    void initialize();
     virtual void print(Object *obj);
 
     virtual Object *less(Object *x, Object *y);

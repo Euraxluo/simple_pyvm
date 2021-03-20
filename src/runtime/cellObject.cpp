@@ -5,6 +5,7 @@
 
 #include "runtime/cellObject.hpp"
 #include "string.hpp"
+#include "map.hpp"
 
 CellKlass* CellKlass::_instance = nullptr;
 
@@ -17,7 +18,7 @@ CellKlass* CellKlass::getInstance() {
 }
 
 CellKlass::CellKlass() {
-    set_klass_dict(new Dict());
+    set_klass_dict(new Map());
     setName(new String("cell"));
 }
 

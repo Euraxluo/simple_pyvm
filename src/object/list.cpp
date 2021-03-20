@@ -20,7 +20,7 @@ ListKlass *ListKlass::getInstance() {
 }
 
 ListKlass::ListKlass() {
-    Dict *klass_dict = new Dict();
+    Map *klass_dict = new Map();
     klass_dict->put(new String("append"), new Function(list_append));
     klass_dict->put(new String("insert"), new Function(list_insert));
     klass_dict->put(new String("index"), new Function(list_index));
@@ -416,7 +416,7 @@ Object *listiterator_next(ArrayList<Object *> *args) {
 }
 
 ListIteratorKlass::ListIteratorKlass() {
-    Dict *klass_dict = new Dict();
+    Map *klass_dict = new Map();
     klass_dict->put(new String("next"), new Function(listiterator_next));
     set_klass_dict(klass_dict);
 }

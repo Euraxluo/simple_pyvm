@@ -8,7 +8,7 @@
 #include "klass.hpp"
 #include "method.hpp"
 #include "checkKlass.hpp"
-
+#include "map.hpp"
 
 ObjectKlass* ObjectKlass::_instance = NULL;
 
@@ -94,8 +94,13 @@ Object *Object::not_contains(Object *rhs) {
 Object* Object::getattr(Object* x) {
     Object* attr = Universe::None;
 
-    attr = klass()->klass_dict()->get(x);
+    if (_obj_dict != nullptr){
+        attr = _obj_dict->get(x,Universe::None);
+        if(attr!=Universe::None)
+            return attr;
+    }
 
+    attr = klass()->klass_dict()->get(x,Universe::None);
     if (attr == Universe::None)
         return attr;
 
@@ -104,6 +109,13 @@ Object* Object::getattr(Object* x) {
         attr = new Method((Function*)attr, this);
     }
     return attr;
+}
+
+Object* Object::setattr(Object* x,Object* y) {
+    if (!_obj_dict)
+        _obj_dict = new Map();
+    _obj_dict->put(x,y);
+    return Universe::None;
 }
 
 Object* Object::subscr(Object *x) {

@@ -57,6 +57,8 @@ public:
         _names = codes->_names;
 
         _locals = new Map();
+        _locals->put(new String("__name__"),new String("__main__"));
+
         _globals = _locals;
         _fast_locals = nullptr;
         _closure = nullptr;

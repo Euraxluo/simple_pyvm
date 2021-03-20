@@ -8,6 +8,7 @@
 #include "assert.h"
 #include "klass.hpp"
 class Klass;
+class Map;
 class ObjectKlass : public Klass{
 private:
     ObjectKlass();
@@ -20,6 +21,7 @@ public:
 class Object {
 private:
     Klass *_klass = nullptr;
+    Map* _obj_dict = nullptr;
 public:
     Klass *klass() {
         assert(_klass != nullptr);
@@ -72,6 +74,7 @@ public:
 
     //method sup
     Object* getattr(Object* x);
+    Object* setattr(Object* x,Object* y);
 
 
 };

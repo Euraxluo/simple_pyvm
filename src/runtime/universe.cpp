@@ -15,10 +15,10 @@ Object *Universe::None = nullptr;
 void Universe::genesis(){
     Real = new String("True");
     Inveracious = new String("False");
-    None = new Object();
+    None = new String("None");
 
     //init StringKlass
-    Dict* klass_dict = new Dict();
+    Map* klass_dict = new Map();
     StringKlass::getInstance()->set_klass_dict(klass_dict);
     StringKlass::getInstance()->setName(new String("str"));
     klass_dict->put(new String("upper"),new Function(upper));
@@ -40,8 +40,10 @@ void Universe::genesis(){
     object_klass->setSuper(nullptr);
 
 
-    type_klass->set_klass_dict(new Dict());
-    object_klass->set_klass_dict(new Dict());
+    type_klass->set_klass_dict(new Map());
+    object_klass->set_klass_dict(new Map());
+
+    MapKlass::getInstance()->initialize();
 
 
     type_klass->setName(new String("type"));//新建一个类型

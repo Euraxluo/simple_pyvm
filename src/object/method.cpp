@@ -5,7 +5,7 @@
 #include "method.hpp"
 MethodKlass* MethodKlass::_instance= nullptr;
 MethodKlass::MethodKlass() {
-    set_klass_dict(new Dict);
+    set_klass_dict(new Map());
 }
 MethodKlass* MethodKlass::getInstance() {
     if(_instance== nullptr)

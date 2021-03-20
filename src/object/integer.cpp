@@ -7,13 +7,14 @@
 #include "integer.hpp"
 #include "runtime/universe.hpp"
 #include "stdio.h"
+#include "map.hpp"
 #include "type.hpp"
 
 IntegerKlass *IntegerKlass::_instance = nullptr;
 
 IntegerKlass::IntegerKlass() {
     setName(new String("int"));
-    set_klass_dict(new Dict);
+    set_klass_dict(new Map());
     (new Type())->setSign(this);
     setSuper(ObjectKlass::getInstance());
 }

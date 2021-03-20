@@ -7,10 +7,12 @@
 
 #include "util/arrayList.hpp"
 #include "util/hashMap.hpp"
+//#include "map.hpp"
 
 class Object;
 class String;
 class Type;
+class Map;
 typedef HashMap<Object *, Object *> Dict;
 
 class Klass {
@@ -20,7 +22,7 @@ private:
     Type* _type = nullptr;
 
     //用于记录某一种类型上的属性和方法
-    Dict *_klass_dict = nullptr;
+    Map *_klass_dict = nullptr;
 
 public:
     Klass() {}
@@ -38,11 +40,11 @@ public:
 
     Type* type(){ return _type;}
 
-    virtual void print(Object *obj) {};
+    virtual void print(Object *obj);
 
-    void set_klass_dict(Dict *dict) { _klass_dict = dict; }
+    void set_klass_dict(Map *dict) { _klass_dict = dict; }
 
-    Dict *klass_dict() { return _klass_dict; }
+    Map *klass_dict() { return _klass_dict; }
 
     static int compare_klass(Klass * x,Klass * y);
 

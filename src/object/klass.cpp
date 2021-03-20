@@ -28,6 +28,21 @@ int Klass::compare_klass(Klass *x, Klass *y) {
         return 1;
 }
 
+void Klass::print(Object *obj) {
+//    <define_class.A object at 0x7f0fc961ad10>
+    printf("<");
+    Map* attr_dict = obj->klass()->klass_dict();
+    if ( attr_dict){
+        Object* mod = attr_dict->get((Object*)StringTable::getInstance()->mod_str,Universe::None);
+        if (mod != Universe::None){
+            mod->print();
+            printf(".");
+        }
+    }
+    obj->klass()->name()->print();
+    printf(" object at %p>", obj);
+};
+
 //attrs
 Object *Klass::create_klass(Object *attrs, Object *supers, Object *name) {
     assert(attrs->klass() == (Klass *) MapKlass::getInstance());
@@ -38,7 +53,7 @@ Object *Klass::create_klass(Object *attrs, Object *supers, Object *name) {
     Map *klass_dict = (Map *) attrs;
     List *supers_list = (List *) supers;
 
-    new_klass->set_klass_dict(new Dict());
+    new_klass->set_klass_dict(klass_dict);
 
     new_klass->setName((String*)name);
     if(supers_list->list()->length()>0){

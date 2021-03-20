@@ -515,6 +515,12 @@ public:
                     v = Klass::create_klass(v,u,w);
                     PUSH(v);
                     break;
+                case ByteCode::STORE_ATTR:
+                    u = POP();
+                    v = _frame->names()->get(option_arg);
+                    w = POP();
+                    u->setattr(v,w);
+                    break;
                 default:
                     printf("Error:Unrecongnized byte code %d\n", option_code);
             }
@@ -523,7 +529,6 @@ public:
 
     void run(CodeObject *co) {
         _frame = new FrameObject(co);
-        _frame->locals()->put(new String("__name__"),new String("__main__"));
         eval_frame();
         destroy_frame();
     }

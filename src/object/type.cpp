@@ -5,6 +5,7 @@
 #include <runtime/stringTable.hpp>
 #include <runtime/universe.hpp>
 #include "type.hpp"
+#include "map.hpp"
 #include "string.hpp"
 TypeKlass *TypeKlass::_instance = nullptr;
 
@@ -21,8 +22,9 @@ TypeKlass *TypeKlass::getInstance() {
 void TypeKlass::print(Object* obj){
     assert(obj->klass() == (Klass*) this);
     printf("<type ");
+    printf("'");
     Klass * obj_type = ((Type*)obj)->sign();
-    Dict* attr_dict =  obj_type->klass_dict();
+    Map* attr_dict =  obj_type->klass_dict();
     if (attr_dict){
         Object* mod = attr_dict->get((Object*)StringTable::getInstance()->mod_str,Universe::None);
         if (mod != Universe::None){
@@ -31,6 +33,7 @@ void TypeKlass::print(Object* obj){
         }
     }
     obj_type->name()->print();
+    printf("'");
     printf(">");
 }
 
