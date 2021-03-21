@@ -29,7 +29,8 @@ public:
     }
 
     void setKlass(Klass *k) { _klass = k; }
-
+    Map* obj_dict(){ return _obj_dict;}
+    void set_obj_dict(Map* obj_dict){ _obj_dict = obj_dict;}
 
     virtual const char *toString() {}
 
@@ -70,11 +71,19 @@ public:
 
     //native funcion
     Object* iter();
-//    Object* len();
+    Object* len();
+    Object* abs();
+    Object* pow(Object* rhs);
+    Object* complex();
+    Object* int_func();
+    Object* float_func();
+    Object* hex();
+    Object* oct();
+    Object* hash();
 
     //method sup
     Object* getattr(Object* x);
-    Object* setattr(Object* x,Object* y);
+    Object* setattr(Object* k,Object* v);
 
 
 };

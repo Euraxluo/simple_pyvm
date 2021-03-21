@@ -92,6 +92,16 @@ public:
 
 //native 方法区
 Object* len(ObjectArr args);
+Object* abs(ObjectArr args);
+Object* pow(ObjectArr args);
+Object* complex(ObjectArr args);
+Object* int_func(ObjectArr args);
+Object* float_func(ObjectArr args);
+Object* hex(ObjectArr args);
+Object* oct(ObjectArr args);
+Object* hash(ObjectArr args);
+
+
 Object* iter(ObjectArr args);
 Object* type_of(ObjectArr args);
 Object* isinstance(ObjectArr args);

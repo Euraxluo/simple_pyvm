@@ -86,6 +86,16 @@ void StringKlass::print(Object *obj) {
         printf("%c", str->c_str()[i]);
     }
 }
+Object *StringKlass::iter(Object *x) {
+    assert(x && x->klass() == (Klass *) this);
+    List* stringList = new List();
+    for (size_t i = 0; i < ((String*)x)->length(); ++i) {
+        stringList->set(i,&((String*)x)->getIndex(i));
+    }
+    printf("%d",stringList->size());
+    return new ListIterator((List *) stringList);
+}
+
 
 Object* StringKlass::less(Object *x, Object *y) {
     String* sx = (String*) x;

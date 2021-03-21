@@ -89,10 +89,52 @@ NativeFunctionKlass::NativeFunctionKlass() {
 
 //NativeFunctions
 Object *len(ObjectArr args) {
-    Object *argtmp = args->get(0);
-    assert(argtmp->klass() == StringKlass::getInstance());
-    return argtmp->klass()->len(argtmp);
+    return args->get(0)->len();
 }
+
+Object *abs(ObjectArr args) {
+    return args->get(0)->abs();
+}
+
+Object *pow(ObjectArr args) {
+    assert(args->size()==2);
+    return args->get(0)->pow(args->get(1));
+}
+
+Object *complex(ObjectArr args) {
+    return args->get(0)->complex();
+}
+
+Object *int_func(ObjectArr args) {
+    return args->get(0)->int_func();
+}
+
+Object *float_func(ObjectArr args) {
+    return args->get(0)->float_func();
+}
+
+Object *hex(ObjectArr args) {
+    return args->get(0)->hex();
+}
+
+Object *oct(ObjectArr args) {
+    return args->get(0)->oct();
+}
+
+
+Object *hash(ObjectArr args) {
+    return args->get(0)->hash();
+}
+
+
+
+
+
+
+
+
+
+
 
 Object* type_of(ObjectArr args) {
     Object* arg0 = args->get(0);

@@ -40,7 +40,7 @@ public:
 
 //    virtual Object *le(Object *x, Object *y);
 
-
+    virtual Object *iter(Object *x);
 
     virtual Object *add(Object *x, Object *y);
 
@@ -218,6 +218,11 @@ public:
         assert(index >= 0 && index <= _length);
         strinsert(_string, index, str);
         return *this;
+    }
+    /**以下是重载运算符*/
+    inline String &getIndex(size_t index) {
+        char x = (_string)[index];
+        return *(new String(&x));
     }
 
     /**以下是重载运算符*/

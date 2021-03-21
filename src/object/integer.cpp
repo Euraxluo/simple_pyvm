@@ -8,6 +8,7 @@
 #include "runtime/universe.hpp"
 #include "stdio.h"
 #include "map.hpp"
+#include "runtime/stringTable.hpp"
 #include "type.hpp"
 
 IntegerKlass *IntegerKlass::_instance = nullptr;
@@ -203,6 +204,14 @@ Object *IntegerKlass::mod(Object *x, Object *y) {
 Object* IntegerKlass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
     if (!args || args->length() == 0)
         return new Integer(0);
-    else
+    else if(args->length() == 1){
+        Object* obj = args->get(0);
+        if (obj->klass() == IntegerKlass::getInstance()){
+            return obj;
+        } else{
+            return  Klass::find_and_call(obj, nullptr,StringTable::getInstance()->int_str, nullptr);
+        }
+    } else{
         return nullptr;
+    }
 }

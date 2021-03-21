@@ -19,6 +19,14 @@ Interpreter::Interpreter() {
     _builtins->put(new String("False"), BUILTIN_FALSE());
     _builtins->put(new String("None"), BUILTIN_NONE());
     _builtins->put(new String("len"), new Function(len)); //native func
+    _builtins->put(new String("abs"), new Function(abs)); //native func
+    _builtins->put(new String("pow"), new Function(pow)); //native func
+    _builtins->put(new String("complex"), new Function(complex)); //native func
+    _builtins->put(new String("int"), new Function(int_func)); //native func
+    _builtins->put(new String("float"), new Function(float_func)); //native func
+    _builtins->put(new String("hex"), new Function(hex)); //native func
+    _builtins->put(new String("oct"), new Function(oct)); //native func
+    _builtins->put(new String("hash"), new Function(hash)); //native func
 
     _builtins->put(new String("type"),     new Function(type_of));
     _builtins->put(new String("isinstance"),new Function(isinstance));
@@ -31,6 +39,7 @@ Interpreter::Interpreter() {
 }
 void Interpreter::run(CodeObject *co) {
     _frame = new FrameObject(co);
+    _frame->locals()->put(new String("__name__"),new String("__main__"));
     eval_frame();
     destroy_frame();
 }
@@ -112,9 +121,13 @@ void Interpreter::build_frame(Object *callable, ObjectArr args, int option_arg) 
         PUSH(instance);
 
     } else {
-
-        printf("Error:Build Frame Faild\n");
-
+        Object* call = callable->getattr(StringTable::getInstance()->call_str);
+        if (call != Universe::None){
+            build_frame(call,args,option_arg);
+        } else{
+            callable->print();
+            printf("\nError: can not call a normal object .\n");
+        }
     }
 
 }
@@ -185,6 +198,11 @@ void Interpreter::eval_frame() {
                 v = POP();
                 w = POP();
                 PUSH(w->mul(v));
+                break;
+            case ByteCode::BINARY_DIVIDE:
+                v = POP();
+                w = POP();
+                PUSH(w->div(v));
                 break;
             case ByteCode::POP_JUMP_IF_FALSE:
                 //如果栈顶元素是0，那么将程序计数器跳转到该指令的参数处

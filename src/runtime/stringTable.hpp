@@ -17,6 +17,37 @@ public:
     String* next_str;
     String* mod_str;
     String* init_str;
+    String* call_str;
+    String* getitem_str;
+    String* setitem_str;
+    String* setattr_str;
+    String* getattr_str;
+
+    String* len_str;
+    String* abs_str;
+    String* pow_str;
+    String* complex_str;
+    String* int_str;
+    String* float_str;
+    String* hex_str;
+    String* oct_str;
+    String* hash_str;
+
+    String* add_str;
+    String* sub_str;
+    String* mul_str;
+    String* div_str;
+    String* neg_str;
+    String* lt_str;
+    String* gt_str;
+    String* le_str;
+    String* ge_str;
+    String* eq_str;
+    String* ne_str;
+    String* and_str;
+    String* or_str;
+    String* invert_str;
+    String* xor_str;
 };
 
 

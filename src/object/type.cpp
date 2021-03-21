@@ -36,6 +36,12 @@ void TypeKlass::print(Object* obj){
     printf("'");
     printf(">");
 }
+Object* TypeKlass::setattr(Object* x,Object* y,Object*z){
+    Type* type_obj = (Type*)x;
+    type_obj->sign()->klass_dict()->put(y,z);
+    return Universe::None;
+}
+
 
 //Type 类型对象
 //每一个对象以后会有一个klass，例如list的对象是ListKlass，这个ListKlass会有一个type

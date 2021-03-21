@@ -1,13 +1,13 @@
-class mall(object):
+class tall(object):
     pass
 
 class zerbr(object):
     pass
 
-m=mall()
+m=tall()
 z=zerbr()
-
 print(m<"hello")
+print(m>"hello")
 print([]<m)
 print([]<"hello")
 print("hello"<z)

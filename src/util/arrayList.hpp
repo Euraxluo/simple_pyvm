@@ -80,7 +80,7 @@ public:
         assert(_size > 0);
         T back = _array[--_size];
         if (_size == _capacity >> 2) {
-            if (_capacity == 1)
+            if (_capacity <= 2)
                 return back;
             resize(_capacity >> 1);
         }

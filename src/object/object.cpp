@@ -85,42 +85,14 @@ Object *Object::not_contains(Object *rhs) {
 };
 
 
-//todo 不是所有的类型都有len
-//Object * Object::len() {
-//    klass()->len(this);
-//}
 
 
 Object* Object::getattr(Object* x) {
-    Object* attr = Universe::None;
-
-    if (_obj_dict != nullptr){
-        attr = _obj_dict->get(x,Universe::None);
-        if(attr!=Universe::None)
-            return attr;
-    }
-
-    attr = klass()->klass_dict()->get(x,Universe::None);
-    if (attr == Universe::None)
-        return attr;
-
-    // Only klass attribute needs bind.
-    if (CheckKlass::isFunction(attr)) {
-        attr = new Method((Function*)attr, this);
-    }
-    return attr;
+    return klass()->getattr(this,x);
 }
 
-Object* Object::setattr(Object* x,Object* y) {
-    if(klass() == TypeKlass::getInstance()){
-        Type* type_obj = (Type*) this;
-        type_obj->sign()->klass_dict()->put(x,y);
-        return Universe::None;
-    }
-    if (!_obj_dict)
-        _obj_dict = new Map();
-    _obj_dict->put(x,y);
-    return Universe::None;
+Object* Object::setattr(Object* k,Object* v) {
+    return klass()->setattr(this,k,v);
 }
 
 Object* Object::subscr(Object *x) {
@@ -133,6 +105,37 @@ void Object::store_subscr(Object *x,Object *y) {
 void Object::del_subscr(Object *x) {
     return klass()->del_subscr(this,x);
 }
+
 Object* Object::iter() {
     return klass()->iter(this);
+}
+
+Object * Object::len() {
+    return klass()->len(this);
+}
+Object * Object::abs() {
+    return klass()->abs(this);
+}
+Object * Object::pow(Object* rhs) {
+    return klass()->pow(this,rhs);
+}
+Object * Object::complex() {
+    return klass()->complex(this);
+}
+Object * Object::int_func() {
+    return klass()->int_func(this);
+}
+Object * Object::float_func() {
+    return klass()->float_func(this);
+}
+Object * Object::hex() {
+    return klass()->hex(this);
+}
+
+Object * Object::oct() {
+    return klass()->oct(this);
+}
+
+Object * Object::hash() {
+    return klass()->hash_func(this);
 }

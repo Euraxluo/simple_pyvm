@@ -31,22 +31,22 @@ public:
 
 class FrameObject {
 private:
-    List *_stack;
-    ArrayList<Block *> *_loop_stack;
+    List *_stack = nullptr;
+    ArrayList<Block *> *_loop_stack = nullptr;
 
 
-    ArrayList<Object *> *_consts;
-    ArrayList<Object *> *_names;
+    ArrayList<Object *> *_consts = nullptr;
+    ArrayList<Object *> *_names = nullptr;
 
-    Map *_locals;
-    Map *_globals;
-    ArrayList<Object *> *_fast_locals;
-    ArrayList<Object *> *_closure;
+    Map *_locals = nullptr;
+    Map *_globals = nullptr;
+    ArrayList<Object *> *_fast_locals = nullptr;
+    ArrayList<Object *> *_closure = nullptr;
 
-    CodeObject *_codes;
-    FrameObject *_sender;
+    CodeObject *_codes = nullptr;
+    FrameObject *_sender = nullptr;
     int _ptr_c = 0;//程序计数器
-    bool _entry_frame = false;
+    bool _entry_frame= false;
 
     inline int byte2int(char byte) {
         return (byte & 0xFF);
@@ -58,7 +58,6 @@ public:
         _names = codes->_names;
 
         _locals = new Map();
-        _locals->put(new String("__name__"),new String("__main__"));
 
         _globals = _locals;
         _fast_locals = nullptr;
@@ -71,6 +70,7 @@ public:
         _codes = codes;
         _ptr_c = 0;
         _sender = nullptr;
+        _entry_frame = false;
 
 
     }
@@ -89,6 +89,7 @@ public:
         _loop_stack = new ArrayList<Block *>();
         _ptr_c = 0;
         _sender = nullptr;
+        _entry_frame = false;
 
         const  int argcnt = _codes->_argcount;//函数规定的形参
         const int nargs = option_arg &0xff;

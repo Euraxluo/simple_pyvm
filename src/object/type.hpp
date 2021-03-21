@@ -14,6 +14,7 @@ private:
 public:
     static TypeKlass*getInstance();
     virtual void print(Object* obj);
+    virtual Object* setattr(Object* x,Object* y,Object*z);
 };
 
 
