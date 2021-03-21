@@ -53,19 +53,6 @@ Object *Klass::create_klass(Object *attrs, Object *supers, Object *name) {
     return type_obj;
 }
 
-//attrs
-
-Object* Klass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
-    Object* new_instance = new Object();
-    new_instance->setKlass(((Type*)callable)->sign());
-    //找这个class的__init__函数
-    Object* constructor = new_instance->klass()->klass_dict()->get(STI(init),Universe::None);
-    if (constructor != Universe::None){
-        Interpreter::getInstance()->call_virtual(constructor,args);
-    }
-    return new_instance;
-}
-
 
 Object* Klass::find_and_call(Object *lhs, ArrayList<Object *> *args, Object *func_name,Object *defaultv=nullptr) {
     Object* func = lhs->getattr(func_name);
@@ -86,8 +73,6 @@ Object* Klass::find_and_call(Object *lhs, ArrayList<Object *> *args, Object *fun
     return Universe::None;
 
 }
-
-
 
 void Klass::print(Object *obj) {
 //    <define_class.A object at 0x7f0fc961ad10>
@@ -240,7 +225,26 @@ Object* Klass::subscr(Object *x, Object *y) {
     return find_and_call(x,args,STI(getitem));
 }
 
+//attrs
+
+Object* Klass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
+    Object* new_instance = new Object();
+    new_instance->setKlass(((Type*)callable)->sign());
+    //找这个class的__init__函数
+    //todo:
+    Object* constructor = new_instance->klass()->klass_dict()->get(STI(init),Universe::None);
+//    Object* constructor = new_instance->getattr(StringTable::getInstance()->init_str);
+    if (constructor != Universe::None){
+        if (CheckKlass::isFunction(constructor)) {
+            constructor = new Method((Function*)constructor, new_instance);
+        }
+        Interpreter::getInstance()->call_virtual(constructor,args);
+    }
+    return new_instance;
+}
+
 Object* Klass::getattr(Object *x, Object *y) {
+
     Object* attr = Universe::None;
 
     if (x->obj_dict() != nullptr){
@@ -251,14 +255,14 @@ Object* Klass::getattr(Object *x, Object *y) {
 
     attr = x->klass()->klass_dict()->get(y,Universe::None);
     if (attr == Universe::None){
-//        Object* func = x->klass()->klass_dict()->get(STI(getattr),Universe::None);
-//        if (func->klass() == FunctionKlass::getInstance()){
-//            func = new Method((Function*)func,x);
-//            ObjectArr args = new ArrayList<Object*>();
-//            args->push(y);
-//            return Interpreter::getInstance()->call_virtual(func,args);
-//        }
-                return attr;
+        Object* func = x->klass()->klass_dict()->get(STI(getattr),Universe::None);
+        if (func->klass() == FunctionKlass::getInstance()){
+            func = new Method((Function*)func,x);
+            ObjectArr args = new ArrayList<Object*>();
+            args->push(y);
+            return Interpreter::getInstance()->call_virtual(func,args);
+        }
+        return attr;
     }
 
 
@@ -270,22 +274,23 @@ Object* Klass::getattr(Object *x, Object *y) {
 }
 
 Object* Klass::setattr(Object *x, Object *y, Object *z) {
-//    Object* func  = x->klass()->klass_dict()->get(STI(setattr));
-//    if (func->klass() == FunctionKlass::getInstance()){
-//        func = new Method((Function*)func,x);
-//        ObjectArr args = new ArrayList<Object*>();
-//        args->push(y);
-//        args->push(z);
-//        return Interpreter::getInstance()->call_virtual(func,args);
-//    }
+    Object* func  = x->klass()->klass_dict()->get(STI(setattr),Universe::None);
+    if (func->klass() == FunctionKlass::getInstance()){
+        func = new Method((Function*)func,x);
+        ObjectArr args = new ArrayList<Object*>();
+        args->push(y);
+        args->push(z);
+        return Interpreter::getInstance()->call_virtual(func,args);
+    }
+
     if(x->klass() == TypeKlass::getInstance()){
-        Type* type_obj = (Type*) this;
-        type_obj->sign()->klass_dict()->put(x,y);
+        Type* type_obj = (Type*) x;
+        type_obj->sign()->klass_dict()->put(y,z);
         return Universe::None;
     }
     if (!x->obj_dict())
         x->set_obj_dict(new Map());
-    x->obj_dict()->put(x,y);
+    x->obj_dict()->put(y,z);
     return Universe::None;
 }
 

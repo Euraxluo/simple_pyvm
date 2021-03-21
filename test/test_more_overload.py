@@ -1,19 +1,24 @@
 m = dict()
 class Test(object):
-    def __init__(self):
+    def __init__(self,a):
+        self.a = a
         print ("__init__")
 
     def __add__(self, other):
         print ("__add__")
+        return Test(self.a+other.a)
 
     def __sub__(self, other):
         print ("__sub__")
+        return Test(self.a-other.a)
 
     def __mul__(self, other):
         print ("__mul__")
+        return Test(self.a*other.a)
 
     def __div__(self, other):
-        print ("__div__")
+        print ("__div__",self.a,other.a)
+        return Test(self.a/other.a)
 
 
     def __lt__(self, other):
@@ -79,20 +84,25 @@ class Test(object):
     def __setattr__(self, key, value):
         m[key] = value
         print("__setattr__",m)
+
 print("TEST BEGIN!!!")
-x = Test()
-# y = Test()
-# add = x+y
-# sub = x-y
-# mul = x*y
-# div = x/y
-# lt = x<y
-# gt = x>y
-# le = x<=y
-# ge = x>=y
-# eq = x==y
-# ne = x!=y
-#
+x = Test(120)
+y = Test(3)
+div = x/y
+print (div.a)
+add = x+y
+print (add.a)
+sub = x-y
+print (sub.a)
+mul = x*y
+print (mul.a)
+lt = x<y
+gt = x>y
+le = x<=y
+ge = x>=y
+eq = x==y
+ne = x!=y
+
 # len(x)
 # abs(x)
 # pow(x,y)
@@ -103,9 +113,9 @@ x = Test()
 # hex(x)
 # oct(x)
 # hash(x)
-# x("sas",3123,q=1)
-# x["test"] = "setItem"
-# x["test"]
-# x.foo = 1
-# x.foo
+x("sas",3123,q=1)
+x["test"] = "setItem"
+x["test"]
+x.foo = 1
+x.foo
 print("TEST SUCCESS!!!")
