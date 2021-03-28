@@ -19,7 +19,7 @@ ListKlass *ListKlass::getInstance() {
     return _instance;
 }
 
-ListKlass::ListKlass() {
+void ListKlass::initialize(){
     Map *klass_dict = new Map();
     klass_dict->put(new String("append"), new Function(list_append));
     klass_dict->put(new String("insert"), new Function(list_insert));

@@ -9,8 +9,11 @@
 #include "string.hpp"
 TypeKlass *TypeKlass::_instance = nullptr;
 
-TypeKlass::TypeKlass() {
-    setSuper(nullptr);
+void TypeKlass::initialize() {
+    set_klass_dict(new Map());
+    (new Type())->setSign(this); //为type_obj设置类型
+    setName(new String("type"));//新建一个类型
+    setSuper(ObjectKlass::getInstance());
 }
 TypeKlass *TypeKlass::getInstance() {
     if (_instance == nullptr) {

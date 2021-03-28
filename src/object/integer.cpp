@@ -13,10 +13,11 @@
 
 IntegerKlass *IntegerKlass::_instance = nullptr;
 
-IntegerKlass::IntegerKlass() {
-    setName(new String("int"));
+//todo:7.更新IntegerKlass定义
+void IntegerKlass::initialize(){
     set_klass_dict(new Map());
     (new Type())->setSign(this);
+    setName(new String("int"));
     setSuper(ObjectKlass::getInstance());
 }
 Integer::Integer(int x) {

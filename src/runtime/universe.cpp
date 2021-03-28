@@ -2,6 +2,7 @@
 // Created by euraxluo on 2021/1/4.
 //
 #include <object/type.hpp>
+#include <object/method.hpp>
 #include "universe.hpp"
 #include "integer.hpp"
 #include "object.hpp"
@@ -16,39 +17,29 @@ void Universe::genesis(){
     Real = new String("True");
     Inveracious = new String("False");
     None = new String("None");
+    //todo:10.再迁移所有的初始化语句到initialize方法中
 
-    //init StringKlass
-    Map* klass_dict = new Map();
-    StringKlass::getInstance()->set_klass_dict(klass_dict);
-    StringKlass::getInstance()->setName(new String("str"));
-    klass_dict->put(new String("upper"),new Function(upper));
-
-    //init Type
-    Klass* object_klass = ObjectKlass::getInstance();
-    Klass* type_klass   = TypeKlass::getInstance();
-//    Klass* int_klass    = IntegerKlass::getInstance();
-
-
-    //init type_klass
-    Type* type = new Type();//初始化type
-    type->setSign(type_klass); //为type_obj设置类型
-    type_klass->setSuper(object_klass); //设置其继承Obj类型
-
-    //init obj_klass
-    Type* obj_type = new Type();
-    obj_type->setSign(object_klass);
-    object_klass->setSuper(nullptr);
-
-
-    type_klass->set_klass_dict(new Map());
-    object_klass->set_klass_dict(new Map());
-
+    ObjectKlass::getInstance()->initialize();
+    TypeKlass::getInstance()->initialize();
+    IntegerKlass::getInstance()->initialize();
+    StringKlass::getInstance()->initialize();
+    ListKlass::getInstance()->initialize();
     MapKlass::getInstance()->initialize();
+    FunctionKlass::getInstance()->initialize();
+    MethodKlass::getInstance()->initialize();
+    NativeFunctionKlass::getInstance()->initialize();
 
 
-    type_klass->setName(new String("type"));//新建一个类型
-    object_klass->setName(new String("object"));//新建一个类型
-
+    //todo:9.先把所有类的mro生成成功，然后打印出来
+    ObjectKlass::getInstance()->order_supers();
+    TypeKlass::getInstance()->order_supers();
+    IntegerKlass::getInstance()->order_supers();
+    StringKlass::getInstance()->order_supers();
+    ListKlass::getInstance()->order_supers();
+    MapKlass::getInstance()->order_supers();
+    FunctionKlass::getInstance()->order_supers();
+    MethodKlass::getInstance()->order_supers();
+    NativeFunctionKlass::getInstance()->order_supers();
 
 
 }

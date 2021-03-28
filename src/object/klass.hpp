@@ -20,17 +20,35 @@ private:
     String *_name = nullptr;
     Klass *_super = nullptr;
     Type* _type = nullptr;
+    ArrayList<Klass*>* _super_list = nullptr;//todo:1.添加一个superList,用来支持mro
+    ArrayList<Type*>* _mro = nullptr;//todo:3.添加mro
 
     //用于记录某一种类型上的属性和方法
     Map *_klass_dict = nullptr;
 
 public:
-    Klass() {}
 
+    Klass() {};
+    void initialize(){};
+    void set_super_list(ArrayList<Klass*>* super_list){
+        _super_list = super_list;
+    }
     void setName(String *name) { _name = name; }
 
-    void setSuper(Klass *super) { _super = super; }
-
+    void setSuper(Klass *super) {
+        _super = super;
+        //todo:2.修改setSuper方法
+        if (_super == nullptr){
+            return;
+        }
+        if (_super_list == nullptr){
+            _super_list = new ArrayList<Klass*>();
+        }
+        _super_list->push(super);
+    }
+    //todo:4.返回mro
+    ArrayList<Type*>* mro(){ return _mro;}
+    void order_supers();
     void setType(Type* type){_type = type;}
 
 

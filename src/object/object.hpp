@@ -11,9 +11,10 @@ class Klass;
 class Map;
 class ObjectKlass : public Klass{
 private:
-    ObjectKlass();
+    ObjectKlass(){};
     static ObjectKlass* _instance;
 public:
+    void initialize();
     static ObjectKlass* getInstance();
 };
 

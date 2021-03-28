@@ -11,10 +11,10 @@ class IntegerKlass : public Klass {
 private:
     static IntegerKlass *_instance;
 
-    IntegerKlass();
-    ~IntegerKlass();
+    IntegerKlass(){};
 
 public:
+    void initialize();
     static IntegerKlass *getInstance();
 
 

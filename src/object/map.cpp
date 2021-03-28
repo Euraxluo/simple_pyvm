@@ -21,10 +21,6 @@ MapKlass *MapKlass::getInstance() {
     return _instance;
 }
 
-MapKlass::MapKlass() {
-
-}
-
 void MapKlass::initialize(){
     Map *klass_dict = new Map();
     klass_dict->put(new String("setdefault"), new Function(map_set_default));

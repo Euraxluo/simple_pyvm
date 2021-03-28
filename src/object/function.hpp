@@ -23,11 +23,10 @@ private:
 
     static FunctionKlass *_instance;
 
-    FunctionKlass();
-
-    ~FunctionKlass();
+    FunctionKlass(){};
 
 public:
+    void initialize();
     static FunctionKlass *getInstance();
 
     virtual void print(Object *obj);
@@ -84,31 +83,36 @@ public:
 //NativeFunctionKlass
 class NativeFunctionKlass: public Klass{
 private:
-    NativeFunctionKlass();
+    NativeFunctionKlass(){};
     static NativeFunctionKlass *_instance;
 public:
+    void initialize();
     static NativeFunctionKlass *getInstance();
 };
 
 //native 方法区
-Object* len(ObjectArr args);
-Object* abs(ObjectArr args);
-Object* pow(ObjectArr args);
-Object* complex(ObjectArr args);
-Object* int_func(ObjectArr args);
-Object* float_func(ObjectArr args);
-Object* hex(ObjectArr args);
-Object* oct(ObjectArr args);
-Object* hash(ObjectArr args);
+namespace Native{
+    Object* len(ObjectArr args);
+    Object* abs(ObjectArr args);
+    Object* pow(ObjectArr args);
+    Object* complex(ObjectArr args);
+    Object* int_func(ObjectArr args);
+    Object* float_func(ObjectArr args);
+    Object* hex(ObjectArr args);
+    Object* oct(ObjectArr args);
+    Object* hash(ObjectArr args);
 
 
-Object* iter(ObjectArr args);
-Object* type_of(ObjectArr args);
-Object* isinstance(ObjectArr args);
-Object* builtin_super(ObjectArr args);
-Object* sysgc(ObjectArr args);
-
+    Object* iter(ObjectArr args);
+    Object* type_of(ObjectArr args);
+    Object* isinstance(ObjectArr args);
+    Object* builtin_super(ObjectArr args);
+    Object* sysgc(ObjectArr args);
+}
 //klass 方法区
-Object* upper(ObjectArr args);
+namespace KlassFunc{
+    Object* upper(ObjectArr args);
+}
+
 
 #endif //SIMPLE_PYVM_FUNCTION_HPP

@@ -3,9 +3,13 @@
 //
 
 #include "method.hpp"
+#include "type.hpp"
 MethodKlass* MethodKlass::_instance= nullptr;
-MethodKlass::MethodKlass() {
+void MethodKlass::initialize() {
     set_klass_dict(new Map());
+    (new Type())->setSign(this);
+    setName(new String("method"));
+    setSuper(FunctionKlass::getInstance());
 }
 MethodKlass* MethodKlass::getInstance() {
     if(_instance== nullptr)

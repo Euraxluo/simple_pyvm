@@ -11,7 +11,7 @@
 
 class MapKlass : public Klass {
 private:
-    MapKlass();
+    MapKlass(){};
     static MapKlass *_instance;
 
 public:

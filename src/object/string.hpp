@@ -13,12 +13,9 @@ class StringKlass : public Klass {
 private:
     static StringKlass *_instance;
 
-    StringKlass();
-
-    ~StringKlass();
-
+    StringKlass(){};
 public:
-
+    void initialize();
     static StringKlass *getInstance();
 
     virtual void print(Object *obj);

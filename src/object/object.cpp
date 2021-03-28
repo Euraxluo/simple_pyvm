@@ -12,7 +12,10 @@
 
 ObjectKlass* ObjectKlass::_instance = NULL;
 
-ObjectKlass::ObjectKlass() {
+void ObjectKlass::initialize() {
+    set_klass_dict(new Map());
+    (new Type())->setSign(this);
+    setName(new String("object"));//新建一个类型
     setSuper(nullptr);
 }
 

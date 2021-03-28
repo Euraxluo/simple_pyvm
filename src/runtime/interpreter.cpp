@@ -2,6 +2,8 @@
 // Created by euraxluo on 2021/1/4.
 //
 #include "interpreter.hpp"
+#include "function.hpp"
+using namespace Native;
 
 Interpreter* Interpreter::_instance = nullptr;
 Interpreter* Interpreter::getInstance(){
@@ -18,18 +20,18 @@ Interpreter::Interpreter() {
     _builtins->put(new String("True"), BUILTIN_TRUE());
     _builtins->put(new String("False"), BUILTIN_FALSE());
     _builtins->put(new String("None"), BUILTIN_NONE());
-    _builtins->put(new String("len"), new Function(len)); //native func
-    _builtins->put(new String("abs"), new Function(abs)); //native func
-    _builtins->put(new String("pow"), new Function(pow)); //native func
-    _builtins->put(new String("complex"), new Function(complex)); //native func
-    _builtins->put(new String("int"), new Function(int_func)); //native func
-    _builtins->put(new String("float"), new Function(float_func)); //native func
-    _builtins->put(new String("hex"), new Function(hex)); //native func
-    _builtins->put(new String("oct"), new Function(oct)); //native func
-    _builtins->put(new String("hash"), new Function(hash)); //native func
+    _builtins->put(new String("len"), new Function(Native::len)); //native func
+    _builtins->put(new String("abs"), new Function(Native::abs)); //native func
+    _builtins->put(new String("pow"), new Function(Native::pow)); //native func
+    _builtins->put(new String("complex"), new Function(Native::complex)); //native func
+    _builtins->put(new String("int"), new Function(Native::int_func)); //native func
+    _builtins->put(new String("float"), new Function(Native::float_func)); //native func
+    _builtins->put(new String("hex"), new Function(Native::hex)); //native func
+    _builtins->put(new String("oct"), new Function(Native::oct)); //native func
+    _builtins->put(new String("hash"), new Function(Native::hash)); //native func
 
-    _builtins->put(new String("type"),     new Function(type_of));
-    _builtins->put(new String("isinstance"),new Function(isinstance));
+    _builtins->put(new String("type"),     new Function(Native::type_of));
+    _builtins->put(new String("isinstance"),new Function(Native::isinstance));
 
     _builtins->put(new String("int"), (Object *) IntegerKlass::getInstance()->type());
     _builtins->put(new String("object"), (Object *) ObjectKlass::getInstance()->type());

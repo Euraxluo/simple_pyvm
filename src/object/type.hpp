@@ -9,9 +9,10 @@
 #include "object.hpp"
 class TypeKlass : public Klass{
 private:
-    TypeKlass();
+    TypeKlass(){};
     static TypeKlass* _instance;
 public:
+    void initialize();
     static TypeKlass*getInstance();
     virtual void print(Object* obj);
     virtual Object* setattr(Object* x,Object* y,Object*z);

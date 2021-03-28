@@ -11,12 +11,16 @@
 
 StringKlass *StringKlass::_instance = nullptr;
 
-StringKlass::StringKlass() {
+
+void StringKlass::initialize(){
+    Map* klass_dict = new Map();
+    StringKlass::getInstance()->set_klass_dict(klass_dict);
+    klass_dict->put(new String("upper"),new Function(KlassFunc::upper));
+    StringKlass::getInstance()->setName(new String("str"));
     (new Type())->setSign(this);
     setSuper(ObjectKlass::getInstance());
-}
 
-StringKlass::~StringKlass() {}
+}
 
 
 

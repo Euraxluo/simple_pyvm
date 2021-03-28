@@ -11,11 +11,12 @@
 
 class ListKlass : public Klass {
 private:
-    ListKlass();
+    ListKlass(){};
 
     static ListKlass *_instance;
 
 public:
+    void initialize();
     static ListKlass *getInstance();
 
     virtual void print(Object *obj);
