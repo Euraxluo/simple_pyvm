@@ -46,14 +46,18 @@ Object *Klass::create_klass(Object *attrs, Object *supers, Object *name) {
 
     new_klass->setName((String *) name);
 
-    List *supers_list = (List *) supers;
-    //todo： 可能真需要用list
-//    new_klass->set_super_list(supers_list->list());
-    if (supers_list->list()->length() > 0) {
-        Type *super = (Type *) supers_list->list()->get(0);//这里先单继承，所以用第一个父
-        new_klass->setSuper(super->sign());
-    }
 
+    //todo： 可能真需要用list
+    ArrayList<Klass*>* super_list = new ArrayList<Klass*>();
+    for (int i = 0; i < ((List *) supers)->list()->size(); ++i) {
+        Type *super = (Type *) ((List *) supers) ->list()->get(i);//这里先单继承，所以用第一个父
+        if (i==0){
+            new_klass->setSuper(super->sign());
+        }
+        super_list->push(super->sign());
+    }
+    new_klass->set_super_list(super_list);
+    new_klass->order_supers();
 
 
     return type_obj;
@@ -270,10 +274,10 @@ Object *Klass::getattr(Object *x, Object *y) {
             args->push(y);
             return Interpreter::getInstance()->call_virtual(func, args);
         }
-        return attr;
+//        return attr;
     }
 
-
+    attr = find_in_parents(x,y);
     // Only klass attribute needs bind.
     if (CheckKlass::isFunction(attr)) {
         attr = new Method((Function *) attr, x);
@@ -302,15 +306,23 @@ Object *Klass::setattr(Object *x, Object *y, Object *z) {
     return Universe::None;
 }
 
-//Object* Klass::find_in_parents(Object*x,Object*y){
-//    Object* result = Universe::None;
-//    result = x->klass()->klass_dict()->get(y,Universe::None);
-//    if (result != Universe::None){
-//        return result;
-//    }
-////    if (x->klass())
-//    f
-//}
+Object* Klass::find_in_parents(Object*x,Object*y){
+    Object* result = Universe::None;
+    result = x->klass()->klass_dict()->get(y,Universe::None);
+    if (result != Universe::None){
+        return result;
+    }
+    if (x->klass()->mro() == nullptr)
+        return result;
+    for (int i = 0; i <x->klass()->mro()->size() ; ++i) {
+        result = ((Type*)(x->klass()->mro()->get(i)))->sign()->klass_dict()->get(y,Universe::None);
+        if (result!=Universe::None){
+            break;
+        }
+    }
+    return result;
+
+}
 
 //todo:5.添加order_super实现
 void Klass::order_supers() {

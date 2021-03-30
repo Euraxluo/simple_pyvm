@@ -120,6 +120,7 @@ public:
 
     //type class
     static Object *create_klass(Object *w, Object *pObject, Object *u);
+    static Object*  find_in_parents(Object* x,Object* y);
 };
 
 
