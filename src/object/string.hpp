@@ -13,11 +13,9 @@ class StringKlass : public Klass {
 private:
     static StringKlass *_instance;
 
-    StringKlass();
-
-    ~StringKlass();
-
+    StringKlass(){};
 public:
+    void initialize();
     static StringKlass *getInstance();
 
     virtual void print(Object *obj);
@@ -39,7 +37,7 @@ public:
 
 //    virtual Object *le(Object *x, Object *y);
 
-
+    virtual Object *iter(Object *x);
 
     virtual Object *add(Object *x, Object *y);
 
@@ -62,6 +60,8 @@ public:
     //type function
     virtual Object *subscr(Object *x, Object *y);
 
+
+    virtual Object *allocate_instance(Object* callable,ArrayList<Object*>* args);
 };
 
 class String : public Object {
@@ -215,6 +215,11 @@ public:
         assert(index >= 0 && index <= _length);
         strinsert(_string, index, str);
         return *this;
+    }
+    /**以下是重载运算符*/
+    inline String &getIndex(size_t index) {
+        char x = (_string)[index];
+        return *(new String(&x));
     }
 
     /**以下是重载运算符*/

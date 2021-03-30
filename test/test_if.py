@@ -22,3 +22,4 @@ if 8<=7:
     print(9)
 else:
     print(10)
+print("TEST SUCCESS!!!")

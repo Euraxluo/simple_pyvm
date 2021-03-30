@@ -13,10 +13,11 @@
 //MethodKlass
 class MethodKlass : public Klass {
 private:
-    MethodKlass();
+    MethodKlass(){};
 
     static MethodKlass *_instance;
 public:
+    void initialize();
     static MethodKlass *getInstance();
 };
 

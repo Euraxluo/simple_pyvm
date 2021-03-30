@@ -7,11 +7,18 @@
 #include "integer.hpp"
 #include "runtime/universe.hpp"
 #include "stdio.h"
+#include "map.hpp"
+#include "runtime/stringTable.hpp"
+#include "type.hpp"
 
 IntegerKlass *IntegerKlass::_instance = nullptr;
 
-IntegerKlass::IntegerKlass() {
+//todo:7.更新IntegerKlass定义
+void IntegerKlass::initialize(){
+    set_klass_dict(new Map());
+    (new Type())->setSign(this);
     setName(new String("int"));
+    setSuper(ObjectKlass::getInstance());
 }
 Integer::Integer(int x) {
     _value = x;
@@ -194,3 +201,18 @@ Object *IntegerKlass::mod(Object *x, Object *y) {
     return new Integer(ix->value() % iy->value());
 }
 
+
+Object* IntegerKlass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
+    if (!args || args->length() == 0)
+        return new Integer(0);
+    else if(args->length() == 1){
+        Object* obj = args->get(0);
+        if (obj->klass() == IntegerKlass::getInstance()){
+            return obj;
+        } else{
+            return  Klass::find_and_call(obj, nullptr,StringTable::getInstance()->int_str, nullptr);
+        }
+    } else{
+        return nullptr;
+    }
+}

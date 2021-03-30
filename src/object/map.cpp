@@ -9,6 +9,7 @@
 #include "runtime/universe.hpp"
 #include "function.hpp"
 #include "list.hpp"
+#include "type.hpp"
 
 //MapKlass
 MapKlass *MapKlass::_instance = nullptr;
@@ -20,8 +21,8 @@ MapKlass *MapKlass::getInstance() {
     return _instance;
 }
 
-MapKlass::MapKlass() {
-    Dict *klass_dict = new Dict();
+void MapKlass::initialize(){
+    Map *klass_dict = new Map();
     klass_dict->put(new String("setdefault"), new Function(map_set_default));
     klass_dict->put(new String("remove"), new Function(map_remove));
     klass_dict->put(new String("keys"), new Function(map_keys));
@@ -31,9 +32,10 @@ MapKlass::MapKlass() {
     klass_dict->put(new String("itervalues"), new Function(map_itervalues));
     klass_dict->put(new String("iteritems"), new Function(map_iteritems));
     set_klass_dict(klass_dict);
+    (new Type())->setSign(this);
     setName(new String("map"));
+    setSuper(ObjectKlass::getInstance());
 }
-
 
 
 Object *map_set_default(ArrayList<Object *> *args) {
@@ -390,6 +392,12 @@ Object *MapKlass::mul(Object *x, Object *y) {
     return nullptr;
 }
 
+Object* MapKlass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
+    if (!args || args->length() == 0)
+        return new Map();
+    else
+        return nullptr;
+}
 
 //MapIteratorKlass
 template <ITER_TYPE n>
@@ -412,7 +420,7 @@ MapIteratorKlass<n>::MapIteratorKlass() {
     };
     //初始化时设置iter的类型
     setName(new String(klass_name[n]));//set not equal name
-    Dict* klass_dict = new Dict();
+    Map* klass_dict = new Map();
     //将next放到klass dict属性中，对应的是mapiterator_next
     klass_dict->put(StringTable::getInstance()->next_str,new Function(mapiterator_next<n>));
     set_klass_dict(klass_dict);

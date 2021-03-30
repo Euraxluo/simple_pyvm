@@ -31,21 +31,22 @@ public:
 
 class FrameObject {
 private:
-    List *_stack;
-    ArrayList<Block *> *_loop_stack;
+    List *_stack = nullptr;
+    ArrayList<Block *> *_loop_stack = nullptr;
 
 
-    ArrayList<Object *> *_consts;
-    ArrayList<Object *> *_names;
+    ArrayList<Object *> *_consts = nullptr;
+    ArrayList<Object *> *_names = nullptr;
 
-    HashMap<Object *, Object *> *_locals;
-    HashMap<Object *, Object *> *_globals;
-    ArrayList<Object *> *_fast_locals;
-    ArrayList<Object *> *_closure;
+    Map *_locals = nullptr;
+    Map *_globals = nullptr;
+    ArrayList<Object *> *_fast_locals = nullptr;
+    ArrayList<Object *> *_closure = nullptr;
 
-    CodeObject *_codes;
-    FrameObject *_sender;
+    CodeObject *_codes = nullptr;
+    FrameObject *_sender = nullptr;
     int _ptr_c = 0;//程序计数器
+    bool _entry_frame= false;
 
     inline int byte2int(char byte) {
         return (byte & 0xFF);
@@ -56,7 +57,8 @@ public:
         _consts = codes->_consts;
         _names = codes->_names;
 
-        _locals = new HashMap<Object *, Object *>();
+        _locals = new Map();
+
         _globals = _locals;
         _fast_locals = nullptr;
         _closure = nullptr;
@@ -68,6 +70,7 @@ public:
         _codes = codes;
         _ptr_c = 0;
         _sender = nullptr;
+        _entry_frame = false;
 
 
     }
@@ -78,7 +81,7 @@ public:
         _consts = _codes->_consts;
         _names = _codes->_names;
 
-        _locals = new HashMap<Object *, Object *>();
+        _locals = new Map();
         _globals = func->globals();
         _fast_locals = new ArrayList<Object *>();
 
@@ -86,6 +89,7 @@ public:
         _loop_stack = new ArrayList<Block *>();
         _ptr_c = 0;
         _sender = nullptr;
+        _entry_frame = false;
 
         const  int argcnt = _codes->_argcount;//函数规定的形参
         const int nargs = option_arg &0xff;
@@ -222,7 +226,14 @@ public:
 
     ~FrameObject() {};
 public:
-    HashMap<Object *, Object *> *globals() { return _globals; }
+
+
+    void set_entry_frame(bool x)    { _entry_frame = x; }
+    bool is_entry_frame()           { return _entry_frame; }
+    bool is_first_frame()           { return _sender == nullptr; }
+
+
+    Map *globals() { return _globals; }
 
     void set_sender(FrameObject *f) { _sender = f; }
 
@@ -243,7 +254,7 @@ public:
 
     ArrayList<Object *> *names() { return _names; }
 
-    HashMap<Object *, Object *> *locals() { return _locals; }
+    Map *locals() { return _locals; }
 
     ArrayList<Object *> *fast_locals() { return _fast_locals; }
     ArrayList<Object *> *closure() { return _closure; }

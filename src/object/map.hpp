@@ -11,13 +11,13 @@
 
 class MapKlass : public Klass {
 private:
-    MapKlass();
-
+    MapKlass(){};
     static MapKlass *_instance;
 
 public:
     static MapKlass *getInstance();
 
+    void initialize();
     virtual void print(Object *obj);
 
     virtual Object *less(Object *x, Object *y);
@@ -41,6 +41,8 @@ public:
     virtual Object *i_add(Object *x, Object *y);
 
     virtual Object *mul(Object *x, Object *y);
+
+    virtual Object *allocate_instance(Object* callable,ArrayList<Object*>* args);
 };
 enum ITER_TYPE{
     ITER_KEY = 0,
@@ -69,7 +71,9 @@ public:
     HashMap<Object *,Object*> *map() { return _map; }
 
     void put(Object*k,Object*v){_map->put(k,v);}
-    Object* get(Object*k){ return _map->get(k);}
+    Object* get(Object*k,Object* defaultv = nullptr){
+        return _map->get(k,defaultv);
+    }
     bool hash_key(Object*k){ return _map->hash_key(k);}
     int size(){return _map->size();}
     void remove(Object*k){ return _map->remove(k);}

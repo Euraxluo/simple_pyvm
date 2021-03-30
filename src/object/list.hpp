@@ -11,11 +11,12 @@
 
 class ListKlass : public Klass {
 private:
-    ListKlass();
+    ListKlass(){};
 
     static ListKlass *_instance;
 
 public:
+    void initialize();
     static ListKlass *getInstance();
 
     virtual void print(Object *obj);
@@ -41,6 +42,8 @@ public:
     virtual Object *i_add(Object *x, Object *y);
 
     virtual Object *mul(Object *x, Object *y);
+
+    virtual Object *allocate_instance(Object* callable,ArrayList<Object*>* args);
 };
 
 class ListIteratorKlass : public Klass {

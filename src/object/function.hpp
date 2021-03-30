@@ -10,6 +10,7 @@
 #include "object.hpp"
 #include "hashMap.hpp"
 #include "list.hpp"
+#include "map.hpp"
 
 //typedef
 typedef ArrayList<Object*>* ObjectArr;
@@ -22,11 +23,10 @@ private:
 
     static FunctionKlass *_instance;
 
-    FunctionKlass();
-
-    ~FunctionKlass();
+    FunctionKlass(){};
 
 public:
+    void initialize();
     static FunctionKlass *getInstance();
 
     virtual void print(Object *obj);
@@ -43,7 +43,7 @@ private:
     CodeObject *_func_code;
     String *_func_name;
     unsigned int _flags;
-    HashMap<Object *, Object *> *_globals;
+    Map *_globals;
     ObjectArr _defaults;
     List* _closure;
 
@@ -70,8 +70,8 @@ public:
 
     CodeObject *func_code() { return _func_code; }
 
-    HashMap<Object *, Object *> * globals() { return _globals; }
-    void set_globals(HashMap<Object *, Object *> *globals) { _globals = globals; }
+    Map * globals() { return _globals; }
+    void set_globals(Map *globals) { _globals = globals; }
 
     ArrayList<Object *> *defaults() { return _defaults; }
     void set_default(ObjectArr defaults);
@@ -83,21 +83,36 @@ public:
 //NativeFunctionKlass
 class NativeFunctionKlass: public Klass{
 private:
-    NativeFunctionKlass();
+    NativeFunctionKlass(){};
     static NativeFunctionKlass *_instance;
 public:
+    void initialize();
     static NativeFunctionKlass *getInstance();
 };
 
 //native 方法区
-Object* len(ObjectArr args);
-Object* iter(ObjectArr args);
-Object* type_of(ObjectArr args);
-Object* isinstance(ObjectArr args);
-Object* builtin_super(ObjectArr args);
-Object* sysgc(ObjectArr args);
+namespace Native{
+    Object* len(ObjectArr args);
+    Object* abs(ObjectArr args);
+    Object* pow(ObjectArr args);
+    Object* complex(ObjectArr args);
+    Object* int_func(ObjectArr args);
+    Object* float_func(ObjectArr args);
+    Object* hex(ObjectArr args);
+    Object* oct(ObjectArr args);
+    Object* hash(ObjectArr args);
 
+
+    Object* iter(ObjectArr args);
+    Object* type_of(ObjectArr args);
+    Object* isinstance(ObjectArr args);
+    Object* builtin_super(ObjectArr args);
+    Object* sysgc(ObjectArr args);
+}
 //klass 方法区
-Object* upper(ObjectArr args);
+namespace KlassFunc{
+    Object* upper(ObjectArr args);
+}
+
 
 #endif //SIMPLE_PYVM_FUNCTION_HPP

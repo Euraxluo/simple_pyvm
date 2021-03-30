@@ -7,6 +7,7 @@
 #include "string.hpp"
 #include "runtime/universe.hpp"
 #include "function.hpp"
+#include "type.hpp"
 
 //ListKlass
 ListKlass *ListKlass::_instance = nullptr;
@@ -18,8 +19,8 @@ ListKlass *ListKlass::getInstance() {
     return _instance;
 }
 
-ListKlass::ListKlass() {
-    Dict *klass_dict = new Dict();
+void ListKlass::initialize(){
+    Map *klass_dict = new Map();
     klass_dict->put(new String("append"), new Function(list_append));
     klass_dict->put(new String("insert"), new Function(list_insert));
     klass_dict->put(new String("index"), new Function(list_index));
@@ -28,7 +29,9 @@ ListKlass::ListKlass() {
     klass_dict->put(new String("reverse"), new Function(list_reverse));
     klass_dict->put(new String("sort"), new Function(list_sort));
     set_klass_dict(klass_dict);
+    (new Type())->setSign(this);
     setName(new String("list"));
+    setSuper(ObjectKlass::getInstance());
 }
 
 Object *list_append(ArrayList<Object *> *args) {
@@ -390,6 +393,12 @@ Object *ListKlass::mul(Object *x, Object *y) {
     return z;
 }
 
+Object* ListKlass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
+    if (!args || args->length() == 0)
+        return new List();
+    else
+        return nullptr;
+}
 
 //ListIteratorKlass
 ListIteratorKlass *ListIteratorKlass::_instance = nullptr;
@@ -407,7 +416,7 @@ Object *listiterator_next(ArrayList<Object *> *args) {
 }
 
 ListIteratorKlass::ListIteratorKlass() {
-    Dict *klass_dict = new Dict();
+    Map *klass_dict = new Map();
     klass_dict->put(new String("next"), new Function(listiterator_next));
     set_klass_dict(klass_dict);
 }

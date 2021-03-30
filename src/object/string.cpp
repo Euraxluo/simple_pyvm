@@ -5,13 +5,24 @@
 #include "string.hpp"
 #include "klass.hpp"
 #include "integer.hpp"
+#include "type.hpp"
 #include "runtime/universe.hpp"
+#include "function.hpp"
 
 StringKlass *StringKlass::_instance = nullptr;
 
-StringKlass::StringKlass() {}
 
-StringKlass::~StringKlass() {}
+void StringKlass::initialize(){
+    Map* klass_dict = new Map();
+    StringKlass::getInstance()->set_klass_dict(klass_dict);
+    klass_dict->put(new String("upper"),new Function(KlassFunc::upper));
+    StringKlass::getInstance()->setName(new String("str"));
+    (new Type())->setSign(this);
+    setSuper(ObjectKlass::getInstance());
+
+}
+
+
 
 //初始化列表
 String::String(size_t length) {
@@ -79,6 +90,16 @@ void StringKlass::print(Object *obj) {
         printf("%c", str->c_str()[i]);
     }
 }
+Object *StringKlass::iter(Object *x) {
+    assert(x && x->klass() == (Klass *) this);
+    List* stringList = new List();
+    for (size_t i = 0; i < ((String*)x)->length(); ++i) {
+        stringList->set(i,&((String*)x)->getIndex(i));
+    }
+    printf("%d",stringList->size());
+    return new ListIterator((List *) stringList);
+}
+
 
 Object* StringKlass::less(Object *x, Object *y) {
     String* sx = (String*) x;
@@ -242,4 +263,12 @@ Object * StringKlass::subscr(Object *x, Object *y){
     Integer* iy = (Integer*)y;
 
     return new String(&(sx->c_str()[iy->value()]), 1);
+}
+
+
+Object* StringKlass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
+    if (!args || args->length() == 0)
+        return new String("");
+    else
+        return nullptr;
 }

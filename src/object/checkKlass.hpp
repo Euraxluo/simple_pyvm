@@ -8,6 +8,7 @@
 #include "object.hpp"
 #include "function.hpp"
 #include "method.hpp"
+#include "type.hpp"
 
 class CheckKlass {
 public:
@@ -47,6 +48,19 @@ public:
         while (k->super() != nullptr) {
             k = k->super();
             if (k == (Klass*) FunctionKlass::getInstance())
+                return true;
+        }
+
+        return false;
+    }
+    static bool isType(Object *x) {
+        Klass* k = x->klass();
+        if (k == (Klass*) TypeKlass::getInstance())
+            return true;
+
+        while (k->super() != nullptr) {
+            k = k->super();
+            if (k == (Klass*) TypeKlass::getInstance())
                 return true;
         }
 

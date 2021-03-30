@@ -11,10 +11,10 @@ class IntegerKlass : public Klass {
 private:
     static IntegerKlass *_instance;
 
-    IntegerKlass();
-    ~IntegerKlass();
+    IntegerKlass(){};
 
 public:
+    void initialize();
     static IntegerKlass *getInstance();
 
 
@@ -43,6 +43,8 @@ public:
     virtual Object *div(Object *x, Object *y);
 
     virtual Object *mod(Object *x, Object *y);
+
+    virtual Object *allocate_instance(Object* callable,ArrayList<Object*>* args);
 };
 
 
