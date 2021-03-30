@@ -261,11 +261,12 @@ Object *Klass::getattr(Object *x, Object *y) {
 
     if (x->obj_dict() != nullptr) {
         attr = x->obj_dict()->get(y, Universe::None);
-        if (attr != Universe::None)
-            return attr;
+//        if (attr != Universe::None)
+//            return attr;
     }
-
-    attr = x->klass()->klass_dict()->get(y, Universe::None);
+    if (x->klass()->klass_dict() != nullptr){
+        attr = x->klass()->klass_dict()->get(y, Universe::None);
+    }
     if (attr == Universe::None) {
         Object *func = x->klass()->klass_dict()->get(STI(getattr), Universe::None);
         if (func->klass() == FunctionKlass::getInstance()) {
@@ -276,8 +277,9 @@ Object *Klass::getattr(Object *x, Object *y) {
         }
 //        return attr;
     }
-
-    attr = find_in_parents(x,y);
+    if (attr == Universe::None){
+        attr = find_in_parents(x,y);
+    }
     // Only klass attribute needs bind.
     if (CheckKlass::isFunction(attr)) {
         attr = new Method((Function *) attr, x);
