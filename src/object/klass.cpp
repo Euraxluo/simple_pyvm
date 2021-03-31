@@ -261,8 +261,8 @@ Object *Klass::getattr(Object *x, Object *y) {
 
     if (x->obj_dict() != nullptr) {
         attr = x->obj_dict()->get(y, Universe::None);
-//        if (attr != Universe::None)
-//            return attr;
+        if (attr != Universe::None)
+            return attr;
     }
     if (x->klass()->klass_dict() != nullptr){
         attr = x->klass()->klass_dict()->get(y, Universe::None);
@@ -275,9 +275,6 @@ Object *Klass::getattr(Object *x, Object *y) {
             args->push(y);
             return Interpreter::getInstance()->call_virtual(func, args);
         }
-//        return attr;
-    }
-    if (attr == Universe::None){
         attr = find_in_parents(x,y);
     }
     // Only klass attribute needs bind.
