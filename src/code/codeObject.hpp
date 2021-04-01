@@ -32,11 +32,11 @@ public:
     int _lineno;//行号
     String *_notable;//行号表
 
-    CodeObject(int argcount, int nlocals, int stacksize, int flag, String *bytecodes,
-               ArrayList<Object *> *consts, ArrayList<Object *> *names,
-               ArrayList<Object *> *varnames,
-               ArrayList<Object *> *freevars, ArrayList<Object *> *cellvars,
-               String *file_name, String *co_name, int lineno, String *notable) :
+    CodeObject(int argcount=0, int nlocals=0, int stacksize=0, int flag=0, String *bytecodes= nullptr,
+               ArrayList<Object *> *consts= new ArrayList<Object*>(), ArrayList<Object *> *names = new ArrayList<Object*>(),
+               ArrayList<Object *> *varnames= new ArrayList<Object*>(),
+               ArrayList<Object *> *freevars= new ArrayList<Object*>(), ArrayList<Object *> *cellvars= new ArrayList<Object*>(),
+               String *file_name= nullptr, String *co_name= nullptr, int lineno=0, String *notable= nullptr) :
             _argcount(argcount),
             _nlocals(nlocals),
             _stack_size(stacksize),

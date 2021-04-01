@@ -9,7 +9,7 @@
 #include <cstring>
 
 #define BUFFER_LEN 256
-
+const int MAX_LEN = BUFFER_LEN * sizeof(char);
 class BufferedInputStream {
 private:
     FILE *fp;//定义一个FILE 结构体类型的指针，FILE 是stdio中的一个结构体
@@ -29,8 +29,8 @@ public:
 
     void readFileName(char const *filename) {
         char *filepath = get_filename((char *) filename);
-        if (*filepath == '\000' && rootPath != nullptr) {
-            char* split = "/\0";
+        if (*filepath == '\000' && rootPath != nullptr && *rootPath != '\000') {
+            char * split = const_cast<char *>("/\000");
             rootPath = strcat(rootPath, split);
             filename = strcat(rootPath, filename);
         }
@@ -39,14 +39,13 @@ public:
         }
 
         //file 是一个指向char const 的指针，可以改变指针的指向，但是不能改变它的值
-        //todo 文件不存在时会出现段错误
+
         fp = fopen(filename, "rb");
-        try {
-            fread(szBuffer, BUFFER_LEN * sizeof(char), 1, fp);
-        } catch (...) {
+        if (!fp){
             printf("file %s not found\n", filename);
             throw "fread Exception\n";
         }
+        fread(szBuffer, MAX_LEN, 1, fp);
 
         index = 0;
     }

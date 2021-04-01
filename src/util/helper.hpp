@@ -19,7 +19,7 @@ public:
     }
 
     static String* string2hex(String *str,int radix=16) {
-        if (str->length() == 0) {
+        if (!str|| str->length() == 0) {
             String *res = new String("\000");
             return res;
         }

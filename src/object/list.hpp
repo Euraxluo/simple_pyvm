@@ -77,7 +77,7 @@ public:
 
     void set(int i, Object *obj) { _list->set(i, obj); }
 
-    Object *top() { return get(size() - 1); }
+    Object *top() { return get(-1); }
 };
 
 class ListIterator : public Object {

@@ -562,6 +562,12 @@ void Interpreter::eval_frame() {
                 _modules->put(v,w);
                 PUSH(w);
                 break;
+            case ByteCode::IMPORT_FROM:
+                v = _frame->names()->get(option_arg);
+                w = TOP();
+                u = ((Module*)w)->get(v);
+                PUSH(u);
+                break;
             default:
                 printf("Error:Unrecongnized byte code %d\n", option_code);
         }

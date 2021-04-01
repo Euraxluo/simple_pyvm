@@ -9,6 +9,7 @@
 #include "integer.hpp"
 #include "helper.hpp"
 #include "../object/integer.hpp"
+#include "../object/list.hpp"
 
 //class BufferedInputStream;
 class BinaryFileParser{
@@ -120,7 +121,7 @@ public:
             return get_tuple();
         }
         file_stream->unread();
-        return nullptr;
+        return new ArrayList<Object*>();
     }
     ArrayList<Object*>* get_tuple(){
         //获取标识这个tuple的长度length
@@ -151,6 +152,9 @@ public:
                 case 'R':
                     list->push(_string_table.get(file_stream->read_int()));
                     break;
+                case '(':
+                    list->push(new List(get_tuple()));
+                    break;
                 default:
                     printf("parser,unrecognized type :%c\n",obj_type);
             }
@@ -162,7 +166,7 @@ public:
             return get_tuple();
         }
         file_stream->unread();
-        return nullptr;
+        return new ArrayList<Object*>();
     }
 
     ArrayList<Object*>* get_var_names(){
@@ -170,7 +174,7 @@ public:
             return get_tuple();
         }
         file_stream->unread();
-        return nullptr;
+        return new ArrayList<Object*>();
     }
 
     ArrayList<Object*>* get_free_vars(){
@@ -178,7 +182,7 @@ public:
             return get_tuple();
         }
         file_stream->unread();
-        return nullptr;
+        return new ArrayList<Object*>();
     }
 
     ArrayList<Object*>* get_cell_vars(){
@@ -186,7 +190,7 @@ public:
             return get_tuple();
         }
         file_stream->unread();
-        return nullptr;
+        return new ArrayList<Object*>();
     }
     String* get_file_name(){
         return get_name();
@@ -203,14 +207,14 @@ public:
             return _string_table.get(file_stream->read_int());
         }
 
-        return nullptr;
+        return new String("");
     }
 
     String* get_no_table(){
         char ch = file_stream->read();
         if (ch != 's' && ch != 't'){
             file_stream->unread();
-            return nullptr;
+            return new String("");
         }
         return get_string();
     }
