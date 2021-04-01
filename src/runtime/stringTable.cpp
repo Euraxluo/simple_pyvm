@@ -14,6 +14,9 @@ StringTable* StringTable::getInstance(){
 }
 
 StringTable::StringTable() {
+    name_str = new String("__name__");
+    builtins_str = new String("__builtins__");
+    main_str = new String("__main__");
     next_str = new String("next");
     mod_str = new String("__module__");
     init_str = new String("__init__");

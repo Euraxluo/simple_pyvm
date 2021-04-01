@@ -6,42 +6,67 @@
 #define PYTHONVM_BUFFEREDINPUTSTREAM_HPP
 
 #include <stdio.h>
+#include <cstring>
+
 #define BUFFER_LEN 256
 
 class BufferedInputStream {
 private:
-    FILE* fp;//定义一个FILE 结构体类型的指针，FILE 是stdio中的一个结构体
+    FILE *fp;//定义一个FILE 结构体类型的指针，FILE 是stdio中的一个结构体
     char szBuffer[BUFFER_LEN];
     unsigned short int index;//0-65535
+    char *rootPath = nullptr;
+    static BufferedInputStream *_instance;
+
 public:
-    BufferedInputStream(char const* filename){//构造函数
+    BufferedInputStream() {}
+    static BufferedInputStream* getInstance() {
+        if (_instance == nullptr) {
+            _instance = new BufferedInputStream();
+        }
+        return _instance;
+    }
+
+    void readFileName(char const *filename) {
+        char *filepath = get_filename((char *) filename);
+        if (*filepath == '\000' && rootPath != nullptr) {
+            char* split = "/\0";
+            rootPath = strcat(rootPath, split);
+            filename = strcat(rootPath, filename);
+        }
+        if (rootPath == nullptr) {
+            rootPath = filepath;
+        }
+
         //file 是一个指向char const 的指针，可以改变指针的指向，但是不能改变它的值
         //todo 文件不存在时会出现段错误
-        fp = fopen(filename,"rb");
+        fp = fopen(filename, "rb");
         try {
-            fread(szBuffer,BUFFER_LEN* sizeof(char),1,fp);
+            fread(szBuffer, BUFFER_LEN * sizeof(char), 1, fp);
         } catch (...) {
-            printf("file %s not found\n",filename);
+            printf("file %s not found\n", filename);
             throw "fread Exception\n";
         }
 
-        index=0;
+        index = 0;
     }
+
     ~BufferedInputStream() {//析构函数
         close();
     }
 
-    char read(){
-        if (index<BUFFER_LEN){
+    char read() {
+        if (index < BUFFER_LEN) {
             return szBuffer[index++];
-        } else{
+        } else {
             index = 0;
             //char,-127~128,8bit
-            fread(szBuffer,BUFFER_LEN*sizeof(char),1,fp);//读取BUFFER_LEN长的字节,并存到szBUffer中,index为0
+            fread(szBuffer, BUFFER_LEN * sizeof(char), 1, fp);//读取BUFFER_LEN长的字节,并存到szBUffer中,index为0
             return szBuffer[index++];
         }
     }
-    int read_int(){
+
+    int read_int() {
         /**
          * 先转为无符号int型,再移位,避免溢出
          */
@@ -51,27 +76,40 @@ public:
         int b4 = toUnsignedInt(read());
         return b4 << 24 | b3 << 16 | b2 << 8 | b1;
     }
-    double read_double(){
+
+    double read_double() {
         char t[8];
-        for (int i = 0;i<8;i++){
+        for (int i = 0; i < 8; i++) {
             t[i] = read();
         }
-        return *(double *)t;
+        return *(double *) t;
     }
 
-    void unread(){
-        index --;
+    void unread() {
+        index--;
     }
 
     int toUnsignedInt(char x) {
-        return  ((int) x) & 0xff;//将高24位全部变成0，低8位保持不变
+        return ((int) x) & 0xff;//将高24位全部变成0，低8位保持不变
     }
 
-    void close(){
-        if (fp!= nullptr){
+    void close() {
+        if (fp != nullptr) {
             fclose(fp);
             fp = nullptr;
         }
+    }
+
+    char *get_filename(char *path) {
+        int i, j = 0;
+        for (i = 0; path[i]; i++) {
+            if (path[i] == '/')
+                j = i;
+        }
+
+        char *name = new char[j + 1];
+        memcpy(name, path, j);
+        return name;
     }
 
 };

@@ -1,7 +1,6 @@
 #include <iostream>
 #include <stdio.h>
 #include <runtime/interpreter.hpp>
-#include "src/study/study.hpp"
 #include "src/object/object.hpp"
 #include "src/object/string.hpp"
 #include "src/util/arrayList.hpp"
@@ -30,8 +29,8 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    BufferedInputStream stream(argv[1]);
-    BinaryFileParser parser(&stream);
+    BufferedInputStream::getInstance()->readFileName(argv[1]);
+    BinaryFileParser parser(BufferedInputStream::getInstance());
     CodeObject *main_code = parser.parse();
     printf("main_code is %s \n", main_code->toString());
 

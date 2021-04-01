@@ -10,7 +10,7 @@
 #include "helper.hpp"
 #include "../object/integer.hpp"
 
-
+//class BufferedInputStream;
 class BinaryFileParser{
 private:
     BufferedInputStream * file_stream;

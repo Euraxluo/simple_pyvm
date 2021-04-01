@@ -48,10 +48,10 @@ Object *Klass::create_klass(Object *attrs, Object *supers, Object *name) {
 
 
     //todo： 可能真需要用list
-    ArrayList<Klass*>* super_list = new ArrayList<Klass*>();
+    ArrayList<Klass *> *super_list = new ArrayList<Klass *>();
     for (int i = 0; i < ((List *) supers)->list()->size(); ++i) {
-        Type *super = (Type *) ((List *) supers) ->list()->get(i);//这里先单继承，所以用第一个父
-        if (i==0){
+        Type *super = (Type *) ((List *) supers)->list()->get(i);//这里先单继承，所以用第一个父
+        if (i == 0) {
             new_klass->setSuper(super->sign());
         }
         super_list->push(super->sign());
@@ -264,7 +264,7 @@ Object *Klass::getattr(Object *x, Object *y) {
         if (attr != Universe::None)
             return attr;
     }
-    if (x->klass()->klass_dict() != nullptr){
+    if (x->klass()->klass_dict() != nullptr) {
         attr = x->klass()->klass_dict()->get(y, Universe::None);
     }
     if (attr == Universe::None) {
@@ -275,7 +275,7 @@ Object *Klass::getattr(Object *x, Object *y) {
             args->push(y);
             return Interpreter::getInstance()->call_virtual(func, args);
         }
-        attr = find_in_parents(x,y);
+        attr = find_in_parents(x, y);
     }
     // Only klass attribute needs bind.
     if (CheckKlass::isFunction(attr)) {
@@ -305,17 +305,17 @@ Object *Klass::setattr(Object *x, Object *y, Object *z) {
     return Universe::None;
 }
 
-Object* Klass::find_in_parents(Object*x,Object*y){
-    Object* result = Universe::None;
-    result = x->klass()->klass_dict()->get(y,Universe::None);
-    if (result != Universe::None){
+Object *Klass::find_in_parents(Object *x, Object *y) {
+    Object *result = Universe::None;
+    result = x->klass()->klass_dict()->get(y, Universe::None);
+    if (result != Universe::None) {
         return result;
     }
     if (x->klass()->mro() == nullptr)
         return result;
-    for (int i = 0; i <x->klass()->mro()->size() ; ++i) {
-        result = ((Type*)(x->klass()->mro()->get(i)))->sign()->klass_dict()->get(y,Universe::None);
-        if (result!=Universe::None){
+    for (int i = 0; i < x->klass()->mro()->size(); ++i) {
+        result = ((Type *) (x->klass()->mro()->get(i)))->sign()->klass_dict()->get(y, Universe::None);
+        if (result != Universe::None) {
             break;
         }
     }
@@ -369,19 +369,19 @@ void Klass::order_supers() {
             }
             _mro->push(type_obj);
         }
-
-        if (_mro == nullptr) {
-            return;
-        }
-
-        printf("%s's mro is ", _name->c_str());
-        for (int i = 0; i < _mro->size(); i++) {
-            Type *type_obj = (Type *) (_mro->get(i));
-            Klass *k = type_obj->sign();
-            printf("%s, ", k->name()->c_str());
-        }
-        printf("\n");
     }
+
+    if (_mro == nullptr) {
+        return;
+    }
+
+    printf("%s's mro is ", _name->c_str());
+    for (int i = 0; i < _mro->size(); i++) {
+        Type *type_obj = (Type *) (_mro->get(i));
+        Klass *k = type_obj->sign();
+        printf("%s, ", k->name()->c_str());
+    }
+    printf("\n");
 
 
 }

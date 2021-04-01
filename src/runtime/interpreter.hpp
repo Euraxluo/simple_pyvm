@@ -19,15 +19,16 @@
 #include "universe.hpp"
 #include "frameObject.hpp"
 #include "stringTable.hpp"
-#include "cellObject.hpp"
 
 typedef ArrayList<Object *> *ObjectArr;
 class Interpreter {
 private:
 
     FrameObject *_frame= nullptr;
-    HashMap<Object *, Object *> *_builtins= nullptr;
+    Map *_builtins= nullptr;
     Object* _ret_value = nullptr;
+    Map* _modules;
+
     static Interpreter* _instance;
 
     template<typename T>
@@ -79,6 +80,7 @@ public:
     void eval_frame();
 
     void run(CodeObject *co);
+    Map* run_mod(CodeObject *co,String* run_mod);
     Object* call_virtual (Object* func,ObjectArr args);
 };
 

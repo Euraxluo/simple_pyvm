@@ -1,8 +1,10 @@
 //
 // Created by euraxluo on 2021/1/4.
 //
+#include <object/module.hpp>
 #include "interpreter.hpp"
 #include "function.hpp"
+#include "cell.hpp"
 using namespace Native;
 
 Interpreter* Interpreter::_instance = nullptr;
@@ -16,7 +18,7 @@ Interpreter* Interpreter::getInstance(){
 }
 
 Interpreter::Interpreter() {
-    _builtins = new HashMap<Object *, Object *>();
+    _builtins = new Map();
     _builtins->put(new String("True"), BUILTIN_TRUE());
     _builtins->put(new String("False"), BUILTIN_FALSE());
     _builtins->put(new String("None"), BUILTIN_NONE());
@@ -38,12 +40,26 @@ Interpreter::Interpreter() {
     _builtins->put(new String("str"), (Object *) StringKlass::getInstance()->type());
     _builtins->put(new String("list"), (Object *) ListKlass::getInstance()->type());
     _builtins->put(new String("dict"), (Object *) MapKlass::getInstance()->type());
+
+    _modules = new Map();
+    _modules->put(StringTable::getInstance()->builtins_str,_builtins);
 }
+
 void Interpreter::run(CodeObject *co) {
     _frame = new FrameObject(co);
-    _frame->locals()->put(new String("__name__"),new String("__main__"));
+    _frame->locals()->put(StringTable::getInstance()->name_str,StringTable::getInstance()->main_str);
     eval_frame();
     destroy_frame();
+}
+Map* Interpreter::run_mod(CodeObject *co,String* mod_name) {
+    FrameObject* frame = new FrameObject(co);
+    frame->set_entry_frame(true);
+    frame->locals()->put(StringTable::getInstance()->name_str,mod_name);
+    enter_frame(frame);
+    eval_frame();
+    Map* result = frame->locals();
+    destroy_frame();
+    return result;
 }
 
 Object* Interpreter::call_virtual (Object* func,ObjectArr args){
@@ -405,7 +421,7 @@ void Interpreter::eval_frame() {
                     // _frame->closure()->set(option_arg,v);
                     //option_arg 是v在_frame->closure()中的序号
                     //_table是变量所在的表
-                    PUSH(new CellObject(_frame->closure(), option_arg));
+                    PUSH(new Cell(_frame->closure(), option_arg));
                 }
 
                 break;
@@ -414,7 +430,7 @@ void Interpreter::eval_frame() {
                 //加载闭包变量
                 v = _frame->closure()->get(option_arg);
                 if (v->klass() == CellKlass::getInstance()) {
-                    v = ((CellObject *) v)->value();
+                    v = ((Cell *) v)->value();
                 }
                 PUSH(v);
                 break;
@@ -532,6 +548,19 @@ void Interpreter::eval_frame() {
                 v = _frame->names()->get(option_arg);
                 w = POP();
                 u->setattr(v,w);
+                break;
+            case ByteCode::IMPORT_NAME:
+                POP();
+                POP();
+                v = _frame->names()->get(option_arg);
+                w = _modules->get(v,Universe::None);
+                if (w!=Universe::None){
+                    PUSH(w);
+                    break;
+                }
+                w = Module::import_module(v);
+                _modules->put(v,w);
+                PUSH(w);
                 break;
             default:
                 printf("Error:Unrecongnized byte code %d\n", option_code);

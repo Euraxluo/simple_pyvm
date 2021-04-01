@@ -1,26 +1,26 @@
-# global x
-# x = 0
-#
-# # g
-# def func():
-#     global x
-#     x = "ewqeqwewq"
-#
-#
-# func()
-# print(x)
-#
-#
-# #l
-# def goo():
-#     return None
-#
-#
-# #b
-# if goo() is None:
-#     print(True)
-#     print(None)
-#     print(False)
+global x
+x = 0
+
+# g
+def func():
+    global x
+    x = "ewqeqwewq"
+
+
+func()
+print(x)
+
+
+#l
+def goo():
+    return None
+
+
+#b
+if goo() is None:
+    print(True)
+    print(None)
+    print(False)
 
 
 #e

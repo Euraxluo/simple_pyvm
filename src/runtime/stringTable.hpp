@@ -13,7 +13,9 @@ private:
 
 public:
     static StringTable* getInstance();
-
+    String* name_str;
+    String* builtins_str;
+    String* main_str;
     String* next_str;
     String* mod_str;
     String* init_str;

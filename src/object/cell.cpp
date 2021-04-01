@@ -3,9 +3,10 @@
 //
 
 
-#include "runtime/cellObject.hpp"
+#include "cell.hpp"
 #include "string.hpp"
 #include "map.hpp"
+#include "type.hpp"
 
 CellKlass* CellKlass::_instance = nullptr;
 
@@ -17,28 +18,24 @@ CellKlass* CellKlass::getInstance() {
     return _instance;
 }
 
-CellKlass::CellKlass() {
+void CellKlass::initialize() {
     set_klass_dict(new Map());
+    (new Type())->setSign(this);
     setName(new String("cell"));
+    setSuper(ObjectKlass::getInstance());
 }
 
-CellObject::CellObject(ArrayList<Object*>* t, int i) :
+Cell::Cell(ArrayList<Object*>* t, int i) :
         _table(t),
         _index(i) {
     setKlass(CellKlass::getInstance());
 }
 
-Object* CellObject::value() {
+Object* Cell::value() {
     return _table->get(_index);
 }
 
 size_t CellKlass::size() {
     return sizeof(CellKlass);
 }
-
-//void CellKlass::oops_do(OopClosure* closure, HiObject* obj) {
-//    CellObject* co = (CellObject*)obj;
-//    closure->do_oop((HiObject**)&co->_table);
-//}
-
 

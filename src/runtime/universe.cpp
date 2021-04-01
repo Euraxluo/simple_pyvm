@@ -3,6 +3,7 @@
 //
 #include <object/type.hpp>
 #include <object/method.hpp>
+#include <object/cell.hpp>
 #include "universe.hpp"
 #include "integer.hpp"
 #include "object.hpp"
@@ -28,6 +29,7 @@ void Universe::genesis(){
     FunctionKlass::getInstance()->initialize();
     MethodKlass::getInstance()->initialize();
     NativeFunctionKlass::getInstance()->initialize();
+    CellKlass::getInstance()->initialize();
 
 
     //todo:9.先把所有类的mro生成成功，然后打印出来
@@ -40,7 +42,7 @@ void Universe::genesis(){
     FunctionKlass::getInstance()->order_supers();
     MethodKlass::getInstance()->order_supers();
     NativeFunctionKlass::getInstance()->order_supers();
-
+    CellKlass::getInstance()->order_supers();
 
 }
 

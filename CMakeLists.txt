@@ -5,13 +5,10 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(src)
 include_directories(src/object)
-include_directories(src/study)
 include_directories(src/util)
 
 add_executable(simple_pyvm
         main.cpp
-        
-        src/study/study.hpp
 
         src/code/bytecode.hpp
         src/code/codeObject.hpp
@@ -19,6 +16,7 @@ add_executable(simple_pyvm
 
         src/util/hashMap.hpp
         src/util/arrayList.hpp
+        src/util/bufferedInputStream.cpp
         src/util/bufferedInputStream.hpp
         src/util/heap.hpp
         src/util/helper.hpp
@@ -48,8 +46,10 @@ add_executable(simple_pyvm
         src/runtime/stringTable.hpp
         src/object/map.cpp
         src/object/map.hpp
-        src/runtime/cellObject.cpp
-        src/runtime/cellObject.hpp
+        src/object/cell.cpp
+        src/object/cell.hpp
         src/object/type.cpp
-        src/object/type.hpp)
+        src/object/type.hpp
+        src/object/module.cpp
+        src/object/module.hpp)
 
