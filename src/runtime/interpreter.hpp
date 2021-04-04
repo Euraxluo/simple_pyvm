@@ -19,13 +19,14 @@
 #include "universe.hpp"
 #include "frameObject.hpp"
 #include "stringTable.hpp"
+#include "module.hpp"
 
 typedef ArrayList<Object *> *ObjectArr;
 class Interpreter {
 private:
 
     FrameObject *_frame= nullptr;
-    Map *_builtins= nullptr;
+    Module *_builtins;
     Object* _ret_value = nullptr;
     Map* _modules;
 

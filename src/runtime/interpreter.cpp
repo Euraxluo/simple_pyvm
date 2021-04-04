@@ -18,7 +18,7 @@ Interpreter* Interpreter::getInstance(){
 }
 
 Interpreter::Interpreter() {
-    _builtins = new Map();
+    _builtins = Module::import_module(new String("lib/builtin"));
     _builtins->put(new String("True"), BUILTIN_TRUE());
     _builtins->put(new String("False"), BUILTIN_FALSE());
     _builtins->put(new String("None"), BUILTIN_NONE());

@@ -42,6 +42,7 @@ public:
 
         fp = fopen(filename, "rb");
         if (!fp){
+            printf("%s\n",rootPath);
             printf("file %s not found\n", filename);
             throw "fread Exception\n";
         }

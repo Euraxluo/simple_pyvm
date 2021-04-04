@@ -33,6 +33,8 @@ Module::Module(Map* map) {
 Module* Module::import_module(Object* x) {
     String* mod_name = (String*)x;
     String* file_name = (String*)(mod_name->add(new String(".pyc")));
+
+    //TODO 判断文件是否存在
     BufferedInputStream::getInstance()->readFileName(file_name->c_str());
     BinaryFileParser parser(BufferedInputStream::getInstance());
     CodeObject* mod_code = parser.parse();
@@ -44,6 +46,6 @@ void Module::put(Object* x, Object* y) {
     obj_dict()->put(x, y);
 }
 
-Object* Module::get(Object* x) {
-    return obj_dict()->get(x);
+Object* Module::get(Object* x,Object* defaultv) {
+    return obj_dict()->get(x,defaultv);
 }
