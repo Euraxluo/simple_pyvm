@@ -33,11 +33,15 @@ public:
     Map* obj_dict(){ return _obj_dict;}
     void set_obj_dict(Map* obj_dict){ _obj_dict = obj_dict;}
 
+
+
     virtual const char *toString() {}
 
     virtual unsigned int hashCode() {}
 
     void print();
+
+    Object* get_klass_attr(Object*x);
 
     Object *add(Object *rhs);
 

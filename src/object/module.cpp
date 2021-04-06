@@ -32,7 +32,7 @@ Module::Module(Map* map) {
 
 Module* Module::import_module(Object* x) {
     String* mod_name = (String*)x;
-    String* file_name = (String*)(mod_name->add(new String(".pyc")));
+    String* file_name = (String*)(mod_name->add(StringTable::getInstance()->pyc_suf));
 
     //TODO 判断文件是否存在
     BufferedInputStream::getInstance()->readFileName(file_name->c_str());
@@ -48,4 +48,7 @@ void Module::put(Object* x, Object* y) {
 
 Object* Module::get(Object* x,Object* defaultv) {
     return obj_dict()->get(x,defaultv);
+}
+void Module::extend(Module *mod){
+    obj_dict()->update(mod->obj_dict());
 }

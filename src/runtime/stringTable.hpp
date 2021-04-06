@@ -13,6 +13,7 @@ private:
 
 public:
     static StringTable* getInstance();
+    String* pyc_suf;
     String* name_str;
     String* builtins_str;
     String* main_str;

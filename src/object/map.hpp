@@ -8,6 +8,7 @@
 #include "klass.hpp"
 #include "object.hpp"
 #include "integer.hpp"
+#include "list.hpp"
 
 class MapKlass : public Klass {
 private:
@@ -77,6 +78,14 @@ public:
     bool hash_key(Object*k){ return _map->hash_key(k);}
     int size(){return _map->size();}
     void remove(Object*k){ return _map->remove(k);}
+
+    void update(Map* map){
+        auto tmp = map->map()->MapEntries();
+        while (tmp){
+            put(tmp->entry->_k,tmp->entry->_v);
+            tmp = tmp->nextEntryNode;
+        }
+    }
 
 };
 

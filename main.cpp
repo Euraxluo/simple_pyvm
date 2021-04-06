@@ -30,6 +30,7 @@ int main(int argc, char **argv) {
     }
 
     BufferedInputStream::getInstance()->readFileName(argv[1]);
+    BufferedInputStream::getInstance()->addDirPath("/mnt/c/home/Repository/simple_pyvm/src");
     BinaryFileParser parser(BufferedInputStream::getInstance());
     CodeObject *main_code = parser.parse();
     printf("main_code is %s \n", main_code->toString());

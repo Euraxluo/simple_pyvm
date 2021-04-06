@@ -40,7 +40,7 @@ public:
     Object *owner() { return _owner; }
 
     Function *func() { return _func; }
-
+    static bool is_function(Object*);
 };
 
 

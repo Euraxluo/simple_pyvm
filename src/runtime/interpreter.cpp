@@ -18,7 +18,7 @@ Interpreter* Interpreter::getInstance(){
 }
 
 Interpreter::Interpreter() {
-    _builtins = Module::import_module(new String("lib/builtin"));
+    _builtins = new Module(new Map());
     _builtins->put(new String("True"), BUILTIN_TRUE());
     _builtins->put(new String("False"), BUILTIN_FALSE());
     _builtins->put(new String("None"), BUILTIN_NONE());
@@ -40,7 +40,10 @@ Interpreter::Interpreter() {
     _builtins->put(new String("str"), (Object *) StringKlass::getInstance()->type());
     _builtins->put(new String("list"), (Object *) ListKlass::getInstance()->type());
     _builtins->put(new String("dict"), (Object *) MapKlass::getInstance()->type());
+}
 
+void Interpreter::initialize(){
+    _builtins->extend(Module::import_module(new String("lib/builtin")));
     _modules = new Map();
     _modules->put(StringTable::getInstance()->builtins_str,_builtins);
 }

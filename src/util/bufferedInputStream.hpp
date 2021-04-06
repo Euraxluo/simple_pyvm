@@ -7,47 +7,83 @@
 
 #include <stdio.h>
 #include <cstring>
+#include <unistd.h>
+#include <climits>
+#include <stdlib.h>
+#include <iostream>
 
 #define BUFFER_LEN 256
 const int MAX_LEN = BUFFER_LEN * sizeof(char);
+
 class BufferedInputStream {
 private:
     FILE *fp;//定义一个FILE 结构体类型的指针，FILE 是stdio中的一个结构体
     char szBuffer[BUFFER_LEN];
     unsigned short int index;//0-65535
     char *rootPath = nullptr;
+    char *workPath = nullptr;
+    size_t dirPathSize = 0;
+    char **dirPath = nullptr;
     static BufferedInputStream *_instance;
 
 public:
     BufferedInputStream() {}
-    static BufferedInputStream* getInstance() {
+
+    static BufferedInputStream *getInstance() {
         if (_instance == nullptr) {
             _instance = new BufferedInputStream();
         }
         return _instance;
     }
 
+    void addDirPath(char *dirpath) {
+        dirPathSize++;
+        char **old = dirPath;
+        dirPath = new char *[dirPathSize];
+        for (int i = 0; i < dirPathSize - 1; ++i) {
+            dirPath[i] = old[i];
+        }
+        dirPath[dirPathSize - 1] = dirpath;
+    }
+
     void readFileName(char const *filename) {
-        char *filepath = get_filename((char *) filename);
-        if (*filepath == '\000' && rootPath != nullptr && *rootPath != '\000') {
-            char * split = const_cast<char *>("/\000");
-            rootPath = strcat(rootPath, split);
-            filename = strcat(rootPath, filename);
-        }
-        if (rootPath == nullptr) {
-            rootPath = filepath;
+        char *tmp = nullptr;
+        if (dirPathSize == 0) {
+            char abs_path_buff[PATH_MAX];
+            if (realpath(".", abs_path_buff)) {
+                tmp = abs_path_buff;
+                addDirPath(tmp);
+            } else {
+                throw "realpath Exception when get workPath\n";
+            }
+
+            char *filepath = getpath((char *) filename);
+            addDirPath(filepath);
         }
 
-        //file 是一个指向char const 的指针，可以改变指针的指向，但是不能改变它的值
+        //1.先直接读取文件
+        tmp = const_cast<char *>(filename);
+        if (access(tmp, R_OK) != 0) {
+            for (int i = 0; i < dirPathSize; ++i) {
+                if (dirPath[i] != "") {
+                    tmp = new char[PATH_MAX];
+                    char * split = const_cast<char *>("/\000");
+                    strcpy(tmp,dirPath[i]);
+                    tmp = strcat(tmp, split);
+                    tmp = strcat(tmp, filename);
+                }
 
-        fp = fopen(filename, "rb");
-        if (!fp){
-            printf("%s\n",rootPath);
-            printf("file %s not found\n", filename);
+                if (access(tmp, R_OK) == 0)
+                    break;
+                delete tmp;
+            }
+        }
+
+        fp = fopen(tmp, "rb");
+        if (!fp) {
             throw "fread Exception\n";
         }
         fread(szBuffer, MAX_LEN, 1, fp);
-
         index = 0;
     }
 
@@ -100,15 +136,15 @@ public:
         }
     }
 
-    char *get_filename(char *path) {
+    char *getpath(char *filename) {
         int i, j = 0;
-        for (i = 0; path[i]; i++) {
-            if (path[i] == '/')
+        for (i = 0; filename[i]; i++) {
+            if (filename[i] == '/')
                 j = i;
         }
 
         char *name = new char[j + 1];
-        memcpy(name, path, j);
+        memcpy(name, filename, j);
         return name;
     }
 

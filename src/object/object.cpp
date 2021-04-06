@@ -30,6 +30,9 @@ void  Object::print() {
     klass()->print(this);
 }
 
+Object *Object::get_klass_attr(Object *x) {
+    return klass()->get_klass_attr(this, x);
+}
 Object *Object::add(Object *rhs) {
     return klass()->add(this, rhs);
 }

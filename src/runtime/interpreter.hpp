@@ -70,6 +70,7 @@ private:
 public:
     static Interpreter* getInstance();
     Interpreter();
+    void initialize();
 
     void build_frame(Object *callable, ObjectArr args, int option_arg);
 

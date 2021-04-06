@@ -15,6 +15,7 @@ StringTable* StringTable::getInstance(){
 
 StringTable::StringTable() {
     name_str = new String("__name__");
+    pyc_suf = new String(".pyc");
     builtins_str = new String("__builtins__");
     main_str = new String("__main__");
     next_str = new String("next");

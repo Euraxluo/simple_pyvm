@@ -17,3 +17,20 @@ MethodKlass* MethodKlass::getInstance() {
     return _instance;
 }
 
+bool Method::is_function(Object *x) {
+    Klass* k = x->klass();
+    if (k == (Klass*) FunctionKlass::getInstance())
+        return true;
+
+    if (k->mro() == NULL)
+        return false;
+
+    for (int i = 0; i < k->mro()->size(); i++) {
+        if (k->mro()->get(i) ==
+            FunctionKlass::getInstance()->type()) {
+            return true;
+        }
+    }
+
+    return false;
+}

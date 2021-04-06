@@ -24,6 +24,8 @@ public:
      static Module* import_module(Object* mod_name);
      void put(Object* x,Object* y);
      Object* get(Object* x,Object* defaultv = nullptr);
+     void extend(Module* mod);
+
 };
 
 

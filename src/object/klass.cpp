@@ -65,13 +65,15 @@ Object *Klass::create_klass(Object *attrs, Object *supers, Object *name) {
 
 
 Object *Klass::find_and_call(Object *lhs, ArrayList<Object *> *args, Object *func_name, Object *defaultv = nullptr) {
-    Object *func = lhs->getattr(func_name);
+    Object *func = lhs->get_klass_attr(func_name);
     if (func != Universe::None) {
         if (!args) {
             args = new ArrayList<Object *>();
         }
         return Interpreter::getInstance()->call_virtual(func, args);
     }
+
+
     if (defaultv != nullptr) {
         return defaultv;
     }
@@ -280,6 +282,16 @@ Object *Klass::getattr(Object *x, Object *y) {
     // Only klass attribute needs bind.
     if (CheckKlass::isFunction(attr)) {
         attr = new Method((Function *) attr, x);
+    }
+    return attr;
+}
+
+Object *Klass::get_klass_attr(Object *x, Object *y) {
+
+    Object *attr = Universe::None;
+    attr = find_in_parents(x,y);
+    if (Method::is_function(attr)){
+        attr = new Method((Function*)attr,x);
     }
     return attr;
 }

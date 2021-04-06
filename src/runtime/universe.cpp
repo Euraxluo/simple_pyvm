@@ -10,6 +10,8 @@
 #include "stdio.h"
 #include "string.hpp"
 #include "function.hpp"
+#include "interpreter.hpp"
+
 Object *Universe::Real = nullptr;
 Object *Universe::Inveracious = nullptr;
 Object *Universe::None = nullptr;
@@ -44,6 +46,8 @@ void Universe::genesis(){
     NativeFunctionKlass::getInstance()->order_supers();
     CellKlass::getInstance()->order_supers();
 
+
+    Interpreter::getInstance()->initialize();
 }
 
 void Universe::destroy() {

@@ -117,6 +117,7 @@ public:
     virtual Object* getattr  (Object* x, Object* y);
     virtual Object* setattr  (Object* x, Object* y, Object* z);
     virtual void del_subscr(Object *x, Object *y) { return; }
+    Object* get_klass_attr(Object *x, Object *y);
 
     //type class
     static Object *create_klass(Object *w, Object *pObject, Object *u);
