@@ -43,6 +43,8 @@ public:
 
     virtual Object *mul(Object *x, Object *y);
 
+    virtual Object *len(Object *x);
+
     virtual Object *allocate_instance(Object* callable,ArrayList<Object*>* args);
 };
 

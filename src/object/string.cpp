@@ -229,7 +229,7 @@ Object *StringKlass::i_add(Object *x, Object *y) {
 //Native Function
 Object *StringKlass::len(Object *obj) {
     String *str = (String *) obj;
-    assert(str && str->klass() == (Klass *) this);
+    assert(str && str->klass() == StringKlass::getInstance());
     return new Integer(str->length());
 }
 

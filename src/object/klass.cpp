@@ -323,8 +323,10 @@ Object *Klass::find_in_parents(Object *x, Object *y) {
     if (result != Universe::None) {
         return result;
     }
+
     if (x->klass()->mro() == nullptr)
         return result;
+
     for (int i = 0; i < x->klass()->mro()->size(); ++i) {
         result = ((Type *) (x->klass()->mro()->get(i)))->sign()->klass_dict()->get(y, Universe::None);
         if (result != Universe::None) {

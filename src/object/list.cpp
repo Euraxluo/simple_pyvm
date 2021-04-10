@@ -393,12 +393,22 @@ Object *ListKlass::mul(Object *x, Object *y) {
     return z;
 }
 
+//Native Function
+Object *ListKlass::len(Object *obj) {
+    List *l = (List *) obj;
+    assert(l && l->klass() == ListKlass::getInstance());
+    return new Integer(l->size());
+}
+
+
 Object* ListKlass::allocate_instance(Object* callable,ArrayList<Object *> *args) {
     if (!args || args->length() == 0)
         return new List();
     else
         return nullptr;
 }
+
+
 
 //ListIteratorKlass
 ListIteratorKlass *ListIteratorKlass::_instance = nullptr;
