@@ -28,16 +28,16 @@ public:
         int nlocals = get_int();//第二个域是整型，表示局部变量个数
         int stacksize = get_int();//第三个域是整型，表示操作数栈的最大深度
         int flags = get_int();//第四个域是整型，表示code的属性值
-//        printf("argcount is 0x%x %d\n",argcount,argcount);
-//        printf("nlocals is 0x%x %d\n",nlocals,nlocals);
-//        printf("stacksize is 0x%x %d\n",stacksize,stacksize);
-//        printf("flags is 0x%x %d\n",flags,flags);
+        printf("argcount is 0x%x %d\n",argcount,argcount);
+        printf("nlocals is 0x%x %d\n",nlocals,nlocals);
+        printf("stacksize is 0x%x %d\n",stacksize,stacksize);
+        printf("flags is 0x%x %d\n",flags,flags);
 
         //接下来是字节码，以字符s开头，然后是整型，表示字节码长度，剩余字节就是字节
         String* byte_codes = get_byte_codes();
-        String * hex = Helper::string2hex(byte_codes);
-        printf("\nbyte_codes is $%s$",hex->c_str());
-        delete hex;
+//        String * hex = Helper::string2hex(byte_codes);
+//        printf("\nbyte_codes is $%s$",hex->c_str());
+//        delete hex;
 
         //接下来是常量表，以字符'('开始,接下来是整型，表示这个list的长度，接下来就是第一个元素的类型,根据类型，可以知道我们应该取多少个字节
         ArrayList<Object*>* consts = get_consts();

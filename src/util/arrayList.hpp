@@ -158,7 +158,7 @@ public:
     }
 
     //重载
-    inline char &operator[](const size_t index) {
+    inline T &operator[](const size_t index) {
         assert(index >= 0 && index <= _size);
         return _array[index];
     }

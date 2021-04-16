@@ -53,3 +53,11 @@ add_executable(simple_pyvm
         src/object/module.cpp
         src/object/module.hpp)
 
+
+#ADD_CUSTOM_COMMAND(TARGET math
+#        POST_BUILD
+#        COMMAND mkdir -p lib
+#        COMMAND cp libmath.so lib/
+#        COMMAND cp ../lib/*.py lib/
+#        COMMAND python -m compileall lib/*.py
+#        )
