@@ -28,10 +28,11 @@ int main(int argc, char **argv) {
         printf("vm need a parameter : filename\n");
         return 0;
     }
-
+    // load lib/builtin.pyc
+    BufferedInputStream::getInstance()->addDirPath(const_cast<char *>("/home/yons/Project/luoyou/simple_pyvm/src"));
     Universe::genesis();//初始化一些值
     BufferedInputStream::getInstance()->readFileName(argv[1]);
-    BufferedInputStream::getInstance()->addDirPath(const_cast<char *>("/mnt/c/home/Repository/simple_pyvm/src"));
+    BufferedInputStream::getInstance()->addDirPath(const_cast<char *>("/home/yons/Project/luoyou/simple_pyvm/src"));
     BinaryFileParser parser(BufferedInputStream::getInstance());
     CodeObject *main_code = parser.parse();
     printf("main_code is %s \n", main_code->toString());
