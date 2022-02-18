@@ -25,13 +25,24 @@ error test case : 0
 
 
 useage:
-1. build 
+
+1. build
 
 `cmake --build ./cmake-build-debug --target simple_pyvm -- -j 12`
+`/usr/bin/cmake --build /tmp/tmp.Q2zFhEdgvl/cmake-build-debug --target simple_pyvm -- -j 4`
 
-2.run
+2. build pyc
 
-`simple_pyvm/cmake-build-debug/simple_pyvm ../test/test_builtin.pyc` 
+`bash test/test.sh ../cmake-build-debug/simple_pyvm`
+`bash test/test.sh /tmp/tmp.Q2zFhEdgvl/cmake-build-debug/simple_pyvm`
+
+
+3. run
+
+`cmake-build-debug/simple_pyvm ../test/test_builtin.pyc`
+`/tmp/tmp.Q2zFhEdgvl/cmake-build-debug/simple_pyvm ../test/test_builtin.pyc`
+
+
 
 ```shell
      ____          __   __                 _    __ __  ___

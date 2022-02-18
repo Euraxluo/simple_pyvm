@@ -7,6 +7,7 @@
 #include "src/util/bufferedInputStream.hpp"
 #include "src/code/binaryFileParser.hpp"
 #include "hashMap.hpp"
+
 using namespace std;
 
 int main(int argc, char **argv) {
@@ -29,10 +30,10 @@ int main(int argc, char **argv) {
         return 0;
     }
     // load lib/builtin.pyc
-    BufferedInputStream::getInstance()->addDirPath(const_cast<char *>("/home/yons/Project/luoyou/simple_pyvm/src"));
+    BufferedInputStream::getInstance()->addDirPath(const_cast<char *>("/mnt/c/home/Repository/simple_pyvm/src"));
     Universe::genesis();//初始化一些值
     BufferedInputStream::getInstance()->readFileName(argv[1]);
-    BufferedInputStream::getInstance()->addDirPath(const_cast<char *>("/home/yons/Project/luoyou/simple_pyvm/src"));
+    BufferedInputStream::getInstance()->addDirPath(const_cast<char *>("/mnt/c/home/Repository/simple_pyvm/src"));
     BinaryFileParser parser(BufferedInputStream::getInstance());
     CodeObject *main_code = parser.parse();
     printf("main_code is %s \n", main_code->toString());
